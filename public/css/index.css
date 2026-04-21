@@ -24,7 +24,7 @@ overflow-x: hidden;
 nav {
 position: fixed;
 top: 0; left: 0; right: 0;
-z-index: 100;
+z-index: 1000;
 background: var(--navy);
 display: flex;
 align-items: center;
@@ -119,6 +119,9 @@ height: 40px;
 gap: 6px;
 align-items: center;
 justify-content: center;
+z-index: 1001;
+-webkit-appearance: none;
+-webkit-tap-highlight-color: transparent;
 }
 
 .hamburger span {
@@ -128,10 +131,12 @@ height: 2.5px;
 background: var(--white);
 border-radius: 2px;
 transition: all 0.3s ease;
+-webkit-transition: all 0.3s ease;
 }
 
 .hamburger.active span:nth-child(1) {
 transform: rotate(45deg) translate(10px, 10px);
+-webkit-transform: rotate(45deg) translate(10px, 10px);
 }
 
 .hamburger.active span:nth-child(2) {
@@ -140,6 +145,7 @@ opacity: 0;
 
 .hamburger.active span:nth-child(3) {
 transform: rotate(-45deg) translate(7px, -7px);
+-webkit-transform: rotate(-45deg) translate(7px, -7px);
 }
 
 /* ── LANGUAGE SELECTOR ── */
@@ -1193,9 +1199,9 @@ grid-template-columns: 1fr;
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
 .nav-links { 
-    display: none;
+    display: none !important;
     position: absolute;
     top: 68px;
     left: 0;
@@ -1208,10 +1214,11 @@ grid-template-columns: 1fr;
     box-shadow: 0 4px 12px rgba(0,0,0,.3);
     max-height: calc(100vh - 68px);
     overflow-y: auto;
+    z-index: 999;
 }
 
 .nav-links.active {
-    display: flex;
+    display: flex !important;
 }
 
 .nav-links a {
@@ -1238,7 +1245,7 @@ grid-template-columns: 1fr;
 }
 
 .hamburger {
-    display: flex;
+    display: flex !important;
 }
 
 /* WhatsApp button adjustment for tablets */
@@ -1292,6 +1299,8 @@ nav {
     width: 36px;
     height: 36px;
     gap: 5px;
+    display: flex !important;
+    z-index: 1001;
 }
 
 .hamburger span {
