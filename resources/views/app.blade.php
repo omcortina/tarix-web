@@ -518,7 +518,7 @@
                 const submitBtn = document.getElementById('submitBtn');
                 if (submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.textContent = '⚠️ Error de configuración';
+                    submitBtn.textContent = 'Error de configuración';
                 }
             });
         </script>
