@@ -23,7 +23,15 @@
                 <span class="logo-sub">{{ __('service.solutions') }}</span>
             </div>
         </a>
-        <div class="nav-links">
+        
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="nav-links" id="navMenu">
             <a href="/#inicio">{{ __('service.home') }}</a>
             <a href="/#nosotros">{{ __('service.about') }}</a>
             <a href="/#servicios">{{ __('service.services_nav') }}</a>
@@ -205,6 +213,35 @@
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             nav.style.boxShadow = window.scrollY > 10 ? '0 4px 30px rgba(0,0,0,.4)' : '0 2px 20px rgba(0,0,0,.3)';
+        });
+
+        // Mobile Menu Toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const navMenu = document.getElementById('navMenu');
+            
+            // Toggle menu when hamburger is clicked
+            hamburgerBtn.addEventListener('click', function() {
+                hamburgerBtn.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close menu when a link is clicked
+            const navLinks = navMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburgerBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('nav')) {
+                    hamburgerBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
         });
     </script>
 </body>

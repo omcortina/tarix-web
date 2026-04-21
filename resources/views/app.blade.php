@@ -25,7 +25,15 @@
                 <span class="logo-sub">{{ __('app.soluciones') }}</span>
             </div>
         </a>
-        <div class="nav-links">
+        
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="nav-links" id="navMenu">
             <a href="#inicio">{{ __('app.inicio') }}</a>
             <a href="#nosotros">{{ __('app.nosotros') }}</a>
             <a href="#servicios">{{ __('app.servicios') }}</a>
@@ -502,6 +510,37 @@
 
     <!-- reCAPTCHA v3 -->
     <script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}"></script>
+
+    <!-- Mobile Menu Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const navMenu = document.getElementById('navMenu');
+            
+            // Toggle menu when hamburger is clicked
+            hamburgerBtn.addEventListener('click', function() {
+                hamburgerBtn.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close menu when a link is clicked
+            const navLinks = navMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburgerBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('nav')) {
+                    hamburgerBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -207,7 +207,15 @@
                 <span class="logo-sub">Soluciones en Comercio Exterior</span>
             </div>
         </a>
-        <div class="nav-links">
+        
+        <!-- Hamburger Menu Button -->
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="nav-links" id="navMenu">
             <a href="/">{{ __('articles.news') == 'Noticias' ? 'Inicio' : 'Home' }}</a>
             <a href="/#nosotros">{{ __('articles.news') == 'Noticias' ? 'Nosotros' : 'About' }}</a>
             <a href="/#servicios">{{ __('articles.news') == 'Noticias' ? 'Servicios' : 'Services' }}</a>
@@ -341,6 +349,37 @@
             <span>Hecho en Colombia 🇨🇴</span>
         </div>
     </footer>
+
+    <!-- Mobile Menu Toggle -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerBtn = document.getElementById('hamburgerBtn');
+            const navMenu = document.getElementById('navMenu');
+            
+            // Toggle menu when hamburger is clicked
+            hamburgerBtn.addEventListener('click', function() {
+                hamburgerBtn.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+            
+            // Close menu when a link is clicked
+            const navLinks = navMenu.querySelectorAll('a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburgerBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+            
+            // Close menu when clicking outside
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('nav')) {
+                    hamburgerBtn.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
