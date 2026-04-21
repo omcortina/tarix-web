@@ -1,0 +1,169 @@
+/* Admin Services Index Styles */
+
+.admin-container {
+    max-width: 1200px;
+    margin: 100px auto 40px;
+    padding: 0 5%;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.admin-header h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: #0d2340;
+}
+
+.admin-header a {
+    background: #1ba8a0;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.admin-header a:hover {
+    background: #22c5bc;
+}
+
+.services-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(13, 35, 64, 0.07);
+}
+
+.services-table thead {
+    background: #f4f6f8;
+    border-bottom: 2px solid #dce4ef;
+}
+
+.services-table th {
+    padding: 16px;
+    text-align: left;
+    font-weight: 600;
+    color: #0d2340;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.services-table td {
+    padding: 16px;
+    border-bottom: 1px solid #e8edf3;
+    color: #4a5568;
+    font-size: 14px;
+}
+
+.services-table tbody tr:hover {
+    background: #f9fbfd;
+}
+
+.service-title {
+    font-weight: 600;
+    color: #0d2340;
+}
+
+.service-slug {
+    color: #8a9bb0;
+    font-size: 13px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-edit {
+    background: #E3F2FD;
+    color: #1976D2;
+}
+
+.btn-edit:hover {
+    background: #1976D2;
+    color: white;
+}
+
+.btn-delete {
+    background: #FFEBEE;
+    color: #D32F2F;
+}
+
+.btn-delete:hover {
+    background: #D32F2F;
+    color: white;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.status-published {
+    background: #E8F5E9;
+    color: #388E3C;
+}
+
+.status-draft {
+    background: #F5F5F5;
+    color: #616161;
+}
+
+.alert {
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.alert-success {
+    background: #E8F5E9;
+    color: #388E3C;
+    border: 1px solid #A5D6A7;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(13, 35, 64, 0.07);
+}
+
+.empty-state h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #0d2340;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    color: #8a9bb0;
+    margin-bottom: 24px;
+}
