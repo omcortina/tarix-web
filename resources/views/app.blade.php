@@ -509,7 +509,20 @@
     </script>
 
     <!-- reCAPTCHA v3 -->
-    <script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}"></script>
+    @if(env('RECAPTCHA_SITE_KEY'))
+        <script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}"></script>
+    @else
+        <script>
+            console.error('RECAPTCHA_SITE_KEY no está configurado en el servidor');
+            document.addEventListener('DOMContentLoaded', function() {
+                const submitBtn = document.getElementById('submitBtn');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '⚠️ Error de configuración';
+                }
+            });
+        </script>
+    @endif
 
     <!-- Mobile Menu Toggle -->
     <script>
