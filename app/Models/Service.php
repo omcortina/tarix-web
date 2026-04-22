@@ -32,6 +32,11 @@ class Service extends Model
         return $this->hasMany(UsefulResource::class)->orderBy('order');
     }
 
+    public function icon()
+    {
+        return Icon::where('class', $this->icon_class)->first();
+    }
+
     protected $casts = [
         'features' => 'array',
         'stats' => 'array',

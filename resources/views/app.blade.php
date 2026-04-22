@@ -162,10 +162,17 @@
             @forelse ($services as $service)
                 <div class="service-card">
                     <div class="service-icon {{ $service->icon_class ?? 'icon-classification' }}">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
-                            <path d="M8 9L16 9M8 13L13 13M8 17L12 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
+                        @php
+                            $icon = $service->icon();
+                        @endphp
+                        @if($icon && $icon->svg)
+                            {!! $icon->svg !!}
+                        @else
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="4" y="5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M8 9L16 9M8 13L13 13M8 17L12 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            </svg>
+                        @endif
                     </div>
                     <a href="/{{ $service->slug }}" style="text-decoration: none; color: inherit;">
                         <div class="service-title">{{ $service->title }}</div>
