@@ -55,6 +55,7 @@
 
                 <div class="form-group">
                     <div class="checkbox-group">
+                        <input type="hidden" name="is_active" value="0">
                         <input type="checkbox" id="is_active" name="is_active" value="1" checked>
                         <label for="is_active">Activar este recurso</label>
                     </div>

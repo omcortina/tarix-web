@@ -134,6 +134,7 @@
                 
                 <div class="form-group full">
                     <div class="checkbox-group">
+                        <input type="hidden" name="published" value="0">
                         <input type="checkbox" id="published" name="published" value="1" 
                             {{ old('published', $service->published ?? true) ? 'checked' : '' }}>
                         <label for="published">Publicar este servicio</label>
@@ -143,6 +144,7 @@
 
                 <div class="form-group full">
                     <div class="checkbox-group">
+                        <input type="hidden" name="show_in_footer" value="0">
                         <input type="checkbox" id="show_in_footer" name="show_in_footer" value="1" 
                             {{ old('show_in_footer', $service->show_in_footer ?? false) ? 'checked' : '' }}>
                         <label for="show_in_footer">Mostrar este servicio en el footer</label>

@@ -99,6 +99,7 @@
                 </div>
 
                 <div class="form-checkbox">
+                    <input type="hidden" name="published" value="0">
                     <input 
                         type="checkbox" 
                         id="published" 
