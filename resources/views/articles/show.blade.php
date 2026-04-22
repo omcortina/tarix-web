@@ -238,7 +238,7 @@
 
     <!-- ARTICLE CONTENT -->
     <div class="article-container">
-        <a href="/noticias" class="back-link"> Volver a Noticias</a>
+        <a href="/noticias" class="back-link"> Volver al Blog</a>
 
         <div class="article-content">
             {!! nl2br($article->content) !!}

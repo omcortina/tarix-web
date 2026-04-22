@@ -4,7 +4,7 @@ return [
     'inicio' => 'Home',
     'nosotros' => 'About',
     'servicios' => 'Services',
-    'noticias' => 'News',
+    'noticias' => 'Blog',
     'recursos' => 'Resources',
     'contacto' => 'Contact',
     'contactanos' => 'Contact Us',

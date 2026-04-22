@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noticias | TARIX</title>
+    <title>Blog | TARIX</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap"
