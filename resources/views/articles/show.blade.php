@@ -216,7 +216,7 @@
             <a href="/">{{ __('articles.home') }}</a>
             <a href="/#nosotros">{{ __('articles.about') }}</a>
             <a href="/#servicios">{{ __('articles.services') }}</a>
-            <a href="/noticias" class="active">{{ __('articles.news') }}</a>
+            <a href="/blog" class="active">{{ __('articles.news') }}</a>
             <a href="/#recursos">{{ __('articles.resources') }}</a>
             <a href="/#contacto">{{ __('articles.contact') }}</a>
             <a href="/#contacto" class="nav-cta">{{ __('articles.contact_us') }}</a>
@@ -238,9 +238,58 @@
 
     <!-- ARTICLE CONTENT -->
     <div class="article-container">
-        <a href="/noticias" class="back-link"> Volver al Blog</a>
+        <a href="/blog" class="back-link"> Volver al Blog</a>
 
         <div class="article-content">
+            <!-- Media Gallery Section -->
+            @if($article->media()->count() > 0)
+                <div style="display: flex; flex-direction: column; gap: 40px; margin-bottom: 40px;">
+                    @foreach($article->media()->orderBy('order')->get() as $media)
+                        <div>
+                            @if($media->type === 'image')
+                                <figure style="margin: 0;">
+                                    <img src="{{ $media->url }}" 
+                                         alt="{{ $media->description }}"
+                                         style="width: 100%; height: auto; max-height: 500px; object-fit: cover; border-radius: 6px;">
+                                    @if($media->description)
+                                        <figcaption style="margin-top: 12px; font-size: 14px; color: #666; font-style: italic;">
+                                            {{ $media->description }}
+                                        </figcaption>
+                                    @endif
+                                </figure>
+
+                            @elseif($media->type === 'youtube')
+                                @php
+                                    $embedId = $media->youtube_embed;
+                                @endphp
+                                @if($embedId)
+                                    <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 6px;">
+                                        <iframe 
+                                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                                            src="https://www.youtube.com/embed/{{ $embedId }}" 
+                                            title="YouTube video"
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                @else
+                                    <div style="background: #f0f0f0; padding: 40px; text-align: center; border-radius: 6px; color: #999;">
+                                        <p>URL de YouTube no válida o video no disponible</p>
+                                        <p style="font-size: 12px; margin-top: 8px;">URL guardada: <code style="background: #e0e0e0; padding: 4px 8px; border-radius: 3px;">{{ $media->url }}</code></p>
+                                    </div>
+                                @endif
+                                @if($media->description)
+                                    <p style="margin-top: 12px; font-size: 14px; color: #666; font-style: italic;">
+                                        {{ $media->description }}
+                                    </p>
+                                @endif
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
             {!! nl2br($article->content) !!}
         </div>
 
@@ -285,7 +334,7 @@
                 <a href="/">{{ __('articles.home') }}</a>
                 <a href="/#nosotros">{{ __('articles.about') }}</a>
                 <a href="/#servicios">{{ __('articles.services') }}</a>
-                <a href="/noticias">{{ __('articles.news') }}</a>
+                <a href="/blog">{{ __('articles.news') }}</a>
                 <a href="/#recursos">{{ __('articles.resources') }}</a>
                 <a href="/#contacto">{{ __('articles.contact') }}</a>
             </div>

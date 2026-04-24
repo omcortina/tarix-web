@@ -14,7 +14,13 @@ class CreateAdminUser extends Seeder
     {
         $user = new \App\Models\User();
         $user->name = 'Admin TARIX';
-        $user->email = 'admin@tarix.com';
+        $user->email = 'admin@tarix.com.co';
+        $user->password = \Illuminate\Support\Facades\Hash::make('admin123');
+        $user->save();
+
+        $user = new \App\Models\User();
+        $user->name = 'Jeison Ruiz';
+        $user->email = 'admin2@tarix.com.co';
         $user->password = \Illuminate\Support\Facades\Hash::make('admin123');
         $user->save();
     }

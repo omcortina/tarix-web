@@ -4,7 +4,7 @@ return [
     'inicio' => 'Inicio',
     'nosotros' => 'Nosotros',
     'servicios' => 'Servicios',
-    'noticias' => 'Blog',
+    'blog' => 'Blog',
     'recursos' => 'Recursos',
     'contacto' => 'Contacto',
     'contactanos' => 'Contáctanos',

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
+use App\Models\ArticleMedia;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -20,7 +21,7 @@ class ArticleSeeder extends Seeder
             'password' => bcrypt('password'),
         ]);
 
-        Article::create([
+        $article1 = Article::create([
             'title' => ['es' => 'Cómo elegir el mejor servicio de transformación digital', 'en' => 'How to choose the best digital transformation service'],
             'slug' => 'como-elegir-mejor-servicio-transformacion-digital',
             'excerpt' => ['es' => 'Descubre los aspectos clave que debes considerar al seleccionar un socio de transformación digital para tu empresa.', 'en' => 'Discover the key aspects you should consider when selecting a digital transformation partner for your company.'],
@@ -57,7 +58,23 @@ Digital transformation is not a destination, it\'s a continuous journey. Choose 
             'published' => true,
         ]);
 
-        Article::create([
+        // Agregar media al artículo 1
+        $article1->media()->createMany([
+            [
+                'type' => 'image',
+                'url' => 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=800',
+                'description' => ['es' => 'Transformación digital en acción', 'en' => 'Digital transformation in action'],
+                'order' => 1,
+            ],
+            [
+                'type' => 'youtube',
+                'url' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+                'description' => ['es' => 'Video introductorio sobre transformación', 'en' => 'Introductory video on transformation'],
+                'order' => 2,
+            ],
+        ]);
+
+        $article2 = Article::create([
             'title' => ['es' => 'Tendencias tecnológicas para 2026', 'en' => 'Technology trends for 2026'],
             'slug' => 'tendencias-tecnologicas-2026',
             'excerpt' => ['es' => 'Explora las tendencias tecnológicas más importantes que definirán el panorama empresarial en 2026.', 'en' => 'Explore the most important technology trends that will shape the business landscape in 2026.'],
@@ -100,7 +117,23 @@ The key to thriving in 2026 is staying informed and adapting quickly to these ch
             'published' => true,
         ]);
 
-        Article::create([
+        // Agregar media al artículo 2
+        $article2->media()->createMany([
+            [
+                'type' => 'image',
+                'url' => 'https://images.unsplash.com/photo-1677442d019cecf8a0538e14dd277bfc566d34485?w=800',
+                'description' => ['es' => 'Tendencias de IA', 'en' => 'AI Trends'],
+                'order' => 1,
+            ],
+            [
+                'type' => 'image',
+                'url' => 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800',
+                'description' => ['es' => 'Cloud Computing', 'en' => 'Cloud Computing'],
+                'order' => 2,
+            ],
+        ]);
+
+        $article3 = Article::create([
             'title' => ['es' => 'Guía completa de transformación en la nube', 'en' => 'Complete cloud transformation guide'],
             'slug' => 'guia-transformacion-nube',
             'excerpt' => ['es' => 'Todo lo que necesitas saber para migrar tu infraestructura a la nube de manera segura y eficiente.', 'en' => 'Everything you need to know to migrate your infrastructure to the cloud safely and efficiently.'],
@@ -153,6 +186,16 @@ Once in the cloud, continuously optimize. Regularly review costs, performance, a
 The cloud is not a magic solution, but when implemented correctly, it can transform your business.'],
             'user_id' => $user->id,
             'published' => false,
+        ]);
+
+        // Agregar media al artículo 3
+        $article3->media()->createMany([
+            [
+                'type' => 'youtube',
+                'url' => 'https://www.youtube.com/watch?v=jNQXAC9IVRw',
+                'description' => ['es' => 'Guía de migración a la nube', 'en' => 'Cloud migration guide'],
+                'order' => 1,
+            ],
         ]);
     }
 }

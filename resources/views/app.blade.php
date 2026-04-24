@@ -37,7 +37,7 @@
             <a href="#inicio">{{ __('app.inicio') }}</a>
             <a href="#nosotros">{{ __('app.nosotros') }}</a>
             <a href="#servicios">{{ __('app.servicios') }}</a>
-            <a href="/noticias">{{ __('app.noticias') }}</a>
+            <a href="/blog">{{ __('app.blog') }}</a>
             <a href="#recursos">{{ __('app.recursos') }}</a>
             <a href="#contacto">{{ __('app.contacto') }}</a>
             <a href="#contacto" class="nav-cta">{{ __('app.contactanos') }}</a>
@@ -318,7 +318,7 @@
                 <a href="#inicio">{{ __('app.inicio') }}</a>
                 <a href="#nosotros">{{ __('app.nosotros') }}</a>
                 <a href="#servicios">{{ __('app.servicios') }}</a>
-                <a href="/noticias">{{ __('app.noticias') }}</a>
+                <a href="/blog">{{ __('app.blog') }}</a>
                 <a href="#recursos">{{ __('app.recursos') }}</a>
                 <a href="#contacto">{{ __('app.contacto') }}</a>
             </div>

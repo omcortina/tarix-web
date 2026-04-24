@@ -35,7 +35,7 @@
             <a href="/#inicio">{{ __('service.home') }}</a>
             <a href="/#nosotros">{{ __('service.about') }}</a>
             <a href="/#servicios">{{ __('service.services_nav') }}</a>
-            <a href="/noticias">{{ __('service.news') }}</a>
+            <a href="/blog">{{ __('service.news') }}</a>
             <a href="/#recursos">{{ __('service.resources') }}</a>
             <a href="/#contacto">{{ __('service.contact') }}</a>
             <a href="/#contacto" class="nav-cta">{{ __('service.contact_us') }}</a>
@@ -139,7 +139,7 @@
                 <a href="/#inicio">{{ __('service.home') }}</a>
                 <a href="/#nosotros">{{ __('service.about') }}</a>
                 <a href="/#servicios">{{ __('service.services_nav') }}</a>
-                <a href="/noticias">{{ __('service.news') }}</a>
+                <a href="/blog">{{ __('service.news') }}</a>
                 <a href="/#recursos">{{ __('service.resources') }}</a>
                 <a href="/#contacto">{{ __('service.contact') }}</a>
             </div>

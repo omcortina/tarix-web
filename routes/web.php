@@ -40,9 +40,9 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 // Ruta para cambiar idioma
 Route::get('/lang/{locale}', [LanguageController::class, 'setLanguage'])->name('lang.set');
 
-// Rutas públicas de artículos (noticias)
-Route::get('/noticias', [ArticlePublicController::class, 'index'])->name('articles.index');
-Route::get('/noticias/{slug}', [ArticlePublicController::class, 'show'])->name('articles.show');
+// Rutas públicas de artículos (blog)
+Route::get('/blog', [ArticlePublicController::class, 'index'])->name('articles.index');
+Route::get('/blog/{slug}', [ArticlePublicController::class, 'show'])->name('articles.show');
 
 // Rutas públicas de servicios (dinámicas por slug)
 Route::get('{service}', [ServiceController::class, 'show']);

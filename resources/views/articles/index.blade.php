@@ -216,13 +216,13 @@
         </button>
         
         <div class="nav-links" id="navMenu">
-            <a href="/">{{ __('articles.news') == 'Noticias' ? 'Inicio' : 'Home' }}</a>
-            <a href="/#nosotros">{{ __('articles.news') == 'Noticias' ? 'Nosotros' : 'About' }}</a>
-            <a href="/#servicios">{{ __('articles.news') == 'Noticias' ? 'Servicios' : 'Services' }}</a>
-            <a href="/noticias" class="active">{{ __('articles.news') }}</a>
-            <a href="/#recursos">{{ __('articles.news') == 'Noticias' ? 'Recursos' : 'Resources' }}</a>
-            <a href="/#contacto">{{ __('articles.news') == 'Noticias' ? 'Contacto' : 'Contact' }}</a>
-            <a href="/#contacto" class="nav-cta">{{ __('articles.news') == 'Noticias' ? 'Contáctanos' : 'Contact Us' }}</a>
+            <a href="/">{{ __('articles.news') == 'Blog' ? 'Inicio' : 'Home' }}</a>
+            <a href="/#nosotros">{{ __('articles.news') == 'Blog' ? 'Nosotros' : 'About' }}</a>
+            <a href="/#servicios">{{ __('articles.news') == 'Blog' ? 'Servicios' : 'Services' }}</a>
+            <a href="/blog" class="active">{{ __('articles.news') }}</a>
+            <a href="/#recursos">{{ __('articles.news') == 'Blog' ? 'Recursos' : 'Resources' }}</a>
+            <a href="/#contacto">{{ __('articles.news') == 'Blog' ? 'Contacto' : 'Contact' }}</a>
+            <a href="/#contacto" class="nav-cta">{{ __('articles.news') == 'Blog' ? 'Contáctanos' : 'Contact Us' }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
                 <a href="{{ route('lang.set', 'en') }}" class="lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
@@ -233,7 +233,7 @@
     <!-- NEWS HEADER -->
     <div class="news-header">
         <h1>{{ __('articles.news') }}</h1>
-        <p>{{ __('articles.news') == 'Noticias' ? 'Mantente actualizado con las últimas noticias y artículos sobre comercio exterior y soluciones empresariales' : 'Stay updated with the latest news and articles on foreign trade and business solutions' }}</p>
+        <p>{{ __('articles.news') == 'Blog' ? 'Mantente actualizado con los últimos artículos sobre comercio exterior y soluciones empresariales' : 'Stay updated with the latest articles on foreign trade and business solutions' }}</p>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -248,6 +248,25 @@
                         </div>
                         <div class="news-card-body">
                             <p class="news-excerpt">{{ $article->excerpt ?: substr(strip_tags($article->content), 0, 150) . '...' }}</p>
+                            
+                            <!-- Media Badges -->
+                            @if($article->images()->count() > 0 || $article->videos()->count() > 0)
+                                <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
+                                    @if($article->images()->count() > 0)
+                                        <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #e3f2fd; color: #1976d2; border-radius: 3px; font-size: 11px; font-weight: 600;">
+                                            <i class="fa fa-image"></i>
+                                            {{ $article->images()->count() }} imagen(es)
+                                        </span>
+                                    @endif
+                                    @if($article->videos()->count() > 0)
+                                        <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #ffebee; color: #c62828; border-radius: 3px; font-size: 11px; font-weight: 600;">
+                                            <i class="fa fa-play-circle"></i>
+                                            {{ $article->videos()->count() }} video(s)
+                                        </span>
+                                    @endif
+                                </div>
+                            @endif
+
                             <div class="news-footer">
                                 <span class="news-author">Por {{ $article->user->name ?? 'Admin' }}</span>
                                 <a href="{{ route('articles.show', $article->slug) }}" class="btn-read-more">Ver más</a>
@@ -262,7 +281,7 @@
             </div>
         @else
             <div class="empty-state">
-                <p>No hay noticias disponibles en este momento.</p>
+                <p>No hay artículos disponibles en este momento.</p>
                 <a href="/" class="btn-primary">Volver al inicio</a>
             </div>
         @endif
@@ -290,7 +309,7 @@
                 <a href="/">{{ __('articles.home') }}</a>
                 <a href="/#nosotros">{{ __('articles.about') }}</a>
                 <a href="/#servicios">{{ __('articles.services') }}</a>
-                <a href="/noticias">{{ __('articles.news') }}</a>
+                <a href="/blog">{{ __('articles.news') }}</a>
                 <a href="/#recursos">{{ __('articles.resources') }}</a>
                 <a href="/#contacto">{{ __('articles.contact') }}</a>
             </div>
@@ -379,7 +398,51 @@
                 }
             });
         });
+
+        // Video Modal
+        function openVideoModal(youtubeId) {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = `https://www.youtube.com/embed/${youtubeId}?autoplay=1`;
+            modal.style.display = 'flex';
+        }
+
+        function closeVideoModal() {
+            const modal = document.getElementById('videoModal');
+            const iframe = document.getElementById('videoFrame');
+            iframe.src = '';
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('videoModal');
+            if (event.target === modal) {
+                closeVideoModal();
+            }
+        });
+
+        // Close with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeVideoModal();
+            }
+        });
     </script>
+
+    <!-- Video Modal -->
+    <div id="videoModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 9999; align-items: center; justify-content: center;">
+        <div style="position: relative; width: 90%; max-width: 900px; aspect-ratio: 16/9;">
+            <button onclick="closeVideoModal()" style="position: absolute; top: -40px; right: 0; background: white; border: none; color: #333; font-size: 24px; cursor: pointer; padding: 0; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">✕</button>
+            <iframe id="videoFrame" 
+                    width="100%" 
+                    height="100%" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
 </body>
 
 </html>

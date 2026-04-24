@@ -34,8 +34,8 @@ class ServiceSeeder extends Seeder
                 'what_is_section' => ['es' => '¿Qué es? La valoración aduanera determina el valor tributario de las mercancías para calcular impuestos y aranceles.', 'en' => 'What is it? Customs valuation determines the tax value of goods for calculating taxes and duties.'],
                 'process_section' => ['es' => 'Proceso: Recopilación de documentos → Análisis de valores → Aplicación de métodos → Determinación final', 'en' => 'Process: Document collection → Value analysis → Method application → Final determination'],
                 'why_section' => ['es' => '¿Por qué es importante? Una valoración correcta evita sanciones y asegura el cálculo justo de tributos.', 'en' => 'Why is it important? Correct valuation avoids penalties and ensures fair tax calculation.'],
-                'published' => true,
-                'show_in_footer' => true,
+                'published' => false,
+                'show_in_footer' => false,
             ],
             [
                 'slug' => 'origen-mercancías',
@@ -46,8 +46,8 @@ class ServiceSeeder extends Seeder
                 'what_is_section' => ['es' => '¿Qué es? El origen de mercancías determina el país de procedencia y aplica beneficios arancelarios según TLC.', 'en' => 'What is it? Merchandise origin determines the country of origin and applies tariff benefits according to FTA.'],
                 'process_section' => ['es' => 'Proceso: Verificación de requisitos → Gestión ante autoridades → Emisión de certificado', 'en' => 'Process: Requirement verification → Management with authorities → Certificate issuance'],
                 'why_section' => ['es' => '¿Por qué es importante? Permite acceder a beneficios arancelarios reduciendo costos de importación y exportación.', 'en' => 'Why is it important? It allows access to tariff benefits, reducing import and export costs.'],
-                'published' => true,
-                'show_in_footer' => true,
+                'published' => false,
+                'show_in_footer' => false,
             ],
             [
                 'slug' => 'asesoría-importaciones',
@@ -71,7 +71,7 @@ class ServiceSeeder extends Seeder
                 'process_section' => ['es' => 'Proceso: Diagnóstico → Análisis de oportunidades → Propuesta de mejora → Implementación', 'en' => 'Process: Diagnosis → Opportunity analysis → Improvement proposal → Implementation'],
                 'why_section' => ['es' => '¿Por qué es importante? Optimiza operaciones internacionales reduciendo costos y mejorando competitividad.', 'en' => 'Why is it important? It optimizes international operations by reducing costs and improving competitiveness.'],
                 'published' => true,
-                'show_in_footer' => false,
+                'show_in_footer' => true,
             ],
             [
                 'slug' => 'tramites-documentación',
@@ -82,7 +82,7 @@ class ServiceSeeder extends Seeder
                 'what_is_section' => ['es' => '¿Qué es? Gestión integral de tramitología ante DIAN y autoridades aduanales.', 'en' => 'What is it? Comprehensive management of procedures with DIAN and customs authorities.'],
                 'process_section' => ['es' => 'Proceso: Recopilación de documentos → Cumplimiento de requisitos → Trámite ante autoridades', 'en' => 'Process: Document collection → Compliance with requirements → Procedures with authorities'],
                 'why_section' => ['es' => '¿Por qué es importante? Asegura el cumplimiento normativo y evita problemas con autoridades.', 'en' => 'Why is it important? It ensures regulatory compliance and avoids problems with authorities.'],
-                'published' => true,
+                'published' => false,
                 'show_in_footer' => false,
             ],
         ];
