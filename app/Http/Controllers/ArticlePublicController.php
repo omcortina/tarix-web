@@ -35,6 +35,9 @@ class ArticlePublicController extends Controller
             ->limit(3)
             ->get();
 
-        return view('articles.show', compact('article', 'related'));
+        // Obtener servicios para el footer
+        $services = \App\Models\Service::where('show_in_footer', true)->where('published', true)->orderBy('id', 'asc')->get();
+
+        return view('articles.show', compact('article', 'related', 'services'));
     }
 }

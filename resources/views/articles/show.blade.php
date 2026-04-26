@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
     <meta charset="UTF-8">
@@ -219,7 +219,8 @@
             <a href="/blog" class="active">{{ __('articles.news') }}</a>
             <a href="/#recursos">{{ __('articles.resources') }}</a>
             <a href="/#contacto">{{ __('articles.contact') }}</a>
-            <a href="/#contacto" class="nav-cta">{{ __('articles.contact_us') }}</a>
+            <a href="{{ route('register') }}" class="nav-cta">{{ __('articles.register') }}</a>
+            <a href="{{ route('login') }}" class="nav-cta">{{ __('articles.login') }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
                 <a href="{{ route('lang.set', 'en') }}" class="lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
@@ -324,10 +325,10 @@
                         <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:3px;">
                             TARIX</div>
                         <div style="font-size:8px;color:#22c5bc;letter-spacing:1.5px;text-transform:uppercase;">
-                            Soluciones en Comercio Exterior</div>
+                            {{ __('articles.solutions') }}</div>
                     </div>
                 </div>
-                <p>Expertos en comercio exterior que acompañan a tu empresa en cada paso de la operación internacional con precisión, seguridad y compromiso.</p>
+                <p>{{ __('articles.footer_experts') }}</p>
             </div>
             <div class="footer-col">
                 <h4>{{ __('articles.navigation') }}</h4>
@@ -340,14 +341,14 @@
             </div>
             <div class="footer-col">
                 <h4>{{ __('articles.services') }}</h4>
-                @forelse(\App\Models\Service::where('show_in_footer', true)->get() as $service)
+                @forelse($services->where('show_in_footer', true) as $service)
                     <a href="/{{ $service->slug }}">{{ $service->title }}</a>
                 @empty
-                    <p style="font-size: 12px; color: #999;">No hay servicios disponibles</p>
+                    <p style="font-size: 12px; color: #999;">{{ __('articles.no_services_available') }}</p>
                 @endforelse
             </div>
             <div class="footer-col">
-                <h4>Contacto</h4>
+                <h4>{{ __('articles.footer_contact') }}</h4>
                 <div class="footer-contact-item">
                     <span class="footer-icon icon-website">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -373,24 +374,26 @@
                             <path d="M9.5 8H14.5M9.5 15H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </span>
-                    <span>+57 300 000 0000</span>
+                    <span>+57 302 467 4923</span>
                 </div>
                 <div class="footer-contact-item">
-                    <span class="footer-icon icon-instagram">
+                    <span class="footer-icon icon-linkedin">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="2" y="2" width="20" height="20" rx="4.5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor"/>
+                            <path d="M3 8C3 6.9 3.9 6 5 6H19C20.1 6 21 6.9 21 8V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M7 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M7 8.5C7 9.32843 6.32843 10 5.5 10C4.67157 10 4 9.32843 4 8.5C4 7.67157 4.67157 7 5.5 7C6.32843 7 7 7.67157 7 8.5Z" fill="currentColor"/>
+                            <path d="M11 17V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M11 11.5C11 10.1193 12.1193 9 13.5 9C14.8807 9 16 10.1193 16 11.5V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
-                    <a href="https://instagram.com/tarix-soluciones">@tarix-soluciones</a>
+                    <a href="https://www.linkedin.com/in/jeison-ruiz">Jeison Ruiz</a>
                 </div>
             </div>
         </div>
         <hr class="footer-divider">
         <div class="footer-bottom">
-            <span>© {{ date('Y') }} TARIX | Soluciones en Comercio Exterior. Todos los derechos reservados.</span>
-            <span>Hecho en Colombia 🇨🇴</span>
+            <span>© {{ date('Y') }} TARIX | {{ __('articles.solutions') }}. {{ __('articles.all_rights_reserved') }}</span>
+            <span>{{ __('articles.made_in_colombia') }} 🇨🇴</span>
         </div>
     </footer>
 

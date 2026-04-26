@@ -8,6 +8,8 @@ return [
     'resources' => 'Resources',
     'contact' => 'Contact',
     'contact_us' => 'Contact Us',
+    'register' => 'Register here',
+    'login' => 'Log In',
     'solutions' => 'Foreign Trade Solutions',
     'what_is' => 'What is',
     'our_process' => 'Our Process',

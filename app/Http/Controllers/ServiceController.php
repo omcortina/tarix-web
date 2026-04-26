@@ -59,7 +59,8 @@ class ServiceController extends Controller
     public function show(Service $service)
     {
         $service->load('usefulResources');
-        return view('servicio', compact('service'));
+        $services = Service::where('show_in_footer', true)->where('published', true)->orderBy('id', 'asc')->get();
+        return view('servicio', compact('service', 'services'));
     }
 
     public function edit(Service $service)

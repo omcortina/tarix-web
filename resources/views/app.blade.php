@@ -172,7 +172,7 @@
         </div>
         <div class="services-grid">
             @forelse ($services as $service)
-                <div class="service-card">
+                <a href="/{{ $service->slug }}" class="service-card" style="text-decoration: none; color: inherit; display: block;">
                     <div class="service-icon {{ $service->icon_class ?? 'icon-classification' }}">
                         @php
                             $icon = $service->icon();
@@ -186,11 +186,9 @@
                             </svg>
                         @endif
                     </div>
-                    <a href="/{{ $service->slug }}" style="text-decoration: none; color: inherit;">
-                        <div class="service-title">{{ $service->title }}</div>
-                        <p class="service-desc">{{ Str::limit($service->subtitle, 120) }}</p>
-                    </a>
-                </div>
+                    <div class="service-title">{{ $service->title }}</div>
+                    <p class="service-desc">{{ Str::limit($service->subtitle, 120) }}</p>
+                </a>
             @empty
                 <p style="grid-column: 1 / -1; text-align: center; color: #999; padding: 40px;">
                     No hay servicios disponibles en este momento.

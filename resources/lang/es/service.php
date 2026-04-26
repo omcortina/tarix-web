@@ -8,6 +8,8 @@ return [
     'resources' => 'Recursos',
     'contact' => 'Contacto',
     'contact_us' => 'Contáctanos',
+    'register' => 'Registrate aquí',
+    'login' => 'Iniciar Sesión',
     'solutions' => 'Soluciones en Comercio Exterior',
     'what_is' => '¿Qué es',
     'our_process' => 'Nuestro Proceso',

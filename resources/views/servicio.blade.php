@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
     <meta charset="UTF-8">
@@ -38,7 +38,8 @@
             <a href="/blog">{{ __('service.news') }}</a>
             <a href="/#recursos">{{ __('service.resources') }}</a>
             <a href="/#contacto">{{ __('service.contact') }}</a>
-            <a href="/#contacto" class="nav-cta">{{ __('service.contact_us') }}</a>
+            <a href="{{ route('register') }}" class="nav-cta">{{ __('service.register') }}</a>
+            <a href="{{ route('login') }}" class="nav-cta">{{ __('service.login') }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
                 <a href="{{ route('lang.set', 'en') }}" class="lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
@@ -145,16 +146,11 @@
             </div>
             <div class="footer-col">
                 <h4>{{ __('service.services') }}</h4>
-                @php
-                    $footerServices = \App\Models\Service::where('show_in_footer', true)->where('published', true)->orderBy('id', 'asc')->get();
-                @endphp
-                @if($footerServices->count())
-                    @foreach($footerServices as $footerService)
-                        <a href="/{{ $footerService->slug }}">{{ getSpanish($footerService->title) }}</a>
-                    @endforeach
-                @else
-                    <p style="color: #999; font-size: 14px;">{{ __('service.no_services_available') }}</p>
-                @endif
+                @forelse($services->where('show_in_footer', true) as $service)
+                    <a href="/{{ $service->slug }}">{{ $service->title }}</a>
+                @empty
+                    <p style="font-size: 12px; color: #999;">{{ __('service.no_services_available') }}</p>
+                @endforelse
             </div>
             <div class="footer-col">
                 <h4>{{ __('service.footer_contact') }}</h4>
@@ -183,29 +179,31 @@
                             <path d="M9.5 8H14.5M9.5 15H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </span>
-                    <span>+57 300 000 0000</span>
+                    <span>+57 302 467 4923</span>
                 </div>
                 <div class="footer-contact-item">
-                    <span class="footer-icon icon-instagram">
+                    <span class="footer-icon icon-linkedin">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="2" y="2" width="20" height="20" rx="4.5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor"/>
+                            <path d="M3 8C3 6.9 3.9 6 5 6H19C20.1 6 21 6.9 21 8V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M7 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M7 8.5C7 9.32843 6.32843 10 5.5 10C4.67157 10 4 9.32843 4 8.5C4 7.67157 4.67157 7 5.5 7C6.32843 7 7 7.67157 7 8.5Z" fill="currentColor"/>
+                            <path d="M11 17V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M11 11.5C11 10.1193 12.1193 9 13.5 9C14.8807 9 16 10.1193 16 11.5V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
-                    <a href="https://instagram.com/tarix-soluciones">@tarix-soluciones</a>
+                    <a href="https://www.linkedin.com/in/jeison-ruiz">Jeison Ruiz</a>
                 </div>
             </div>
         </div>
         <hr class="footer-divider">
         <div class="footer-bottom">
             <span>© {{ date('Y') }} TARIX | {{ __('service.solutions') }}. {{ __('service.all_rights_reserved') }}</span>
-            <span>{{ __('service.made_in_colombia') }}</span>
+            <span>{{ __('service.made_in_colombia') }} 🇨🇴</span>
         </div>
     </footer>
 
     <!-- WHATSAPP FLOATING BUTTON -->
-    <a href="https://wa.me/573000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
+    <a href="https://wa.me/573024674923" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
         <i class="fa fa-whatsapp" style="font-size: 32px;"></i>
     </a>
 
