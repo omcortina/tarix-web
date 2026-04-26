@@ -79,7 +79,7 @@
                 <div class="menu-icon">
                     <i class="fa fa-users"></i>
                 </div>
-                <span>Usuarios Externos</span>
+                <span>Usuarios</span>
                 <div class="menu-indicator"></div>
             </a>
         </li>

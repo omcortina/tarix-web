@@ -59,6 +59,11 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('users/{user}/verify-general', [UserManagementController::class, 'verifyAsGeneral'])->name('users.verify-general');
     Route::patch('users/{user}/verify-preferential', [UserManagementController::class, 'verifyAsPreferential'])->name('users.verify-preferential');
     Route::delete('users/{user}/reject', [UserManagementController::class, 'reject'])->name('users.reject');
+    Route::get('users/create-clasificador', [UserManagementController::class, 'showCreateClasificador'])->name('users.create-clasificador');
+    Route::post('users/clasificador', [UserManagementController::class, 'storeClasificador'])->name('users.store-clasificador');
+    Route::get('users/{user}/edit-clasificador', [UserManagementController::class, 'editClasificador'])->name('users.edit-clasificador');
+    Route::put('users/{user}/clasificador', [UserManagementController::class, 'updateClasificador'])->name('users.update-clasificador');
+    Route::delete('users/{user}/clasificador', [UserManagementController::class, 'deleteClasificador'])->name('users.delete-clasificador');
 });
 
 // Rutas de contacto (pública)

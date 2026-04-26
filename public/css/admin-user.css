@@ -218,6 +218,11 @@ body {
     color: #f57c00;
 }
 
+.user-card.bandeja .user-card-icon {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
 .user-card h3 {
     font-family: "Montserrat", sans-serif;
     font-size: 20px;

@@ -107,5 +107,8 @@ return [
     'dashboard_classification_desc' => 'Consulta la clasificación arancelaria de tus productos y obtén información detallada sobre códigos y aranceles.',
     'dashboard_procedures_title' => 'Consulta de Trámites',
     'dashboard_procedures_desc' => 'Revisa el estado de tus trámites aduanales y obtén actualizaciones en tiempo real de tus gestiones.',
+    'dashboard_inbox_title' => 'Bandeja de Correspondencia',
+    'dashboard_inbox_desc' => 'Gestiona y revisa la correspondencia clasificada',
+    'user_type_clasificador' => 'Clasificador',
 ];
 

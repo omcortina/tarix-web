@@ -56,29 +56,46 @@
                     </div>
                     <div class="user-info-text">
                         <small>{{ __('app.dashboard_account') }}</small>
-                        <strong>{{ Auth::user()->client_type ?? __('app.dashboard_account_type') }}</strong>
+                        <strong>
+                            @if (Auth::user()->user_type === 'CLASIFICADOR')
+                                {{ __('app.user_type_clasificador') }}
+                            @else
+                                {{ Auth::user()->client_type ?? __('app.dashboard_account_type') }}
+                            @endif
+                        </strong>
                     </div>
                 </div>
             </div>
 
             <div class="user-cards-grid">
-                <!-- Card 1: Clasificación Arancelaria -->
-                <a href="#" class="user-card arancel">
-                    <div class="user-card-icon">
-                        <i class="fa fa-list"></i>
-                    </div>
-                    <h3>{{ __('app.dashboard_classification_title') }}</h3>
-                    <p>{{ __('app.dashboard_classification_desc') }}</p>
-                </a>
+                @if (Auth::user()->user_type === 'CLASIFICADOR')
+                    <!-- Card: Bandeja de Correspondencia (Solo para Clasificadores) -->
+                    <a href="#" class="user-card bandeja">
+                        <div class="user-card-icon">
+                            <i class="fa fa-list"></i>
+                        </div>
+                        <h3>{{ __('app.dashboard_inbox_title') }}</h3>
+                        <p>{{ __('app.dashboard_inbox_desc') }}</p>
+                    </a>
+                @else
+                    <!-- Card 1: Clasificación Arancelaria -->
+                    <a href="#" class="user-card arancel">
+                        <div class="user-card-icon">
+                            <i class="fa fa-list"></i>
+                        </div>
+                        <h3>{{ __('app.dashboard_classification_title') }}</h3>
+                        <p>{{ __('app.dashboard_classification_desc') }}</p>
+                    </a>
 
-                <!-- Card 2: Consulta de Trámites -->
-                <a href="#" class="user-card tramite">
-                    <div class="user-card-icon">
-                        <i class="fa fa-folder-open"></i>
-                    </div>
-                    <h3>{{ __('app.dashboard_procedures_title') }}</h3>
-                    <p>{{ __('app.dashboard_procedures_desc') }}</p>
-                </a>
+                    <!-- Card 2: Consulta de Trámites -->
+                    <a href="#" class="user-card tramite">
+                        <div class="user-card-icon">
+                            <i class="fa fa-folder-open"></i>
+                        </div>
+                        <h3>{{ __('app.dashboard_procedures_title') }}</h3>
+                        <p>{{ __('app.dashboard_procedures_desc') }}</p>
+                    </a>
+                @endif
             </div>
         </main>
     </div>

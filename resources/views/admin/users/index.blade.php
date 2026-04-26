@@ -3,306 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar Usuarios Externos | Admin TARIX</title>
+    <title>Gestionar Usuarios | Admin TARIX</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <style>
-        .page-container {
-            padding: 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .breadcrumb {
-            font-size: 13px;
-            color: #8899a6;
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-
-        .page-header {
-            margin-bottom: 40px;
-        }
-
-        .page-title {
-            font-family: "Montserrat", sans-serif;
-            font-size: 28px;
-            font-weight: 800;
-            color: #1a2e44;
-            margin-bottom: 8px;
-        }
-
-        .page-subtitle {
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .alert {
-            padding: 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .alert-success {
-            background: #f0fff4;
-            color: #22863a;
-            border: 1px solid #85e89d;
-        }
-
-        .alert-error {
-            background: #fff5f5;
-            color: #c53030;
-            border: 1px solid #feb2b2;
-        }
-
-        .section {
-            margin-bottom: 50px;
-        }
-
-        .section-title {
-            font-family: "Montserrat", sans-serif;
-            font-size: 20px;
-            font-weight: 700;
-            color: #1a2e44;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-title i {
-            font-size: 24px;
-            color: #22c5bc;
-        }
-
-        .badge-count {
-            background: #FFEBEE;
-            color: #c53030;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .users-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .user-card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            border: 1px solid #e0e8ed;
-            transition: all 0.3s ease;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            gap: 20px;
-            align-items: start;
-        }
-
-        .user-card:hover {
-            box-shadow: 0 8px 24px rgba(34, 197, 188, 0.12);
-            border-color: #22c5bc;
-        }
-
-        .user-avatar {
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #22c5bc 0%, #1e9b8f 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 700;
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .user-main-info {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .user-name {
-            font-family: "Montserrat", sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            color: #1a2e44;
-        }
-
-        .user-details {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            font-size: 14px;
-            color: #8899a6;
-        }
-
-        .user-detail-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .user-detail-item i {
-            color: #22c5bc;
-            width: 16px;
-        }
-
-        .user-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            align-items: stretch;
-        }
-
-        .btn-verify {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            text-decoration: none;
-            white-space: nowrap;
-            font-family: "Montserrat", sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-general {
-            background: #E8F5E9;
-            color: #2e7d32;
-            border: 1px solid #81c784;
-        }
-
-        .btn-general:hover {
-            background: #c8e6c9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.2);
-        }
-
-        .btn-preferential {
-            background: #fff3e0;
-            color: #e65100;
-            border: 1px solid #ffb74d;
-        }
-
-        .btn-preferential:hover {
-            background: #ffe0b2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(230, 81, 0, 0.2);
-        }
-
-        .btn-reject {
-            background: #ffebee;
-            color: #c53030;
-            border: 1px solid #ef5350;
-        }
-
-        .btn-reject:hover {
-            background: #ffcdd2;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(197, 48, 48, 0.2);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: #f8fffe;
-            border-radius: 12px;
-            color: #8899a6;
-        }
-
-        .empty-state i {
-            font-size: 56px;
-            color: #e0e8ed;
-            margin-bottom: 16px;
-        }
-
-        .empty-state p {
-            font-size: 16px;
-            margin: 0;
-        }
-
-        .badge-verified {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #E8F5E9;
-            color: #2e7d32;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-
-        .badge-preferential {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: #fff3e0;
-            color: #e65100;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-top: 8px;
-        }
-
-        .verified-card {
-            grid-template-columns: auto 1fr auto auto;
-            align-items: center;
-        }
-
-        .verified-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            color: #2e7d32;
-        }
-
-        @media (max-width: 768px) {
-            .user-card,
-            .verified-card {
-                grid-template-columns: 1fr;
-            }
-
-            .user-actions {
-                flex-direction: row;
-                gap: 8px;
-                order: -1;
-            }
-
-            .btn-verify {
-                flex: 1;
-            }
-
-            .page-container {
-                padding: 20px;
-            }
-
-            .page-title {
-                font-size: 22px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/index-user.css') }}">
 </head>
 <body>
     @include('admin.partials.navbar')
@@ -314,25 +20,25 @@
             <div class="breadcrumb">
                 <a href="{{ route('admin.dashboard') }}">Dashboard</a>
                 <span> / </span>
-                <span>Gestionar Usuarios Externos</span>
+                <span>Gestionar Usuarios</span>
             </div>
 
             <!-- Header -->
             <div class="page-header">
-                <h1 class="page-title">Gestionar Usuarios Externos</h1>
-                <p class="page-subtitle">Verifica y clasifica nuevos usuarios registrados en el sistema</p>
+                <h1 class="page-title">Gestionar Usuarios</h1>
+                <p class="page-subtitle">Administra clientes y clasificadores del sistema</p>
             </div>
 
             <!-- Alerts -->
             @if (session('success'))
-                <div class="alert alert-success">
+                <div class="alert alert-success" id="success-alert">
                     <i class="fa fa-check-circle"></i>
                     {{ session('success') }}
                 </div>
             @endif
 
             @if ($errors->any())
-                <div class="alert alert-error">
+                <div class="alert alert-error" id="error-alert">
                     <i class="fa fa-exclamation-circle"></i>
                     <div>
                         @foreach ($errors->all() as $error)
@@ -342,145 +48,413 @@
                 </div>
             @endif
 
-            <!-- Users Pending Verification -->
-            <div class="section">
-                <div class="section-title">
-                    <i class="fa fa-clock-o"></i>
-                    Pendientes de Verificación
-                    <span class="badge-count">{{ $unverifiedUsers->count() }}</span>
+            <!-- Tabs Navigation -->
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-button active" onclick="switchTab('clientes')">
+                        <i class="fa fa-users"></i> Clientes
+                    </button>
+                    <button class="tab-button" onclick="switchTab('clasificadores')">
+                        <i class="fa fa-check-square"></i> Clasificadores
+                    </button>
                 </div>
 
-                @if ($unverifiedUsers->isEmpty())
-                    <div class="empty-state">
-                        <i class="fa fa-inbox"></i>
-                        <p>No hay usuarios pendientes de verificación</p>
-                    </div>
-                @else
-                    <div class="users-grid">
-                        @foreach ($unverifiedUsers as $user)
-                            <div class="user-card">
-                                <!-- Avatar -->
-                                <div class="user-avatar">
-                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                <!-- Tab: Clientes -->
+                <div id="tab-clientes" class="tab-content active">
+                    <div class="clients-container">
+                        <!-- Verified Users - Left Side -->
+                        <div class="clients-section left-section">
+                            <div class="section">
+                                <div class="section-title">
+                                    <i class="fa fa-check-circle"></i>
+                                    Clientes Verificados
+                                    <span class="badge-count" style="background: #E3F2FD; color: #1565c0;">{{ $verifiedUsers->count() }}</span>
                                 </div>
 
-                                <!-- Info -->
-                                <div class="user-main-info">
-                                    <div class="user-name">{{ $user->name }}</div>
-                                    <div class="user-details">
-                                        <div class="user-detail-item">
-                                            <i class="fa fa-envelope"></i>
-                                            <span>{{ $user->email }}</span>
-                                        </div>
-                                        @if ($user->phone)
-                                            <div class="user-detail-item">
-                                                <i class="fa fa-phone"></i>
-                                                <span>{{ $user->phone }}</span>
-                                            </div>
-                                        @endif
-                                        <div class="user-detail-item">
-                                            <i class="fa fa-calendar"></i>
-                                            <span>{{ $user->created_at->format('d/m/Y H:i') }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Actions -->
-                                <div class="user-actions">
-                                    <form method="POST" action="{{ route('admin.users.verify-general', $user) }}" style="display: contents;">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn-verify btn-general" title="Clasificar como Cliente General">
-                                            <i class="fa fa-user"></i> General
-                                        </button>
-                                    </form>
-                                    <form method="POST" action="{{ route('admin.users.verify-preferential', $user) }}" style="display: contents;">
-                                        @csrf
-                                        @method('PATCH')
-                                        <button type="submit" class="btn-verify btn-preferential" title="Clasificar como Cliente Preferencial">
-                                            <i class="fa fa-star"></i> Preferencial
-                                        </button>
-                                    </form>
-                                    <form method="POST" action="{{ route('admin.users.reject', $user) }}" style="display: contents;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-verify btn-reject" onclick="return confirm('¿Deseas rechazar este registro? Esta acción no se puede deshacer.');" title="Rechazar este usuario">
-                                            <i class="fa fa-trash"></i> Rechazar
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
-            </div>
-
-            <!-- Verified Users -->
-            <div class="section">
-                <div class="section-title">
-                    <i class="fa fa-check-circle"></i>
-                    Usuarios Verificados
-                    <span class="badge-count" style="background: #E3F2FD; color: #1565c0;">{{ $verifiedUsers->count() }}</span>
-                </div>
-
-                @if ($verifiedUsers->isEmpty())
-                    <div class="empty-state">
-                        <i class="fa fa-inbox"></i>
-                        <p>No hay usuarios verificados aún</p>
-                    </div>
-                @else
-                    <div class="users-grid">
-                        @foreach ($verifiedUsers as $user)
-                            <div class="user-card verified-card">
-                                <!-- Avatar -->
-                                <div class="user-avatar">
-                                    {{ strtoupper(substr($user->name, 0, 1)) }}
-                                </div>
-
-                                <!-- Info -->
-                                <div class="user-main-info">
-                                    <div class="user-name">{{ $user->name }}</div>
-                                    <div class="user-details">
-                                        <div class="user-detail-item">
-                                            <i class="fa fa-envelope"></i>
-                                            <span>{{ $user->email }}</span>
-                                        </div>
-                                        @if ($user->phone)
-                                            <div class="user-detail-item">
-                                                <i class="fa fa-phone"></i>
-                                                <span>{{ $user->phone }}</span>
-                                            </div>
-                                        @endif
-                                        <div class="user-detail-item">
-                                            <i class="fa fa-calendar"></i>
-                                            <span>Verificado: {{ $user->verified_at->format('d/m/Y H:i') }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Client Type Badge -->
-                                @if ($user->client_type === 'GENERAL')
-                                    <div class="badge-verified">
-                                        <i class="fa fa-user"></i> Cliente General
+                                @if ($verifiedUsers->isEmpty())
+                                    <div class="empty-state">
+                                        <i class="fa fa-inbox"></i>
+                                        <p>No hay clientes verificados aún</p>
                                     </div>
                                 @else
-                                    <div class="badge-preferential">
-                                        <i class="fa fa-star"></i> Cliente Preferencial
+                                    <div class="users-grid">
+                                        @foreach ($verifiedUsers as $user)
+                                            <div class="user-card verified-card">
+                                                <!-- Avatar -->
+                                                <div class="user-avatar">
+                                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                                </div>
+
+                                                <!-- Info -->
+                                                <div class="user-main-info">
+                                                    <div class="user-name">{{ $user->name }}</div>
+                                                    <div class="user-details">
+                                                        <div class="user-detail-item">
+                                                            <i class="fa fa-envelope"></i>
+                                                            <span>{{ $user->email }}</span>
+                                                        </div>
+                                                        @if ($user->phone)
+                                                            <div class="user-detail-item">
+                                                                <i class="fa fa-phone"></i>
+                                                                <span>{{ $user->phone }}</span>
+                                                            </div>
+                                                        @endif
+                                                        <div class="user-detail-item">
+                                                            <i class="fa fa-calendar"></i>
+                                                            <span>Verificado: {{ $user->verified_at->format('d/m/Y H:i') }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Badges -->
+                                                <div class="badges-group">
+                                                    <!-- Client Type Badge -->
+                                                    @if ($user->client_type === 'GENERAL')
+                                                        <div class="badge-verified">
+                                                            <i class="fa fa-user"></i> General
+                                                        </div>
+                                                    @else
+                                                        <div class="badge-preferential">
+                                                            <i class="fa fa-star"></i> Preferencial
+                                                        </div>
+                                                    @endif
+
+                                                    <!-- Verified Status -->
+                                                    <div class="verified-status">
+                                                        <i class="fa fa-check-circle"></i> Verificado
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     </div>
                                 @endif
-
-                                <!-- Verified Status -->
-                                <div class="verified-status">
-                                    <i class="fa fa-check-circle"></i> Verificado
-                                </div>
                             </div>
-                        @endforeach
+                        </div>
+
+                        <!-- Pending Users - Right Side -->
+                        <div class="clients-section right-section">
+                            <div class="section">
+                                <div class="section-title">
+                                    <i class="fa fa-clock-o"></i>
+                                    Pendientes de Verificación
+                                    <span class="badge-count">{{ $unverifiedUsers->count() }}</span>
+                                </div>
+
+                                @if ($unverifiedUsers->isEmpty())
+                                    <div class="empty-state">
+                                        <i class="fa fa-inbox"></i>
+                                        <p>No hay clientes pendientes de verificación</p>
+                                    </div>
+                                @else
+                                    <div class="users-grid">
+                                        @foreach ($unverifiedUsers as $user)
+                                            <div class="user-card">
+                                                <!-- Avatar -->
+                                                <div class="user-avatar">
+                                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                                </div>
+
+                                                <!-- Info -->
+                                                <div class="user-main-info">
+                                                    <div class="user-name">{{ $user->name }}</div>
+                                                    <div class="user-details">
+                                                        <div class="user-detail-item">
+                                                            <i class="fa fa-envelope"></i>
+                                                            <span>{{ $user->email }}</span>
+                                                        </div>
+                                                        @if ($user->phone)
+                                                            <div class="user-detail-item">
+                                                                <i class="fa fa-phone"></i>
+                                                                <span>{{ $user->phone }}</span>
+                                                            </div>
+                                                        @endif
+                                                        <div class="user-detail-item">
+                                                            <i class="fa fa-calendar"></i>
+                                                            <span>{{ $user->created_at->format('d/m/Y H:i') }}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Actions -->
+                                                <div class="user-actions">
+                                                    <form method="POST" action="{{ route('admin.users.verify-general', $user) }}" style="display: contents;">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="btn-verify btn-general" title="Clasificar como Cliente General">
+                                                            <i class="fa fa-user"></i> General
+                                                        </button>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('admin.users.verify-preferential', $user) }}" style="display: contents;">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="submit" class="btn-verify btn-preferential" title="Clasificar como Cliente Preferencial">
+                                                            <i class="fa fa-star"></i> Preferencial
+                                                        </button>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('admin.users.reject', $user) }}" style="display: contents;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn-verify btn-reject" onclick="return confirm('¿Deseas rechazar este registro? Esta acción no se puede deshacer.');" title="Rechazar este usuario">
+                                                            <i class="fa fa-trash"></i> Rechazar
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
-                @endif
+                </div>
+
+                <!-- Tab: Clasificadores -->
+                <div id="tab-clasificadores" class="tab-content">
+                    <!-- Botón para crear Clasificador -->
+                    <div style="margin-bottom: 30px;">
+                        <a href="{{ route('admin.users.create-clasificador') }}" style="display: inline-block; padding: 12px 24px; background: #22c5bc; color: white; text-decoration: none; border-radius: 8px; font-weight: 600; transition: background 0.2s;">
+                            <i class="fa fa-plus"></i> Crear Usuario Clasificador
+                        </a>
+                    </div>
+
+                    <div class="section">
+                        <div class="section-title">
+                            <i class="fa fa-check-square"></i>
+                            Usuarios Clasificadores
+                            <span class="badge-count" style="background: #FFF3E0; color: #e65100;">{{ $clasificadores->count() }}</span>
+                        </div>
+
+                        @if ($clasificadores->isEmpty())
+                            <div class="empty-state">
+                                <i class="fa fa-inbox"></i>
+                                <p>No hay usuarios clasificadores creados aún</p>
+                            </div>
+                        @else
+                            <div class="users-grid">
+                                @foreach ($clasificadores as $user)
+                                    <div class="user-card verified-card">
+                                        <!-- Avatar -->
+                                        <div class="user-avatar" style="background: #FFF3E0; color: #e65100;">
+                                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                                        </div>
+
+                                        <!-- Info -->
+                                        <div class="user-main-info">
+                                            <div class="user-name">{{ $user->name }}</div>
+                                            <div class="user-details">
+                                                <div class="user-detail-item">
+                                                    <i class="fa fa-envelope"></i>
+                                                    <span>{{ $user->email }}</span>
+                                                </div>
+                                                @if ($user->phone)
+                                                    <div class="user-detail-item">
+                                                        <i class="fa fa-phone"></i>
+                                                        <span>{{ $user->phone }}</span>
+                                                    </div>
+                                                @endif
+                                                <div class="user-detail-item">
+                                                    <i class="fa fa-calendar"></i>
+                                                    <span>Creado: {{ $user->created_at->format('d/m/Y H:i') }}</span>
+                                                </div>
+                                            </div>
+                                            <!-- Actions -->
+                                            <div class="user-actions">
+                                                <a href="{{ route('admin.users.edit-clasificador', $user) }}" class="btn-verify btn-general" title="Editar información del clasificador">
+                                                    <i class="fa fa-edit"></i> Editar
+                                                </a>
+                                                <form method="POST" action="{{ route('admin.users.delete-clasificador', $user) }}" style="display: contents;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn-verify btn-reject" onclick="return confirm('¿Deseas eliminar este clasificador? Esta acción no se puede deshacer.');" title="Eliminar este clasificador">
+                                                        <i class="fa fa-trash"></i> Eliminar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                        <!-- Badges -->
+                                        <div class="badges-group">
+                                            <!-- Role Badge -->
+                                            <div class="badge-verified" style="background: #FFF3E0; color: #e65100;">
+                                                <i class="fa fa-check-square"></i> Clasificador
+                                            </div>
+
+                                            <!-- Verified Status -->
+                                            <div class="verified-status" style="background: #e8f5e9; color: #2e7d32;">
+                                                <i class="fa fa-check-circle"></i> Activo
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
-    <script src="{{ asset('js/dashboard.js') }}"></script>
+    <style>
+        .tabs-container {
+            margin-bottom: 30px;
+        }
+
+        .tabs-header {
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid #e0e8ed;
+            margin-bottom: 24px;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8899a6;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-button:hover {
+            color: #22c5bc;
+        }
+
+        .tab-button.active {
+            color: #22c5bc;
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #22c5bc;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Clientes Layout - Vertical Division */
+        .clients-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .clients-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .left-section {
+            border-right: 1px solid #e0e8ed;
+            padding-right: 24px;
+        }
+
+        .right-section {
+            padding-left: 24px;
+        }
+
+        /* Alert Auto-Hide Animation */
+        .alert {
+            animation: slideInDown 0.3s ease-out;
+        }
+
+        .alert.fade-out {
+            animation: slideOutUp 0.3s ease-out forwards;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideOutUp {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Responsive - Mobile */
+        @media (max-width: 1200px) {
+            .clients-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .left-section {
+                border-right: none;
+                border-bottom: 1px solid #e0e8ed;
+                padding-right: 0;
+                padding-bottom: 30px;
+            }
+
+            .right-section {
+                padding-left: 0;
+                padding-top: 0;
+            }
+        }
+    </style>
+
+    <script>
+        // Auto-hide alerts después de 5 segundos
+        function autoHideAlert(alertId, delay = 5000) {
+            const alert = document.getElementById(alertId);
+            if (alert) {
+                setTimeout(() => {
+                    alert.classList.add('fade-out');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300);
+                }, delay);
+            }
+        }
+
+        // Ejecutar al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            autoHideAlert('success-alert', 3000);
+            autoHideAlert('error-alert', 3000);
+        });
+
+        function switchTab(tabName) {
+            // Ocultar todos los tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Desactivar todos los botones
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Mostrar el tab seleccionado
+            document.getElementById('tab-' + tabName).classList.add('active');
+
+            // Activar el botón seleccionado
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>

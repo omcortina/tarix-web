@@ -91,10 +91,16 @@ class AuthController extends Controller
 
         if ($user) {
             // Usuario ya existe
-            // Solo loguea si está verificado (ADMIN o EXTERNO aprobado)
-            if ($user->user_type === 'ADMIN' || ($user->user_type === 'EXTERNO' && $user->is_verified)) {
+            // Loguea según su tipo de usuario
+            if ($user->user_type === 'ADMIN') {
                 auth()->login($user);
                 return redirect()->route('admin.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
+            } elseif ($user->user_type === 'CLASIFICADOR') {
+                auth()->login($user);
+                return redirect()->route('user.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
+            } elseif ($user->user_type === 'EXTERNO' && $user->is_verified) {
+                auth()->login($user);
+                return redirect()->route('user.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
             } else {
                 // Usuario registrado pero no verificado
                 return redirect()->route('auth.pending')->with('error', 'Tu cuenta está en proceso de aprobación. Recibirás un correo cuando sea verificada.');

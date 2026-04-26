@@ -107,5 +107,8 @@ return [
     'dashboard_classification_desc' => 'Consult the tariff classification of your products and get detailed information about codes and tariffs.',
     'dashboard_procedures_title' => 'Procedures Consultation',
     'dashboard_procedures_desc' => 'Check the status of your customs procedures and get real-time updates on your transactions.',
+    'dashboard_inbox_title' => 'Mail Inbox',
+    'dashboard_inbox_desc' => 'Manage and review classified correspondence',
+    'user_type_clasificador' => 'Classifier',
 ];
 
