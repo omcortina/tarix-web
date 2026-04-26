@@ -212,3 +212,53 @@ code {
     border-radius: 3px;
     font-family: "Courier New", monospace;
 }
+
+.divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: #e0e8ed;
+}
+
+.divider-text {
+    font-size: 12px;
+    color: #8899a6;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.btn-google {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    color: #1a2e44;
+    border: 1.5px solid #e0e8ed;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-google:hover {
+    background: #f8fafc;
+    border-color: #22c5bc;
+    color: #22c5bc;
+    box-shadow: 0 4px 12px rgba(34, 197, 188, 0.15);
+}

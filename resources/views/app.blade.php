@@ -11,9 +11,36 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
+    <!-- Global Alert for Errors/Success -->
+    @if (session('error'))
+        <div class="global-alert alert-error" style="position: fixed; top: 20px; right: 20px; background: #fff5f5; color: #c53030; padding: 16px 20px; border-radius: 8px; border-left: 4px solid #ef5350; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 9999; max-width: 400px; animation: slideIn 0.3s ease;">
+            <i class="fa fa-exclamation-circle"></i> {{ session('error') }}
+        </div>
+        <style>
+            @keyframes slideIn {
+                from { transform: translateX(450px); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateX(0); }
+                to { opacity: 0; transform: translateX(450px); }
+            }
+            .global-alert.fade-out {
+                animation: fadeOut 0.3s ease forwards;
+            }
+        </style>
+    @endif
+
+    @if (session('success'))
+        <div class="global-alert alert-success" style="position: fixed; top: 20px; right: 20px; background: #f0fff4; color: #22863a; padding: 16px 20px; border-radius: 8px; border-left: 4px solid #85e89d; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 9999; max-width: 400px; animation: slideIn 0.3s ease;">
+            <i class="fa fa-check-circle"></i> {{ session('success') }}
+        </div>
+    @endif
+
     <!-- NAV -->
     <nav>
         <a href="#" class="nav-logo">
@@ -40,7 +67,8 @@
             <a href="/blog">{{ __('app.blog') }}</a>
             <a href="#recursos">{{ __('app.recursos') }}</a>
             <a href="#contacto">{{ __('app.contacto') }}</a>
-            <a href="#contacto" class="nav-cta">{{ __('app.contactanos') }}</a>
+            <a href="{{ route('register') }}" class="nav-cta">{{ __('app.conoce_servicios') }}</a>
+            <a href="{{ route('login') }}" class="nav-cta">{{ __('app.login') }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
                 <a href="{{ route('lang.set', 'en') }}" class="lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
@@ -56,7 +84,7 @@
             <h1>{{ __('app.titulo_hero') }} <span>{{ __('app.operacion_internacional') }}</span></h1>
             <p>{{ __('app.descripcion_hero') }}</p>
             <div class="hero-btns">
-                <a href="#servicios" class="btn-primary">{{ __('app.conoce_servicios') }}</a>
+                <a href="{{ route('register') }}" class="btn-primary">{{ __('app.conoce_servicios') }}</a>
                 <a href="#contacto" class="btn-secondary">{{ __('app.contactanos') }}</a>
             </div>
         </div>
@@ -84,65 +112,49 @@
 
     <!-- VALUES -->
     <section class="values reveal" id="nosotros">
-        <div class="section-label">{{ __('app.por_que_elegirnos') }}</div>
-        <h2 class="section-title">{{ __('app.nuestros_valores') }}</h2>
-        <p class="section-desc">{{ __('app.trabajamos_altos_estandares') }}</p>
+        <div class="values-header">
+            <div class="section-label">{{ __('app.por_que_elegirnos') }}</div>
+            <h2 class="section-title">
+                {{ __('app.nuestros_valores_line1') }}<br>
+                <span class="title-teal">{{ __('app.nuestros_valores_line2') }}</span>
+            </h2>
+            <p class="section-desc">{{ __('app.trabajamos_altos_estandares') }}</p>
+            @auth
+                <a href="{{ route('admin.values.index') }}" style="margin-top: 20px; display: inline-block; padding: 10px 20px; background: #22c5bc; color: white; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 600;">
+                    {{ __('app.gestionar_valores') }}
+                </a>
+            @endauth
+        </div>
+
         <div class="values-grid">
-            <div class="value-card">
-                <div class="value-icon icon-precision">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                        <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="1.5"/>
-                        <circle cx="12" cy="12" r="2" fill="currentColor"/>
-                    </svg>
+            @forelse($values as $index => $value)
+                <div class="value-card card-{{ $index + 1 }}">
+                    <div class="value-card-top">
+                        <div class="value-icon" style="background-color: {{ $value->icon_color }}; border-radius: 50%; width: 54px; height: 54px; display: flex; align-items: center; justify-content: center;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 32px; height: 32px;">
+                                {!! $value->icon_svg !!}
+                            </svg>
+                        </div>
+                        <div class="value-card-number" style="color: {{ $value->icon_color }};">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }}</div>
+                    </div>
+                    <h3 class="value-name">{{ $value->getTranslation('name', app()->getLocale()) }}</h3>
+                    <div class="value-divider" style="background-color: {{ $value->icon_color }};"></div>
+                    <p class="value-desc">{{ $value->getTranslation('description', app()->getLocale()) }}</p>
                 </div>
-                <div class="value-name">{{ __('app.value_precision_name') }}</div>
-                <div class="value-desc">{{ __('app.value_precision_desc') }}</div>
+            @empty
+                <p style="grid-column: 1 / -1; text-align: center; color: #999; padding: 40px;">
+                    No hay valores disponibles en este momento.
+                </p>
+            @endforelse
+        </div>
+
+        <!-- Commitment Banner -->
+        <div class="values-commitment">
+            <div class="values-commitment-content">
+                <h3>{{ __('app.value_commitment_name') }}</h3>
+                <p>{{ __('app.value_commitment_desc') }}</p>
             </div>
-            <div class="value-card">
-                <div class="value-icon icon-security">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 2L4 5.5V11C4 17 12 22 12 22S20 17 20 11V5.5L12 2Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                        <path d="M10 12L11.5 13.5L14 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="value-name">{{ __('app.value_security_name') }}</div>
-                <div class="value-desc">{{ __('app.value_security_desc') }}</div>
-            </div>
-            <div class="value-card">
-                <div class="value-icon icon-experience">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
-                        <path d="M7 9.5C7.8 8.5 9.3 7.5 12 7.5C14.7 7.5 16.2 8.5 17 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <circle cx="9" cy="11" r="0.8" fill="currentColor"/>
-                        <circle cx="15" cy="11" r="0.8" fill="currentColor"/>
-                        <path d="M8.5 15.5C9.5 17 10.8 18 12 18C13.2 18 14.5 17 15.5 15.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    </svg>
-                </div>
-                <div class="value-name">{{ __('app.value_experience_name') }}</div>
-                <div class="value-desc">{{ __('app.value_experience_desc') }}</div>
-            </div>
-            <div class="value-card">
-                <div class="value-icon icon-efficiency">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 20H21V4M5 16L9 12L12 14L19 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="19" cy="8" r="1.5" fill="currentColor"/>
-                    </svg>
-                </div>
-                <div class="value-name">{{ __('app.value_efficiency_name') }}</div>
-                <div class="value-desc">{{ __('app.value_efficiency_desc') }}</div>
-            </div>
-            <div class="value-card">
-                <div class="value-icon icon-commitment">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M13 8L14.5 4.5M11 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        <path d="M7 8H2V20C2 21.1 2.9 22 4 22H20C21.1 22 22 21.1 22 20V8H17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9.5 11.5L11.5 13.5L15.5 9.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="value-name">{{ __('app.value_commitment_name') }}</div>
-                <div class="value-desc">{{ __('app.value_commitment_desc') }}</div>
-            </div>
+            <a href="https://wa.me/573024674923" class="btn-commitment">{{ __('app.value_commitment_btn') }} →</a>
         </div>
     </section>
 
@@ -348,7 +360,7 @@
                             <path d="M4 5H20C21.1 5 22 5.9 22 7V17C22 18.1 21.1 19 20 19H4C2.9 19 2 18.1 2 17V7C2 5.9 2.9 5 4 5Z" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
                     </span>
-                    <a href="mailto:contacto@tarix.com.co">contacto@tarix.com.co</a>
+                    <a href="mailto:info@tarix.com.co">info@tarix.com.co</a>
                 </div>
                 <div class="footer-contact-item">
                     <span class="footer-icon icon-phone">
@@ -357,17 +369,19 @@
                             <path d="M9.5 8H14.5M9.5 15H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </span>
-                    <span>+57 300 000 0000</span>
+                    <span>+57 302 467 4923</span>
                 </div>
                 <div class="footer-contact-item">
-                    <span class="footer-icon icon-instagram">
+                    <span class="footer-icon icon-linkedin">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="2" y="2" width="20" height="20" rx="4.5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor"/>
+                            <path d="M3 8C3 6.9 3.9 6 5 6H19C20.1 6 21 6.9 21 8V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M7 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M7 8.5C7 9.32843 6.32843 10 5.5 10C4.67157 10 4 9.32843 4 8.5C4 7.67157 4.67157 7 5.5 7C6.32843 7 7 7.67157 7 8.5Z" fill="currentColor"/>
+                            <path d="M11 17V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M11 11.5C11 10.1193 12.1193 9 13.5 9C14.8807 9 16 10.1193 16 11.5V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
-                    <a href="https://instagram.com/tarix-soluciones">@tarix-soluciones</a>
+                    <a href="https://www.linkedin.com/in/jeison-ruiz">Jeison Ruiz</a>
                 </div>
             </div>
         </div>
@@ -379,7 +393,7 @@
     </footer>
 
     <!-- WHATSAPP FLOATING BUTTON -->
-    <a href="https://wa.me/573000000000" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
+    <a href="https://wa.me/573024674923" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
         <i class="fa fa-whatsapp" style="font-size: 32px;"></i>
     </a>
 
@@ -416,6 +430,7 @@
             grecaptcha.ready(() => {
                 grecaptcha.execute('{{ env("RECAPTCHA_SITE_KEY") }}', { action: 'submit' })
                     .then(token => {
+                        console.log('reCAPTCHA token generado:', token.substring(0, 50) + '...');
                         document.getElementById('g-recaptcha-response').value = token;
                         enviarFormulario();
                     })
@@ -445,16 +460,37 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    mostrarExito(data.message);
-                    contactForm.reset();
-                    limpiarErrores();
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Mensaje enviado!',
+                        text: data.message,
+                        confirmButtonColor: '#22c5bc',
+                        confirmButtonText: 'Aceptar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            contactForm.reset();
+                            limpiarErrores();
+                        }
+                    });
                 } else {
-                    mostrarError(data.message || 'Error al enviar.');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: data.message || 'Error al enviar.',
+                        confirmButtonColor: '#d32f2f',
+                        confirmButtonText: 'Aceptar'
+                    });
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                mostrarError('Error de conexión.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'Ocurrió un error al enviar tu mensaje. Por favor intenta nuevamente.',
+                    confirmButtonColor: '#d32f2f',
+                    confirmButtonText: 'Aceptar'
+                });
             })
             .finally(() => {
                 submitBtn.disabled = false;
@@ -558,6 +594,19 @@
                     hamburgerBtn.classList.remove('active');
                     navMenu.classList.remove('active');
                 }
+            });
+        });
+
+        // Auto-hide global alerts after 2.5 seconds
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.global-alert');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('fade-out');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 300);
+                }, 2500);
             });
         });
     </script>

@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             UsefulResourceSeeder::class,
             ArticleSeeder::class,
+            ValueSeeder::class,
         ]);
     }
 }

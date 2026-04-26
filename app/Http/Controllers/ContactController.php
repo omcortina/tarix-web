@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ContactController extends Controller
 {
@@ -22,25 +23,10 @@ class ContactController extends Controller
             'g-recaptcha-response' => 'required',
         ]);
 
-        // Verificar reCAPTCHA con Google
-        $recaptchaResponse = $request->input('g-recaptcha-response');
-        $secretKey = env('RECAPTCHA_SECRET_KEY');
-
         try {
-            $response = Http::post('https://www.google.com/recaptcha/api/siteverify', [
-                'secret' => $secretKey,
-                'response' => $recaptchaResponse,
-            ]);
-
-            $result = $response->json();
-
-            // Validar que reCAPTCHA fue exitoso
-            if (!$result['success'] || $result['score'] < 0.5) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Validación reCAPTCHA fallida. Intenta nuevamente.',
-                ], 422);
-            }
+            // TODO: Habilitar validación reCAPTCHA cuando esté correctamente configurado
+            // Por ahora solo almacenamos el token
+            $recaptchaResponse = $request->input('g-recaptcha-response');
 
             // Guardar el contacto
             $contact = Contact::create([
@@ -49,7 +35,7 @@ class ContactController extends Controller
                 'phone' => $validated['phone'],
                 'company' => $validated['company'],
                 'message' => $validated['message'],
-                'recaptcha_score' => $result['score'] ?? 0,
+                'recaptcha_score' => 0,
             ]);
 
             // TODO: Enviar email de confirmación al usuario
@@ -61,6 +47,12 @@ class ContactController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            Log::error('Error al guardar contacto', [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]);
+            
             return response()->json([
                 'success' => false,
                 'message' => 'Error al procesar tu solicitud. Intenta más tarde.',

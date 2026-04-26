@@ -10,55 +10,7 @@
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 </head>
 <body>
-    <!-- NAVBAR -->
-    <div class="admin-navbar">
-        <div class="admin-brand">
-            <i class="fa fa-cog"></i>
-            TARIX Admin
-        </div>
-        <div class="admin-user">
-            <div class="user-info">
-                <div class="user-name">{{ Auth::user()->name }}</div>
-                <div class="user-role">Administrador</div>
-            </div>
-            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" class="btn-logout">
-                    <i class="fa fa-sign-out"></i> Cerrar sesión
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- SIDEBAR -->
-    <aside class="admin-sidebar">
-        <ul class="sidebar-menu">
-            <li>
-                <a href="{{ route('admin.dashboard') }}" class="active">
-                    <i class="fa fa-home"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.services.index') }}">
-                    <i class="fa fa-briefcase"></i>
-                    Servicios
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.articles.index') }}">
-                    <i class="fa fa-newspaper-o"></i>
-                    Artículos
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.contacts.index') }}">
-                    <i class="fa fa-envelope"></i>
-                    Mensajes
-                </a>
-            </li>
-        </ul>
-    </aside>
+    @include('admin.partials.navbar')
 
     <!-- MAIN CONTENT -->
     <main class="admin-main">
@@ -187,5 +139,34 @@
             @endif
         </div>
     </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const hamburgerAdmin = document.getElementById('hamburgerAdmin');
+            const adminSidebar = document.getElementById('adminSidebar');
+
+            hamburgerAdmin.addEventListener('click', function() {
+                hamburgerAdmin.classList.toggle('active');
+                adminSidebar.classList.toggle('active');
+            });
+
+            // Cerrar menú cuando se hace clic en un enlace
+            const sidebarLinks = adminSidebar.querySelectorAll('a');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburgerAdmin.classList.remove('active');
+                    adminSidebar.classList.remove('active');
+                });
+            });
+
+            // Cerrar menú cuando se hace clic fuera
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.admin-navbar') && !event.target.closest('.admin-sidebar')) {
+                    hamburgerAdmin.classList.remove('active');
+                    adminSidebar.classList.remove('active');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

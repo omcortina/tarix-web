@@ -339,7 +339,7 @@
                             <path d="M4 5H20C21.1 5 22 5.9 22 7V17C22 18.1 21.1 19 20 19H4C2.9 19 2 18.1 2 17V7C2 5.9 2.9 5 4 5Z" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
                     </span>
-                    <a href="mailto:contacto@tarix.com.co">contacto@tarix.com.co</a>
+                    <a href="mailto:info@tarix.com.co">info@tarix.com.co</a>
                 </div>
                 <div class="footer-contact-item">
                     <span class="footer-icon icon-phone">

@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <style>
         body { background: #f5f7fa; font-family: 'Inter', sans-serif; }
-        .admin-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .admin-container { max-width: 1200px; margin: 100px auto 40px; padding: 0 5%; }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .admin-header h1 { font-size: 28px; color: #0d2340; margin: 0; }
+        .admin-header h1 { font-family: 'Montserrat', sans-serif;, font-size: 32px; font-weight: 800; color: #0d2340; margin: 0; }
         .breadcrumb { font-size: 14px; color: #666; margin-bottom: 20px; }
         .breadcrumb a { color: #22c5bc; text-decoration: none; margin: 0 5px; }
         .messages-table { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
@@ -34,6 +34,22 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
+    <nav>
+        <a href="/" class="nav-logo">
+            <div class="logo-icon">
+                <div class="logo-t">T</div>
+            </div>
+            <div class="logo-text">
+                <span class="logo-name">TARIX</span>
+                <span class="logo-sub">Soluciones en Comercio Exterior</span>
+            </div>
+        </a>
+        <div class="nav-links">
+            <a href="/">Volver al Sitio</a>
+            <a href="{{ route('admin.dashboard') }}" class="nav-cta">Admin</a>
+        </div>
+    </nav>
+    
     <div class="admin-container">
         <div style="margin-bottom: 20px; display: flex; gap: 8px; align-items: center; font-size: 14px; color: #666;">
             <a href="{{ route('admin.dashboard') }}" style="color: #22c5bc; text-decoration: none; font-weight: 600;">
