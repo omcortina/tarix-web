@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
     <meta charset="UTF-8">
@@ -11,188 +11,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <style>
-        body { background: #f5f7fa; }
-        .news-header { 
-            background: linear-gradient(135deg, #1ba8a0 0%, #0d2340 100%);
-            color: white;
-            padding: 100px 20px;
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        .news-header h1 { 
-            font-size: 42px;
-            margin: 0 0 15px 0;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 800;
-        }
-        .news-header p { 
-            font-size: 16px;
-            max-width: 600px;
-            margin: 0 auto;
-            opacity: 0.95;
-        }
-        .news-container { 
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px 80px;
-        }
-        .news-grid { 
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        .news-card { 
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            display: flex;
-            flex-direction: column;
-        }
-        .news-card:hover { 
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-        }
-        .news-card-header { 
-            padding: 24px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        .news-date { 
-            font-size: 12px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-        .news-card h3 { 
-            margin: 0;
-            font-size: 18px;
-            color: #0d2340;
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            line-height: 1.4;
-        }
-        .news-card-body { 
-            padding: 24px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        .news-excerpt { 
-            color: #666;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            flex-grow: 1;
-        }
-        .news-footer { 
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid #e0e0e0;
-        }
-        .news-author { 
-            font-size: 12px;
-            color: #999;
-        }
-        .btn-read-more { 
-            display: inline-block;
-            padding: 8px 16px;
-            background: #22c5bc;
-            color: white;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-            transition: background 0.2s;
-        }
-        .btn-read-more:hover { 
-            background: #1ba8a0;
-        }
-        .empty-state { 
-            text-align: center;
-            padding: 80px 20px;
-            color: #999;
-        }
-        .empty-state p { 
-            font-size: 16px;
-            margin-bottom: 30px;
-        }
-        .pagination { 
-            display: flex;
-            justify-content: center;
-            gap: 5px;
-            margin-top: 50px;
-            flex-wrap: wrap;
-        }
-        .pagination a, .pagination span { 
-            padding: 10px 14px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            text-decoration: none;
-            color: #0066cc;
-            font-size: 14px;
-        }
-        .pagination .active { 
-            background: #0066cc;
-            color: white;
-            border-color: #0066cc;
-        }
-        .pagination a:hover { 
-            background: #f0f0f0;
-        }
-        .language-selector {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .lang-btn {
-            padding: 6px 12px;
-            border: 2px solid transparent;
-            background: transparent;
-            color: #666;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            transition: all 0.2s;
-        }
-        .lang-btn.active {
-            color: #22c5bc;
-            border-bottom: 2px solid #22c5bc;
-        }
-        .lang-btn:hover {
-            color: #22c5bc;
-        }
-        .language-selector {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .lang-btn {
-            padding: 6px 12px;
-            border: 2px solid transparent;
-            background: transparent;
-            color: #666;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            transition: all 0.2s;
-        }
-        .lang-btn.active {
-            color: #22c5bc;
-            border-bottom: 2px solid #22c5bc;
-        }
-        .lang-btn:hover {
-            color: #22c5bc;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/articles.css') }}">
 </head>
 
 <body>
@@ -204,7 +23,7 @@
             </div>
             <div class="logo-text">
                 <span class="logo-name">TARIX</span>
-                <span class="logo-sub">Soluciones en Comercio Exterior</span>
+                <span class="logo-sub">{{ __('articles.solutions') }}</span>
             </div>
         </a>
         
@@ -216,13 +35,14 @@
         </button>
         
         <div class="nav-links" id="navMenu">
-            <a href="/">{{ __('articles.news') == 'Blog' ? 'Inicio' : 'Home' }}</a>
-            <a href="/#nosotros">{{ __('articles.news') == 'Blog' ? 'Nosotros' : 'About' }}</a>
-            <a href="/#servicios">{{ __('articles.news') == 'Blog' ? 'Servicios' : 'Services' }}</a>
+            <a href="/">{{ __('articles.home') }}</a>
+            <a href="/#nosotros">{{ __('articles.about') }}</a>
+            <a href="/#servicios">{{ __('articles.services') }}</a>
             <a href="/blog" class="active">{{ __('articles.news') }}</a>
-            <a href="/#recursos">{{ __('articles.news') == 'Blog' ? 'Recursos' : 'Resources' }}</a>
-            <a href="/#contacto">{{ __('articles.news') == 'Blog' ? 'Contacto' : 'Contact' }}</a>
-            <a href="/#contacto" class="nav-cta">{{ __('articles.news') == 'Blog' ? 'Contáctanos' : 'Contact Us' }}</a>
+            <a href="/#recursos">{{ __('articles.resources') }}</a>
+            <a href="/#contacto">{{ __('articles.contact') }}</a>
+            <a href="{{ route('register') }}" class="nav-cta">{{ __('articles.register') }}</a>
+            <a href="{{ route('login') }}" class="nav-cta">{{ __('articles.login') }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
                 <a href="{{ route('lang.set', 'en') }}" class="lang-btn {{ app()->getLocale() === 'en' ? 'active' : '' }}">EN</a>
@@ -299,10 +119,10 @@
                         <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:3px;">
                             TARIX</div>
                         <div style="font-size:8px;color:#22c5bc;letter-spacing:1.5px;text-transform:uppercase;">
-                            Soluciones en Comercio Exterior</div>
+                            {{ __('articles.solutions') }}</div>
                     </div>
                 </div>
-                <p>Expertos en comercio exterior que acompañan a tu empresa en cada paso de la operación internacional con precisión, seguridad y compromiso.</p>
+                <p>{{ __('articles.footer_experts') }}</p>
             </div>
             <div class="footer-col">
                 <h4>{{ __('articles.navigation') }}</h4>
@@ -315,14 +135,14 @@
             </div>
             <div class="footer-col">
                 <h4>{{ __('articles.services') }}</h4>
-                @forelse(\App\Models\Service::where('show_in_footer', true)->get() as $service)
+                @forelse($services->where('show_in_footer', true) as $service)
                     <a href="/{{ $service->slug }}">{{ $service->title }}</a>
                 @empty
-                    <p style="font-size: 12px; color: #999;">No hay servicios disponibles</p>
+                    <p style="font-size: 12px; color: #999;">{{ __('articles.no_services_available') }}</p>
                 @endforelse
             </div>
             <div class="footer-col">
-                <h4>Contacto</h4>
+                <h4>{{ __('articles.footer_contact') }}</h4>
                 <div class="footer-contact-item">
                     <span class="footer-icon icon-website">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -348,24 +168,26 @@
                             <path d="M9.5 8H14.5M9.5 15H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </span>
-                    <span>+57 300 000 0000</span>
+                    <span>+57 302 467 4923</span>
                 </div>
                 <div class="footer-contact-item">
-                    <span class="footer-icon icon-instagram">
+                    <span class="footer-icon icon-linkedin">
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="2" y="2" width="20" height="20" rx="4.5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5"/>
-                            <circle cx="17.5" cy="6.5" r="0.75" fill="currentColor"/>
+                            <path d="M3 8C3 6.9 3.9 6 5 6H19C20.1 6 21 6.9 21 8V20C21 21.1 20.1 22 19 22H5C3.9 22 3 21.1 3 20V8Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                            <path d="M7 11V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M7 8.5C7 9.32843 6.32843 10 5.5 10C4.67157 10 4 9.32843 4 8.5C4 7.67157 4.67157 7 5.5 7C6.32843 7 7 7.67157 7 8.5Z" fill="currentColor"/>
+                            <path d="M11 17V11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                            <path d="M11 11.5C11 10.1193 12.1193 9 13.5 9C14.8807 9 16 10.1193 16 11.5V17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </span>
-                    <a href="https://instagram.com/tarix-soluciones">@tarix-soluciones</a>
+                    <a href="https://www.linkedin.com/in/jeison-ruiz">Jeison Ruiz</a>
                 </div>
             </div>
         </div>
         <hr class="footer-divider">
         <div class="footer-bottom">
-            <span>© {{ date('Y') }} TARIX | Soluciones en Comercio Exterior. Todos los derechos reservados.</span>
-            <span>Hecho en Colombia 🇨🇴</span>
+            <span>© {{ date('Y') }} TARIX | {{ __('articles.solutions') }}. {{ __('articles.all_rights_reserved') }}</span>
+            <span>{{ __('articles.made_in_colombia') }} 🇨🇴</span>
         </div>
     </footer>
 

@@ -16,7 +16,10 @@ class ArticlePublicController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(9);
 
-        return view('articles.index', compact('articles'));
+        // Obtener servicios para el footer
+        $services = \App\Models\Service::where('show_in_footer', true)->where('published', true)->orderBy('id', 'asc')->get();
+
+        return view('articles.index', compact('articles', 'services'));
     }
 
     /**
