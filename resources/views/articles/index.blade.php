@@ -96,9 +96,6 @@
                 @endforeach
             </div>
 
-            <div class="pagination">
-                {{ $articles->links() }}
-            </div>
         @else
             <div class="empty-state">
                 <p>No hay artículos disponibles en este momento.</p>
