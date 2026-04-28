@@ -40,6 +40,16 @@ class ClassificationController extends Controller
     public function create()
     {
         $setting = ClassificationSetting::first();
+        
+        // Validar que exista al menos un clasificador registrado
+        $clasificadoresCount = User::where('user_type', 'CLASIFICADOR')->count();
+        if ($clasificadoresCount === 0) {
+            return redirect()->route('user.classifications')
+                ->withErrors([
+                    'error' => 'No hay clasificadores disponibles en este momento. Por favor, intente más tarde o contacte al administrador.'
+                ]);
+        }
+        
         return view('user.classifications.create', compact('setting'));
     }
 
@@ -48,6 +58,14 @@ class ClassificationController extends Controller
      */
     public function store(Request $request)
     {
+        // Validar que exista al menos un clasificador registrado
+        $clasificadoresCount = User::where('user_type', 'CLASIFICADOR')->count();
+        if ($clasificadoresCount === 0) {
+            return back()->withErrors([
+                'error' => 'No hay clasificadores disponibles en este momento. Por favor, intente más tarde o contacte al administrador.'
+            ])->withInput();
+        }
+        
         $validated = $request->validate([
             'type' => 'required|in:general,unidad_funcional',
             'items' => 'nullable|array|min:0',
