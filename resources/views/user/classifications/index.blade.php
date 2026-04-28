@@ -22,6 +22,20 @@
             </div>
         @endif
 
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                @if ($errors->has('error'))
+                    <strong>Error:</strong> {{ $errors->first('error') }}
+                @else
+                    <ul style="margin: 0; padding-left: 20px;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+            </div>
+        @endif
+
         @if ($classifications->count() > 0)
             <div class="classifications-grid">
                 @foreach ($classifications as $classification)
