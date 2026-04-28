@@ -265,7 +265,7 @@
 </style>
 
 <!-- Script reCAPTCHA v3 -->
-<script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}"></script>
+<script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}"></script>
 
 <!-- Script del formulario -->
 <script>
@@ -280,7 +280,7 @@
 
         // Ejecutar reCAPTCHA
         grecaptcha.ready(() => {
-            grecaptcha.execute('{{ env("RECAPTCHA_SITE_KEY") }}', { action: 'submit' })
+            grecaptcha.execute('{{ config("recaptcha.site_key") }}', { action: 'submit' })
                 .then(token => {
                     document.getElementById('g-recaptcha-response').value = token;
                     enviarFormulario();

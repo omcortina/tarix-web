@@ -426,7 +426,7 @@
 
             // Ejecutar reCAPTCHA
             grecaptcha.ready(() => {
-                grecaptcha.execute('{{ env("RECAPTCHA_SITE_KEY") }}', { action: 'submit' })
+                grecaptcha.execute('{{ config("recaptcha.site_key") }}', { action: 'submit' })
                     .then(token => {
                         console.log('reCAPTCHA token generado:', token.substring(0, 50) + '...');
                         document.getElementById('g-recaptcha-response').value = token;
@@ -550,8 +550,8 @@
     </script>
 
     <!-- reCAPTCHA v3 -->
-    @if(env('RECAPTCHA_SITE_KEY'))
-        <script src="https://www.google.com/recaptcha/api.js?render={{ env('RECAPTCHA_SITE_KEY') }}"></script>
+    @if(config('recaptcha.site_key'))
+        <script src="https://www.google.com/recaptcha/api.js?render={{ config('recaptcha.site_key') }}"></script>
     @else
         <script>
             console.error('RECAPTCHA_SITE_KEY no está configurado en el servidor');
