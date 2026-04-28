@@ -1,9 +1,7 @@
 /* Admin Services Index Styles */
 
 .admin-container {
-    max-width: 1200px;
-    margin: 100px auto 40px;
-    padding: 0 5%;
+    margin: 0px auto 40px;
 }
 
 .admin-header {
@@ -118,7 +116,7 @@
 
 .status-badge {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 4px 8px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 600;

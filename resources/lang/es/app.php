@@ -83,7 +83,7 @@ return [
     'email_verification_subject' => '¡Tu cuenta ha sido verificada! Bienvenido a TARIX',
     'email_verification_greeting' => '¡Hola :name!',
     'email_verification_intro' => 'Nos complace informarte que tu cuenta en TARIX ha sido <strong>verificada exitosamente</strong>.',
-    'email_verification_status' => '✓ Cuenta Verificada',
+    'email_verification_status' => 'Cuenta Verificada',
     'email_verification_approved' => 'Tu cuenta ha sido aprobada como Cliente',
     'email_verification_access' => 'Ahora tienes acceso completo a todos nuestros servicios y funcionalidades.',
     'email_verification_features_title' => 'Ya puedes disfrutar de:',
@@ -109,6 +109,9 @@ return [
     'dashboard_procedures_desc' => 'Revisa el estado de tus trámites aduanales y obtén actualizaciones en tiempo real de tus gestiones.',
     'dashboard_inbox_title' => 'Bandeja de Correspondencia',
     'dashboard_inbox_desc' => 'Gestiona y revisa la correspondencia clasificada',
+    'classification_pending_payment' => 'Pendiente de Pago',
+    'classification_in_process' => 'En Proceso',
+    'classification_completed' => 'Finalizadas',
     'user_type_clasificador' => 'Clasificador',
 ];
 

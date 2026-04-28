@@ -294,6 +294,9 @@
             {!! nl2br($article->content) !!}
         </div>
 
+        <!-- Comments Section -->
+        @include('includes.article-comments')
+
         @if($related->count())
             <div class="related-section">
                 <h2 class="related-title">Artículos Relacionados</h2>

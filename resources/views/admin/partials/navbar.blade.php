@@ -83,5 +83,15 @@
                 <div class="menu-indicator"></div>
             </a>
         </li>
+        
+        <li>
+            <a href="{{ route('admin.classifications.settings') }}" class="{{ request()->routeIs('admin.classifications.*') ? 'active' : '' }}">
+                <div class="menu-icon">
+                    <i class="fa fa-cog"></i>
+                </div>
+                <span>Clasificaciones</span>
+                <div class="menu-indicator"></div>
+            </a>
+        </li>
     </ul>
 </aside>

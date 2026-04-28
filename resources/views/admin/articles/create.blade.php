@@ -153,7 +153,7 @@
                         @enderror
                         @if($existingImageMedia)
                             <div style="margin-top: 8px; padding: 8px; background: #e3f2fd; border-radius: 4px; font-size: 12px; color: #1976d2;">
-                                ✓ Imagen actual guardada
+                                Imagen actual guardada
                             </div>
                         @endif
                     </div>
@@ -173,7 +173,7 @@
                         @enderror
                         @if($existingYoutubeMedia)
                             <div style="margin-top: 8px; padding: 8px; background: #ffe3e3; border-radius: 4px; font-size: 12px; color: #c62828;">
-                                ✓ Video YouTube actual guardado
+                                Video YouTube actual guardado
                             </div>
                         @endif
                     </div>

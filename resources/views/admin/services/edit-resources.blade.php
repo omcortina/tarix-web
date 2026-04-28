@@ -81,7 +81,7 @@
                             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 5px;">
                                 <h4 style="margin: 0;">{{ $resource->title }}</h4>
                                 <span style="display: inline-block; font-size: 11px; padding: 3px 8px; border-radius: 3px; background: {{ $resource->is_active ? '#e8f5e9' : '#fff3e0' }}; color: {{ $resource->is_active ? '#2e7d32' : '#f57c00' }}; font-weight: 600;">
-                                    {{ $resource->is_active ? '✓ Activo' : '✗ Inactivo' }}
+                                    {{ $resource->is_active ? 'Activo' : '✗ Inactivo' }}
                                 </span>
                             </div>
                             <p>{{ $resource->url }}</p>

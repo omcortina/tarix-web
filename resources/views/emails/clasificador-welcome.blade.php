@@ -114,7 +114,7 @@
 
             <!-- Credenciales -->
             <div class="credentials-box">
-                <strong>Tus datos de acceso:</strong>
+                <strong>Tus datos de acceso</strong>
                 <div><strong>Email:</strong> {{ $user->email }}</div>
                 <div><strong>Estado:</strong>Activo (acceso inmediato)</div>
             </div>

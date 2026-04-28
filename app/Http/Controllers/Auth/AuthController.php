@@ -180,6 +180,25 @@ class AuthController extends Controller
 
     public function userDashboard()
     {
-        return view('user.dashboard');
+        $user = auth()->user();
+        $stats = null;
+        
+        // Si es clasificador, calcular estadísticas de clasificaciones asignadas
+        if ($user->user_type === 'CLASIFICADOR') {
+            $stats = [
+                'pending_payment' => $user->assignedClassifications()
+                    ->where('status', 'Pendiente de Pago')
+                    ->count(),
+                'in_process' => $user->assignedClassifications()
+                    ->whereIn('status', ['En Proceso', 'En proceso', 'Asignado'])
+                    ->count(),
+                'completed' => $user->assignedClassifications()
+                    ->where('status', 'Aprobado')
+                    ->count(),
+                'total' => $user->assignedClassifications()->count(),
+            ];
+        }
+        
+        return view('user.dashboard', compact('stats'));
     }
 }

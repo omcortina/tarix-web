@@ -4,104 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') | TARIX Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    @yield('styles')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @yield('extra_css')
 </head>
 <body>
-    <!-- NAVBAR -->
-    <div class="admin-navbar">
-        <div class="admin-brand">
-            <i class="fa fa-cog"></i>
-            TARIX Admin
-        </div>
-        <div class="admin-user">
-            <div class="user-info">
-                <div class="user-name">{{ Auth::user()->name }}</div>
-                <div class="user-role">Administrador</div>
-            </div>
-            <form action="{{ route('logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" class="btn-logout">
-                    <i class="fa fa-sign-out"></i> Cerrar sesión
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- SIDEBAR -->
-    <aside class="admin-sidebar">
-        <ul class="sidebar-menu">
-            <li>
-                <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                    <i class="fa fa-home"></i>
-                    Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.services.index') }}" class="{{ request()->routeIs('admin.services.*') ? 'active' : '' }}">
-                    <i class="fa fa-briefcase"></i>
-                    Servicios
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.values.index') }}" class="{{ request()->routeIs('admin.values.*') ? 'active' : '' }}">
-                    <i class="fa fa-star"></i>
-                    Valores
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.articles.index') }}" class="{{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
-                    <i class="fa fa-newspaper-o"></i>
-                    Artículos
-                </a>
-            </li>
-            <li>
-                <a href="{{ route('admin.contacts.index') }}" class="{{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
-                    <i class="fa fa-envelope"></i>
-                    Mensajes
-                </a>
-            </li>
-        </ul>
-    </aside>
+    @include('admin.partials.navbar')
 
     <!-- MAIN CONTENT -->
     <main class="admin-main">
         @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show auto-alert" role="alert">
+            <div class="alert alert-success">
                 <i class="fa fa-check-circle"></i> {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show auto-alert" role="alert">
+            <div class="alert alert-error">
                 <i class="fa fa-exclamation-circle"></i> {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @yield('content')
     </main>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    @yield('scripts')
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const alerts = document.querySelectorAll('.auto-alert');
-            alerts.forEach(alert => {
-                setTimeout(() => {
-                    // Usar la API de bootstrap para cerrar el alert
-                    const bsAlert = new bootstrap.Alert(alert);
-                    bsAlert.close();
-                }, 2500);
-            });
+            const hamburgerAdmin = document.getElementById('hamburgerAdmin');
+            const adminSidebar = document.getElementById('adminSidebar');
+
+            if (hamburgerAdmin && adminSidebar) {
+                hamburgerAdmin.addEventListener('click', function() {
+                    hamburgerAdmin.classList.toggle('active');
+                    adminSidebar.classList.toggle('active');
+                });
+
+                const sidebarLinks = adminSidebar.querySelectorAll('a');
+                sidebarLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        hamburgerAdmin.classList.remove('active');
+                        adminSidebar.classList.remove('active');
+                    });
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!event.target.closest('.admin-navbar') && !event.target.closest('.admin-sidebar')) {
+                        hamburgerAdmin.classList.remove('active');
+                        adminSidebar.classList.remove('active');
+                    }
+                });
+            }
         });
+
+        function confirmDelete(event, itemId, itemType) {
+            event.preventDefault();
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Deseas eliminar este ' + itemType + '? Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ff6b6b',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm-' + itemId).submit();
+                }
+            });
+        }
     </script>
+
+    @yield('extra_js')
 </body>
 </html>

@@ -11,8 +11,9 @@ body {
 
 body {
     font-family: "Inter", sans-serif;
+    font-size: 14px;
     background: #f8f9fa;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
 .user-wrapper {

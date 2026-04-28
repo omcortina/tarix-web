@@ -40,4 +40,9 @@ class Article extends Model
     {
         return $this->media()->where('type', 'youtube');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(ArticleComment::class)->orderByDesc('created_at');
+    }
 }

@@ -83,7 +83,7 @@ return [
     'email_verification_subject' => 'Your account has been verified! Welcome to TARIX',
     'email_verification_greeting' => 'Hello :name!',
     'email_verification_intro' => 'We are pleased to inform you that your TARIX account has been <strong>successfully verified</strong>.',
-    'email_verification_status' => '✓ Account Verified',
+    'email_verification_status' => 'Account Verified',
     'email_verification_approved' => 'Your account has been approved as a',
     'email_verification_access' => 'You now have complete access to all our services and features.',
     'email_verification_features_title' => 'You can now enjoy:',
@@ -109,6 +109,9 @@ return [
     'dashboard_procedures_desc' => 'Check the status of your customs procedures and get real-time updates on your transactions.',
     'dashboard_inbox_title' => 'Mail Inbox',
     'dashboard_inbox_desc' => 'Manage and review classified correspondence',
+    'classification_pending_payment' => 'Pending Payment',
+    'classification_in_process' => 'In Process',
+    'classification_completed' => 'Completed',
     'user_type_clasificador' => 'Classifier',
 ];
 

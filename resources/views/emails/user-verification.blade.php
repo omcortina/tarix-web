@@ -122,7 +122,6 @@
         }
         
         .feature-list li:before {
-            content: "✓";
             position: absolute;
             left: 0;
             color: #22c5bc;

@@ -48,4 +48,20 @@ class User extends Authenticatable
         'verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Obtener las clasificaciones del usuario
+     */
+    public function classifications()
+    {
+        return $this->hasMany(Classification::class);
+    }
+
+    /**
+     * Obtener las clasificaciones asignadas al clasificador
+     */
+    public function assignedClassifications()
+    {
+        return $this->hasMany(Classification::class, 'clasificador_id');
+    }
 }
