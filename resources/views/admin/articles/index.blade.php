@@ -43,7 +43,7 @@
                 <tbody>
                     @foreach($articles as $article)
                         <tr>
-                            <td>{{ $article->title }}</td>
+                            <td title="{{ $article->title }}">{{ Str::limit($article->title, 50) }}</td>
                             <td>{{ $article->user->name ?? 'Admin' }}</td>
                             <td>
                                 <span class="badge {{ $article->published ? 'badge-published' : 'badge-draft' }}">
