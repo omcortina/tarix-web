@@ -22,42 +22,42 @@
     </div>
 
     @if($services->count() > 0)
-        <table class="services-table">
-            <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Slug</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($services as $service)
+        <div class="services-table">
+            <table class="table" id="adminTable">
+                <thead>
                     <tr>
-                        <td>
-                            <div class="service-title">{{ $service->title }}</div>
-                            <div class="service-slug">{{ $service->subtitle }}</div>
-                        </td>
-                        <td>{{ $service->slug }}</td>
-                        <td>
-                            <span class="status-badge {{ $service->published ? 'status-published' : 'status-draft' }}">
-                                {{ $service->published ? 'Publicado' : 'Borrador' }}
-                            </span>
-                        </td>
-                        <td>
-                            <div class="actions">
+                        <th>Título</th>
+                        <th>Slug</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($services as $service)
+                        <tr>
+                            <td>
+                                <div class="service-title">{{ $service->title }}</div>
+                                <div class="service-slug">{{ $service->subtitle }}</div>
+                            </td>
+                            <td>{{ $service->slug }}</td>
+                            <td>
+                                <span class="badge {{ $service->published ? 'badge-published' : 'badge-draft' }}">
+                                    {{ $service->published ? 'Publicado' : 'Borrador' }}
+                                </span>
+                            </td>
+                            <td>
                                 <a href="{{ route('admin.services.edit', $service) }}" class="btn-edit">Editar</a>
                                 <form id="deleteForm-{{ $service->id }}" action="{{ route('admin.services.destroy', $service) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="btn-delete" onclick="confirmDelete(event, '{{ $service->id }}', 'servicio')">Eliminar</button>
                                 </form>
-                            </div>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     @else
         <div class="empty-state">
             <h2>Sin servicios aún</h2>

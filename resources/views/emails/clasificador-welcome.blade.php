@@ -116,8 +116,16 @@
             <div class="credentials-box">
                 <strong>Tus datos de acceso</strong>
                 <div><strong>Email:</strong> {{ $user->email }}</div>
-                <div><strong>Estado:</strong>Activo (acceso inmediato)</div>
+                @if($plainPassword)
+                <div><strong>Contraseña temporal:</strong> <code style="background:#f0f0f0; padding: 2px 8px; border-radius: 4px; font-size: 14px; letter-spacing: 1px;">{{ $plainPassword }}</code></div>
+                @endif
+                <div><strong>Estado:</strong> Activo (acceso inmediato)</div>
             </div>
+            @if($plainPassword)
+            <p style="background:#fff8e1; border-left: 4px solid #f39c12; padding: 10px 14px; border-radius: 4px; font-size: 13px; color: #7d5a00;">
+                Por seguridad, se te pedira que cambies tu contrasena en el primer inicio de sesion.
+            </p>
+            @endif
 
             <!-- CTA Button -->
             <p style="text-align: center;">

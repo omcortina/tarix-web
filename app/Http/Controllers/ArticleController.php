@@ -11,7 +11,7 @@ class ArticleController extends Controller
 {
     public function index()
     {
-        $articles = Article::latest()->paginate(10);
+        $articles = Article::latest()->get();
         return view('admin.articles.index', compact('articles'));
     }
 

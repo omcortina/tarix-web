@@ -1,6 +1,6 @@
 <!-- Comments Section for Public Article View -->
 <div class="comments-section" style="margin-top: 40px; border-top: 2px solid #e0e0e0; padding-top: 30px;">
-    <h3 style="font-size: 20px; margin-bottom: 30px; color: #1a2e44;">Comentarios</h3>
+    <h3 style="font-size: 20px; margin-bottom: 30px; color: #1a2e44;">{{ __('articles.comments') }}</h3>
     
     <!-- Comments List -->
     @if ($article->comments()->where('status', 'approved')->with('replies')->count() > 0)
@@ -38,12 +38,12 @@
             @endforeach
         </div>
     @else
-        <p style="color: #999; text-align: center; padding: 30px 0;">No hay comentarios aún. ¡Sé el primero en comentar!</p>
+        <p style="color: #999; text-align: center; padding: 30px 0;">{{ __('articles.no_comments') }}</p>
     @endif
     
     <!-- Comment Form -->
     <div style="background: #f0f4ff; padding: 25px; border-radius: 8px; border: 1px solid #e0e6ff;">
-        <h4 style="color: #667eea; margin-bottom: 20px; font-size: 16px;">Dejar un Comentario</h4>
+        <h4 style="color: #667eea; margin-bottom: 20px; font-size: 16px;">{{ __('articles.leave_comment') }}</h4>
         
         @if (session('success'))
             <div style="background: #e8f5e9; border-left: 4px solid #4CAF50; padding: 15px; border-radius: 4px; margin-bottom: 15px; color: #2e7d32;">
@@ -65,49 +65,49 @@
             @csrf
             
             <div style="margin-bottom: 15px;">
-                <label for="author_name" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Nombre *</label>
+                <label for="author_name" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">{{ __('articles.name') }} *</label>
                 <input 
                     type="text" 
                     id="author_name" 
                     name="author_name" 
                     value="{{ old('author_name', Auth::user()?->name ?? '') }}"
-                    placeholder="Tu nombre" 
+                    placeholder="{{ __('articles.your_name') }}" 
                     required
                     style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
             </div>
             
             <div style="margin-bottom: 15px;">
-                <label for="author_email" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Email *</label>
+                <label for="author_email" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">{{ __('articles.email') }} *</label>
                 <input 
                     type="email" 
                     id="author_email" 
                     name="author_email" 
                     value="{{ old('author_email', Auth::user()?->email ?? '') }}"
-                    placeholder="tu@email.com" 
+                    placeholder="{{ __('articles.your_email') }}" 
                     required
                     style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px;">
             </div>
             
             <div style="margin-bottom: 15px;">
-                <label for="content" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">Comentario *</label>
+                <label for="content" style="display: block; margin-bottom: 6px; font-weight: 600; color: #333; font-size: 14px;">{{ __('articles.comment') }} *</label>
                 <textarea 
                     id="content" 
                     name="content" 
-                    placeholder="Escribe tu comentario..." 
+                    placeholder="{{ __('articles.write_comment') }}" 
                     rows="5"
                     required
                     maxlength="2000"
                     style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; font-family: inherit; resize: vertical;">{{ old('content') }}</textarea>
-                <small style="color: #999; display: block; margin-top: 4px;">Máximo 2000 caracteres</small>
+                <small style="color: #999; display: block; margin-top: 4px;">{{ __('articles.max_characters') }}</small>
             </div>
             
             <button type="submit" style="background: #667eea; color: white; padding: 10px 24px; border: none; border-radius: 4px; font-weight: 600; cursor: pointer; font-size: 14px;">
-                Publicar Comentario
+                {{ __('articles.submit_comment') }}
             </button>
         </form>
         
         <small style="display: block; margin-top: 15px; color: #999; line-height: 1.5;">
-            Nota: Tu comentario será revisado por nuestro equipo antes de ser publicado.
+            {{ __('articles.comment_note') }}
         </small>
     </div>
 </div>

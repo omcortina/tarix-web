@@ -26,6 +26,8 @@ class User extends Authenticatable
         'client_type',
         'is_verified',
         'verified_at',
+        'must_change_password',
+        'company_id',
     ];
 
     /**
@@ -63,5 +65,27 @@ class User extends Authenticatable
     public function assignedClassifications()
     {
         return $this->hasMany(Classification::class, 'clasificador_id');
+    }
+
+    /**
+     * Obtener la empresa a la que pertenece el usuario
+     */
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    /**
+     * Determina si el usuario puede ver el precio de una clasificación.
+     * - EMPRESA: siempre puede ver precios (gestiona facturación de su empresa)
+     * - EXTERNO en empresa Tarix (default) o sin empresa: puede ver precios
+     * - EXTERNO en otra empresa: NO puede ver precios (lo ve el usuario EMPRESA)
+     */
+    public function canSeePrices(): bool
+    {
+        if ($this->user_type === 'EMPRESA') {
+            return true;
+        }
+        return !$this->company_id || ($this->company && $this->company->isTarix());
     }
 }

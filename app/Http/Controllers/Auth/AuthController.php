@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Socialite\Facades\Socialite;
@@ -34,6 +35,11 @@ class AuthController extends Controller
                 ])->onlyInput('email');
             }
 
+            // Si debe cambiar contraseña (clasificadores creados por admin)
+            if ($user->must_change_password) {
+                return redirect()->route('password.change');
+            }
+
             // Redirigir según tipo de usuario
             if ($user->user_type === 'ADMIN') {
                 return redirect()->route('admin.dashboard')->with('success', '¡Bienvenido al admin!');
@@ -49,7 +55,8 @@ class AuthController extends Controller
 
     public function showRegister()
     {
-        return view('auth.register');
+        $companies = Company::active()->get();
+        return view('auth.register', compact('companies'));
     }
 
     public function register(Request $request)
@@ -59,6 +66,7 @@ class AuthController extends Controller
             'email' => 'required|email|unique:users',
             'phone' => 'required|string|max:20',
             'password' => 'required|min:8|confirmed',
+            'company_id' => 'required|exists:companies,id',
         ]);
 
         $user = User::create([
@@ -67,6 +75,7 @@ class AuthController extends Controller
             'phone' => $validated['phone'],
             'password' => Hash::make($validated['password']),
             'user_type' => 'EXTERNO',
+            'company_id' => $validated['company_id'],
         ]);
 
         return redirect()->route('auth.pending')->with('success', '¡Registro completado! Por favor revisa tu correo.');
@@ -123,9 +132,12 @@ class AuthController extends Controller
             return redirect()->route('register');
         }
 
+        $companies = Company::active()->get();
+
         return view('auth.register-google-complete', [
             'name' => session('google_name'),
             'email' => session('google_email'),
+            'companies' => $companies,
         ]);
     }
 
@@ -137,6 +149,7 @@ class AuthController extends Controller
 
         $validated = $request->validate([
             'phone' => 'required|string|max:20',
+            'company_id' => 'required|exists:companies,id',
         ]);
 
         $user = User::create([
@@ -145,6 +158,7 @@ class AuthController extends Controller
             'phone' => $validated['phone'],
             'password' => Hash::make(uniqid()),
             'user_type' => 'EXTERNO',
+            'company_id' => $validated['company_id'] ?? null,
         ]);
 
         session()->forget(['google_name', 'google_email', 'google_id']);
@@ -198,7 +212,55 @@ class AuthController extends Controller
                 'total' => $user->assignedClassifications()->count(),
             ];
         }
+
+        // Si es externo, calcular estadísticas de sus propias clasificaciones
+        if ($user->user_type === 'EXTERNO') {
+            $canSeePrices = $user->canSeePrices();
+            $stats = [
+                'pending'    => $user->classifications()
+                    ->whereIn('status', ['Pendiente de Pago', 'En Revisión'])
+                    ->count(),
+                'in_process' => $user->classifications()
+                    ->whereIn('status', ['En Proceso', 'En proceso', 'Asignado'])
+                    ->count(),
+                'completed'  => $user->classifications()
+                    ->where('status', 'Aprobado')
+                    ->count(),
+                'pending_label' => $canSeePrices ? 'Pendiente de Pago' : 'En Revisión',
+            ];
+        }
         
         return view('user.dashboard', compact('stats'));
+    }
+
+    public function showChangePassword()
+    {
+        // Si ya no necesita cambiar contraseña, redirigir al dashboard
+        if (!auth()->user()->must_change_password) {
+            return redirect()->route('user.dashboard');
+        }
+        return view('auth.change-password');
+    }
+
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            'password' => [
+                'required',
+                'min:8',
+                'confirmed',
+                'regex:/^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%&*?])/',
+            ],
+        ], [
+            'password.regex' => 'La contraseña debe tener al menos una mayúscula, un número y un carácter especial (!@#$%&*?).',
+        ]);
+
+        $user = auth()->user();
+        $user->update([
+            'password' => Hash::make($request->password),
+            'must_change_password' => false,
+        ]);
+
+        return redirect()->route('user.dashboard')->with('success', '¡Contraseña actualizada correctamente! Bienvenido.');
     }
 }

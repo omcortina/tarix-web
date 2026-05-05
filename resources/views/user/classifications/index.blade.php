@@ -39,13 +39,19 @@
         @if ($classifications->count() > 0)
             <div class="classifications-grid">
                 @foreach ($classifications as $classification)
+                    @php
+                        $displayStatus = $classification->status;
+                        if (!auth()->user()->canSeePrices() && $displayStatus === 'Pendiente de pago') {
+                            $displayStatus = 'En Revisión';
+                        }
+                    @endphp
                     <div class="classification-card">
                         <div class="card-header">
                             <div class="radicado">
                                 <strong>{{ $classification->radicado }}</strong>
                             </div>
-                            <span class="status-badge status-{{ str_replace(' ', '-', strtolower($classification->status)) }}">
-                                {{ $classification->status }}
+                            <span class="status-badge status-{{ str_replace(' ', '-', strtolower($displayStatus)) }}">
+                                {{ $displayStatus }}
                             </span>
                         </div>
 
@@ -66,10 +72,12 @@
                                 <span class="value">{{ $classification->items->count() }}</span>
                             </div>
 
+                            @if(auth()->user()->canSeePrices())
                             <div class="info-row">
                                 <span class="label">Costo Total:</span>
                                 <span class="value strong">${{ number_format($classification->total_cost, 0, ',', '.') }}</span>
                             </div>
+                            @endif
 
                             <div class="info-row">
                                 <span class="label">Creada:</span>
@@ -95,7 +103,7 @@
 
             @if ($classifications->hasPages())
                 <div class="pagination-container">
-                    {{ $classifications->links() }}
+                    {{ $classifications->links('vendor.pagination.custom') }}
                 </div>
             @endif
         @else

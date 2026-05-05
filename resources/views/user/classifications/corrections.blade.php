@@ -308,7 +308,7 @@
                                 @foreach ($correction->attachments->where('type', 'cliente') as $attachment)
                                     <div class="attachment-item">
                                         <span class="attachment-icon">📎</span>
-                                        <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank">
+                                        <a href="{{ route('corrections.attachments.download', $attachment->id) }}" target="_blank" download="{{ $attachment->file_name }}">
                                             {{ $attachment->file_name }}
                                         </a>
                                     </div>

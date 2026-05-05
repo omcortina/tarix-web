@@ -240,12 +240,18 @@
                     
                     <div class="form-group" style="margin-bottom: 12px;">
                         <label for="password">Nueva Contraseña</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            placeholder="Déjalo en blanco para mantener la contraseña actual"
-                        >
+                        <div style="position: relative;">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                placeholder="Déjalo en blanco para mantener la contraseña actual"
+                                style="padding-right: 40px;"
+                            >
+                            <button type="button" onclick="toggleVis('password')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#888; padding:0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/></svg>
+                            </button>
+                        </div>
                         @error('password')
                             <div class="form-error">{{ $message }}</div>
                         @enderror
@@ -253,12 +259,23 @@
 
                     <div class="form-group">
                         <label for="password_confirmation">Confirmar Contraseña</label>
-                        <input 
-                            type="password" 
-                            id="password_confirmation" 
-                            name="password_confirmation" 
-                            placeholder="Confirma la nueva contraseña"
-                        >
+                        <div style="position: relative;">
+                            <input 
+                                type="password" 
+                                id="password_confirmation" 
+                                name="password_confirmation" 
+                                placeholder="Confirma la nueva contraseña"
+                                style="padding-right: 40px;"
+                            >
+                            <button type="button" onclick="toggleVis('password_confirmation')" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; cursor:pointer; color:#888; padding:0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/><path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin-top: 4px;">
+                        <button type="button" onclick="generateEditPassword()" style="padding: 8px 18px; background: #22c5bc; color: #fff; border: none; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">Generar contraseña</button>
+                        <span id="pwdIndicator" style="font-size: 12px; color: #22c5bc; display: none;"></span>
                     </div>
                 </div>
 
@@ -274,4 +291,33 @@
         </div>
     </div>
 </body>
+<script>
+    function generateEditPassword() {
+        const upper = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lower = 'abcdefghijklmnopqrstuvwxyz';
+        const digits = '0123456789';
+        const special = '!@#$%&*?';
+        const all = upper + lower + digits + special;
+        let pwd = [
+            upper[Math.floor(Math.random() * upper.length)],
+            lower[Math.floor(Math.random() * lower.length)],
+            digits[Math.floor(Math.random() * digits.length)],
+            special[Math.floor(Math.random() * special.length)],
+        ];
+        for (let i = 4; i < 12; i++) pwd.push(all[Math.floor(Math.random() * all.length)]);
+        pwd = pwd.sort(() => Math.random() - 0.5).join('');
+        document.getElementById('password').value = pwd;
+        document.getElementById('password_confirmation').value = pwd;
+        document.getElementById('password').type = 'text';
+        document.getElementById('password_confirmation').type = 'text';
+        const indicator = document.getElementById('pwdIndicator');
+        indicator.textContent = 'Contraseña generada: ' + pwd;
+        indicator.style.display = 'inline';
+    }
+
+    function toggleVis(fieldId) {
+        const f = document.getElementById(fieldId);
+        f.type = f.type === 'password' ? 'text' : 'password';
+    }
+</script>
 </html>

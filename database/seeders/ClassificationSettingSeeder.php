@@ -18,6 +18,7 @@ class ClassificationSettingSeeder extends Seeder
         ClassificationSetting::create([
             'price_general' => 50000,
             'price_preferential' => 30000,
+            'iva_percentage' => 19.00,
             'max_items' => 50,
             'max_attachment_size_mb' => 10,
             'required_fields' => json_encode(['commercial_name']),

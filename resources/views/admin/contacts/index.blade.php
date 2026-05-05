@@ -4,29 +4,9 @@
 
 @section('extra_css')
 <style>
-    .admin-container { margin: 0px auto 40px; }
-    .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .admin-header h1 { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800; color: #0d2340; margin: 0; }
-    .breadcrumb { font-size: 14px; color: #666; margin-bottom: 20px; }
-    .breadcrumb a { color: #22c5bc; text-decoration: none; margin: 0 5px; }
-    .messages-table { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .table { width: 100%; border-collapse: collapse; }
-    .table th { background: #f8f9fa; padding: 16px; text-align: left; font-weight: 600; color: #0d2340; border-bottom: 1px solid #e0e0e0; }
-    .table td { padding: 16px; border-bottom: 1px solid #e0e0e0; }
-    .table tr:hover { background: #f8f9fa; }
-    .message-row { cursor: pointer; }
     .message-row.unread { background: #f0f9ff; font-weight: 600; }
-    .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
     .badge-unread { background: #fff3e0; color: #e65100; }
     .badge-read { background: #e8f5e9; color: #2e7d32; }
-    .btn-view { padding: 6px 12px; background: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer; text-decoration: none; font-size: 13px; }
-    .btn-view:hover { background: #0052a3; }
-    .btn-delete { padding: 6px 12px; background: #ff6b6b; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 13px; }
-    .btn-delete:hover { background: #ff5252; }
-    .empty-state { text-align: center; padding: 60px 20px; color: #999; }
-    .pagination { margin-top: 30px; display: flex; justify-content: center; gap: 5px; }
-    .pagination a, .pagination span { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none; color: #0066cc; }
-    .pagination .active { background: #0066cc; color: white; border-color: #0066cc; }
 </style>
 @endsection
 
@@ -44,14 +24,14 @@
 
     @if($contacts->count())
         <div class="messages-table">
-            <table class="table">
+            <table class="table" id="adminTable">
                 <thead>
                     <tr>
-                        <th style="width: 20%;">Nombre</th>
-                        <th style="width: 25%;">Email</th>
-                        <th style="width: 15%;">Empresa</th>
-                        <th style="width: 15%;">Estado</th>
-                        <th style="width: 25%;">Acciones</th>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Empresa</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,10 +57,6 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
-
-        <div class="pagination">
-            {{ $contacts->links() }}
         </div>
     @else
         <div class="empty-state">

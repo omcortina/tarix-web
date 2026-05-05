@@ -161,7 +161,7 @@
                                             @foreach ($item->attachments as $attachment)
                                                 <div class="attachment-item">
                                                     <i class="fa fa-file"></i>
-                                                    <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank" download>
+                                                    <a href="{{ route('attachments.download', $attachment->id) }}" target="_blank" download="{{ $attachment->file_name }}">
                                                         {{ $attachment->file_name }}
                                                     </a>
                                                     <small>({{ number_format($attachment->file_size / 1024, 2) }} KB)</small>
@@ -202,7 +202,7 @@
                                                                 <div style="margin-top: 8px;">
                                                                     @foreach ($correction->attachments->where('type', 'cliente') as $attachment)
                                                                         <div style="display: flex; align-items: center; gap: 8px; padding: 6px; background: #f0f4ff; border-radius: 4px; margin-bottom: 6px; font-size: 12px;">
-                                                                            <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank" style="color: #667eea; text-decoration: none; flex: 1;">
+                                                                            <a href="{{ route('corrections.attachments.download', $attachment->id) }}" target="_blank" download="{{ $attachment->file_name }}" style="color: #667eea; text-decoration: none; flex: 1;">
                                                                                 {{ $attachment->file_name }}
                                                                             </a>
                                                                             <small style="color: #999;">{{ number_format($attachment->file_size / 1024, 2) }} KB</small>

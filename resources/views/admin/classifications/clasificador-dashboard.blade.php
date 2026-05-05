@@ -78,11 +78,10 @@
             </div>
 
             <div class="pagination-container">
-                {{ $classifications->links() }}
+                {{ $classifications->links('vendor.pagination.custom') }}
             </div>
         @else
             <div class="empty-state">
-                <div class="empty-icon">📭</div>
                 <h2>Sin clasificaciones pendientes</h2>
                 <p>Todas las clasificaciones asignadas han sido procesadas</p>
             </div>

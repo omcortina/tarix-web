@@ -1,7 +1,6 @@
 .classifications-container {
     max-width: 1200px;
     margin: 20px auto;
-    padding: 0 15px;
 }
 
 .header-section {
@@ -207,6 +206,57 @@
     display: flex;
     justify-content: center;
     margin-top: 30px;
+}
+
+ul.pagination-custom {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
+}
+
+ul.pagination-custom li.page-item { display: inline-block; margin: 0; }
+
+ul.pagination-custom li.page-item a.page-link,
+ul.pagination-custom li.page-item span.page-link {
+    display: inline-block;
+    padding: 10px 14px;
+    border: 1.5px solid #b2ece9;
+    border-radius: 6px;
+    background: white;
+    color: #22c5bc;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 40px;
+    text-align: center;
+    line-height: 1;
+}
+
+ul.pagination-custom li.page-item a.page-link:hover {
+    background: #e0faf8;
+    border-color: #22c5bc;
+    transform: translateY(-1px);
+}
+
+ul.pagination-custom li.page-item.active span.page-link {
+    background: #22c5bc;
+    color: white;
+    border-color: #22c5bc;
+    font-weight: 600;
+}
+
+ul.pagination-custom li.page-item.disabled span.page-link {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
 }
 
 @media (max-width: 768px) {

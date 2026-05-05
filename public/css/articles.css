@@ -113,30 +113,84 @@ body {
     font-size: 16px;
     margin-bottom: 30px;
 }
-.pagination {
+
+/* ===== PAGINATION ===== */
+.pagination-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 60px;
+    gap: 20px;
+}
+
+.pagination-info {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+}
+
+ul.pagination-custom {
+    list-style: none;
     display: flex;
     justify-content: center;
-    gap: 5px;
-    margin-top: 50px;
+    gap: 8px;
     flex-wrap: wrap;
+    padding: 0;
+    margin: 0;
 }
-.pagination a,
-.pagination span {
+
+ul.pagination-custom li.page-item {
+    display: inline-block;
+    margin: 0;
+}
+
+ul.pagination-custom li.page-item a.page-link,
+ul.pagination-custom li.page-item span.page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     padding: 10px 14px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    text-decoration: none;
-    color: #0066cc;
+    border: 1.5px solid #dce4ef;
+    border-radius: 6px;
+    background: white;
+    color: #1976D2;
     font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 40px;
+    text-align: center;
+    line-height: 1;
 }
-.pagination .active {
-    background: #0066cc;
+
+ul.pagination-custom li.page-item a.page-link i,
+ul.pagination-custom li.page-item span.page-link i {
+    font-size: 12px;
+}
+
+ul.pagination-custom li.page-item a.page-link:hover {
+    background: #E3F2FD;
+    border-color: #1976D2;
+    transform: translateY(-1px);
+}
+
+ul.pagination-custom li.page-item.active span.page-link {
+    background: #1976D2;
     color: white;
-    border-color: #0066cc;
+    border-color: #1976D2;
+    font-weight: 600;
 }
-.pagination a:hover {
-    background: #f0f0f0;
+
+ul.pagination-custom li.page-item.disabled span.page-link {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
 }
+
 .language-selector {
     display: flex;
     gap: 8px;

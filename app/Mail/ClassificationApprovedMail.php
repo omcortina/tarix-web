@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -20,6 +21,7 @@ class ClassificationApprovedMail extends Mailable implements ShouldQueue
      */
     public function __construct(
         public Classification $classification,
+        public ?string $pdfPath = null,
         string $locale = 'es'
     )
     {
@@ -60,6 +62,13 @@ class ClassificationApprovedMail extends Mailable implements ShouldQueue
      */
     public function attachments(): array
     {
+        if ($this->pdfPath && file_exists($this->pdfPath)) {
+            return [
+                Attachment::fromPath($this->pdfPath)
+                    ->as('Factura-' . $this->classification->radicado . '.pdf')
+                    ->withMime('application/pdf'),
+            ];
+        }
         return [];
     }
 }

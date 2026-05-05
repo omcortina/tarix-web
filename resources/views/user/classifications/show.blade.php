@@ -15,10 +15,16 @@
         </div>
 
         <div class="classification-detail">
+            @php
+                $displayStatus = $classification->status;
+                if (!auth()->user()->canSeePrices() && $displayStatus === 'Pendiente de pago') {
+                    $displayStatus = 'En Revisión';
+                }
+            @endphp
             <div class="detail-header">
                 <h1>{{ $classification->radicado }}</h1>
-                <span class="status-badge status-{{ str_replace(' ', '-', strtolower($classification->status)) }}">
-                    {{ $classification->status }}
+                <span class="status-badge status-{{ str_replace(' ', '-', strtolower($displayStatus)) }}">
+                    {{ $displayStatus }}
                 </span>
             </div>
 
@@ -39,13 +45,15 @@
                             @endif
                         </span>
                     </div>
+                    @if(auth()->user()->canSeePrices())
                     <div class="info-row">
                         <span class="label">Costo Total:</span>
                         <span class="value highlight">${{ number_format($classification->total_cost, 0, ',', '.') }}</span>
                     </div>
+                    @endif
                     <div class="info-row">
                         <span class="label">Estado:</span>
-                        <span class="value">{{ $classification->status }}</span>
+                        <span class="value">{{ $displayStatus }}</span>
                     </div>
                     <div class="info-row">
                         <span class="label">Creada:</span>
@@ -170,7 +178,7 @@
                                             @foreach ($item->attachments as $attachment)
                                                 <div class="attachment-item">
                                                     <i class="fa fa-file"></i>
-                                                    <a href="{{ asset('storage/' . $attachment->file_path) }}" target="_blank" download>
+                                                    <a href="{{ route('attachments.download', $attachment->id) }}" target="_blank" download="{{ $attachment->file_name }}">
                                                         {{ $attachment->file_name }}
                                                     </a>
                                                     <small>({{ number_format($attachment->file_size / 1024, 2) }} KB)</small>
@@ -191,6 +199,9 @@
                 @if ($classification->histories->count() > 0)
                     <div class="timeline">
                         @foreach ($classification->histories as $history)
+                            @if (!auth()->user()->canSeePrices() && $history->status === 'Pendiente de Pago')
+                                @continue
+                            @endif
                             <div class="timeline-item">
                                 <div class="timeline-marker"></div>
                                 <div class="timeline-content">

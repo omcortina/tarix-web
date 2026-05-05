@@ -20,6 +20,7 @@ return [
     'email_placeholder' => 'Tu correo electrónico',
     'phone' => 'Teléfono',
     'phone_placeholder' => 'Tu número de teléfono',
+    'company' => 'Empresa',
     'password_placeholder' => 'Mínimo 8 caracteres',
     'confirm_password' => 'Confirmar Contraseña',
     'confirm_password_placeholder' => 'Repite tu contraseña',

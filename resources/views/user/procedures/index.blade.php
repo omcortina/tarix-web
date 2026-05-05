@@ -42,8 +42,14 @@
                 <div class="classification-detail">
                     <div class="detail-header">
                         <h2>{{ $classification->radicado }}</h2>
-                        <span class="status-badge status-{{ str_replace(' ', '-', strtolower($classification->status)) }}">
-                            {{ $classification->status }}
+                        @php
+                            $displayStatus = $classification->status;
+                            if (!auth()->user()->canSeePrices() && $displayStatus === 'Pendiente de pago') {
+                                $displayStatus = 'En Revisión';
+                            }
+                        @endphp
+                        <span class="status-badge status-{{ str_replace(' ', '-', strtolower($displayStatus)) }}">
+                            {{ $displayStatus }}
                         </span>
                     </div>
 
@@ -65,10 +71,12 @@
                                 <value>{{ $classification->items->count() }}</value>
                             </div>
 
+                            @if(auth()->user()->canSeePrices())
                             <div class="info-item">
                                 <label>Costo Total:</label>
                                 <value class="highlight">${{ number_format($classification->total_cost, 0, ',', '.') }}</value>
                             </div>
+                            @endif
 
                             <div class="info-item">
                                 <label>Fecha de Creación:</label>
@@ -144,6 +152,9 @@
                         @if ($classification->histories->count() > 0)
                             <div class="timeline">
                                 @foreach ($classification->histories as $history)
+                                    @if (!auth()->user()->canSeePrices() && $history->status === 'Pendiente de Pago')
+                                        @continue
+                                    @endif
                                     <div class="timeline-item">
                                         <div class="timeline-marker"></div>
                                         <div class="timeline-content">

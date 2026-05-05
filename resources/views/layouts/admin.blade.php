@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin-general.css') }}">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @yield('extra_css')
 </head>
@@ -17,7 +21,7 @@
     <!-- MAIN CONTENT -->
     <main class="admin-main">
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="alert alert-success" id="global-success-alert">
                 <i class="fa fa-check-circle"></i> {{ session('success') }}
             </div>
         @endif
@@ -59,6 +63,16 @@
             }
         });
 
+        // Auto-ocultar mensaje de éxito
+        const successAlert = document.getElementById('global-success-alert');
+        if (successAlert) {
+            setTimeout(function() {
+                successAlert.style.transition = 'opacity 0.5s ease';
+                successAlert.style.opacity = '0';
+                setTimeout(function() { successAlert.remove(); }, 500);
+            }, 3000);
+        }
+
         function confirmDelete(event, itemId, itemType) {
             event.preventDefault();
             Swal.fire({
@@ -77,6 +91,41 @@
                 }
             });
         }
+    </script>
+
+    <!-- jQuery y DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+
+    <script>
+        // Inicializar DataTables automáticamente
+        $(document).ready(function() {
+            if ($.fn.dataTable.isDataTable('#adminTable')) {
+                $('#adminTable').DataTable().destroy();
+            }
+            
+            $('#adminTable').DataTable({
+                responsive: true,
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json'
+                },
+                pageLength: 25,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
+                order: [],
+                ordering: false,
+                dom: '<"dt-wrapper"<"dt-head"<"dt-controls"<"dt-length"l><"dt-search"f>>>tr<"dt-footer"<"dt-info"i><"dt-pagination"p>>>',
+                drawCallback: function() {
+                    $('ul.pagination').addClass('pagination-custom');
+                    $('ul.pagination li').each(function() {
+                        $(this).addClass('page-item');
+                        $(this).find('a, span').addClass('page-link');
+                    });
+                }
+            });
+        });
     </script>
 
     @yield('extra_js')

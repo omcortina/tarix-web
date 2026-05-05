@@ -185,7 +185,7 @@ Once in the cloud, continuously optimize. Regularly review costs, performance, a
 
 The cloud is not a magic solution, but when implemented correctly, it can transform your business.'],
             'user_id' => $user->id,
-            'published' => false,
+            'published' => true,
         ]);
 
         // Agregar media al artículo 3
@@ -197,5 +197,71 @@ The cloud is not a magic solution, but when implemented correctly, it can transf
                 'order' => 1,
             ],
         ]);
+
+        // Crear 22 artículos adicionales para demostración de paginación
+        $topics = [
+            ['es' => 'Seguridad en el comercio electrónico', 'en' => 'Security in e-commerce'],
+            ['es' => 'Automatización de procesos empresariales', 'en' => 'Business process automation'],
+            ['es' => 'Análisis de datos con Machine Learning', 'en' => 'Data analysis with Machine Learning'],
+            ['es' => 'Gestión de proyectos en equipo', 'en' => 'Team project management'],
+            ['es' => 'Desarrollos ágiles: metodología Scrum', 'en' => 'Agile development: Scrum methodology'],
+            ['es' => 'Diseño UX/UI para aplicaciones modernas', 'en' => 'UX/UI design for modern applications'],
+            ['es' => 'API REST: mejores prácticas', 'en' => 'REST API: best practices'],
+            ['es' => 'Contenedores Docker: introducción práctica', 'en' => 'Docker containers: practical introduction'],
+            ['es' => 'Microservicios en arquitectura moderna', 'en' => 'Microservices in modern architecture'],
+            ['es' => 'DevOps: cultura y herramientas', 'en' => 'DevOps: culture and tools'],
+            ['es' => 'Blockchain y sus aplicaciones empresariales', 'en' => 'Blockchain and business applications'],
+            ['es' => 'Realidad aumentada en el retail', 'en' => 'Augmented reality in retail'],
+            ['es' => 'Big Data: recolección y análisis', 'en' => 'Big Data: collection and analysis'],
+            ['es' => 'Sostenibilidad digital en la empresa', 'en' => 'Digital sustainability in business'],
+            ['es' => 'Ciberseguridad: riesgos y soluciones', 'en' => 'Cybersecurity: risks and solutions'],
+            ['es' => 'Inteligencia de negocios (BI)', 'en' => 'Business Intelligence (BI)'],
+            ['es' => 'Transformación digital en PYMES', 'en' => 'Digital transformation in SMEs'],
+            ['es' => 'Gestión de identidad digital', 'en' => 'Digital identity management'],
+            ['es' => 'Redes 5G: impacto en negocios', 'en' => '5G networks: business impact'],
+            ['es' => 'Computación en el extremo (Edge Computing)', 'en' => 'Edge Computing'],
+            ['es' => 'Sostenibilidad y economía circular', 'en' => 'Sustainability and circular economy'],
+            ['es' => 'Experiencia del cliente en tiempos digitales', 'en' => 'Customer experience in digital times'],
+        ];
+
+        foreach ($topics as $index => $titles) {
+            $slug = strtolower(str_replace(' ', '-', $titles['es']));
+            $published = true; // Todos publicados
+
+            Article::create([
+                'title' => ['es' => $titles['es'], 'en' => $titles['en']],
+                'slug' => $slug,
+                'excerpt' => [
+                    'es' => 'Artículo sobre ' . lcfirst($titles['es']) . '. Descubre los conceptos principales y mejores prácticas en este campo.',
+                    'en' => 'Article about ' . lcfirst($titles['en']) . '. Discover the main concepts and best practices in this field.'
+                ],
+                'content' => [
+                    'es' => 'Este es un artículo de demostración sobre ' . lcfirst($titles['es']) . '. 
+
+En el mundo actual, este tema es cada vez más relevante para las empresas que buscan mantenerse competitivas en el mercado digital.
+
+**Aspectos clave:**
+1. Innovación continua en el sector
+2. Adopción de nuevas herramientas y tecnologías
+3. Capacitación del equipo
+4. Estrategia integral de implementación
+
+La transformación es un proceso gradual que requiere compromiso y dedicación. Para más información, consulta con expertos en la materia.',
+                    'en' => 'This is a demonstration article about ' . lcfirst($titles['en']) . '.
+
+In today\'s world, this topic is increasingly relevant for companies looking to remain competitive in the digital market.
+
+**Key aspects:**
+1. Continuous innovation in the sector
+2. Adoption of new tools and technologies
+3. Team training
+4. Comprehensive implementation strategy
+
+Transformation is a gradual process that requires commitment and dedication. For more information, consult with subject matter experts.'
+                ],
+                'user_id' => $user->id,
+                'published' => $published,
+            ]);
+        }
     }
 }

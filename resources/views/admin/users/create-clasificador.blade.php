@@ -225,13 +225,27 @@
 
                 <div class="form-group">
                     <label for="password">Contraseña *</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        name="password" 
-                        placeholder="Mínimo 8 caracteres"
-                        required
-                    >
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <div style="position: relative; flex: 1;">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                placeholder="Mínimo 8 caracteres"
+                                required
+                                style="width: 100%; padding-right: 40px; box-sizing: border-box;"
+                            >
+                            <button type="button" onclick="toggleVisibility('password', this)" 
+                                style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #999; padding: 0;">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
+                        <button type="button" onclick="generatePassword()" title="Generar contraseña segura"
+                            style="padding: 9px 14px; background: #22c5bc; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; white-space: nowrap; display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+                            <i class="fa fa-key"></i> Generar
+                        </button>
+                    </div>
+                    <div id="password-strength" style="margin-top: 6px; font-size: 11px; display: none;"></div>
                     @error('password')
                         <div class="form-error">{{ $message }}</div>
                     @enderror
@@ -239,13 +253,20 @@
 
                 <div class="form-group">
                     <label for="password_confirmation">Confirmar Contraseña *</label>
-                    <input 
-                        type="password" 
-                        id="password_confirmation" 
-                        name="password_confirmation" 
-                        placeholder="Confirma la contraseña"
-                        required
-                    >
+                    <div style="position: relative;">
+                        <input 
+                            type="password" 
+                            id="password_confirmation" 
+                            name="password_confirmation" 
+                            placeholder="Confirma la contraseña"
+                            required
+                            style="width: 100%; padding-right: 40px; box-sizing: border-box;"
+                        >
+                        <button type="button" onclick="toggleVisibility('password_confirmation', this)"
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: #999; padding: 0;">
+                            <i class="fa fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
 
                 <div class="form-actions">
@@ -259,5 +280,60 @@
             </form>
         </div>
     </div>
+
+<script>
+function generatePassword() {
+    const upper   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lower   = 'abcdefghijklmnopqrstuvwxyz';
+    const digits  = '0123456789';
+    const special = '!@#$%&*?';
+    const all     = upper + lower + digits + special;
+
+    // Garantizar al menos uno de cada categoría
+    let pwd = [
+        upper  [Math.floor(Math.random() * upper.length)],
+        lower  [Math.floor(Math.random() * lower.length)],
+        digits [Math.floor(Math.random() * digits.length)],
+        special[Math.floor(Math.random() * special.length)],
+    ];
+
+    // Completar hasta 12 caracteres
+    for (let i = pwd.length; i < 12; i++) {
+        pwd.push(all[Math.floor(Math.random() * all.length)]);
+    }
+
+    // Mezclar
+    pwd = pwd.sort(() => Math.random() - 0.5).join('');
+
+    const pwdField    = document.getElementById('password');
+    const confirmField = document.getElementById('password_confirmation');
+
+    pwdField.value     = pwd;
+    confirmField.value = pwd;
+
+    // Mostrar en texto claro para que el admin pueda copiarlo
+    pwdField.type     = 'text';
+    confirmField.type = 'text';
+
+    // Indicador
+    const indicator = document.getElementById('password-strength');
+    indicator.style.display = 'block';
+    indicator.innerHTML = '<span style="color:#2e7d32; font-weight:700;">Contraseña generada:</span> '
+        + '<code style="background:#f5f5f5; padding: 2px 8px; border-radius:4px; font-size:13px; user-select:all;">' + pwd + '</code>'
+        + ' <span style="color:#999;">(cópiala antes de guardar)</span>';
+}
+
+function toggleVisibility(fieldId, btn) {
+    const field = document.getElementById(fieldId);
+    const icon  = btn.querySelector('i');
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+}
+</script>
 </body>
 </html>

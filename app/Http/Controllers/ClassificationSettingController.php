@@ -18,6 +18,7 @@ class ClassificationSettingController extends Controller
         $validated = $request->validate([
             'price_general' => 'required|numeric|min:0',
             'price_preferential' => 'required|numeric|min:0',
+            'iva_percentage' => 'required|numeric|min:0|max:100',
             'max_items' => 'required|integer|min:1',
             'max_attachment_size_mb' => 'required|integer|min:1',
         ]);

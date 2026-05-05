@@ -249,7 +249,7 @@
             </div>
             
             <center>
-                <a href="{{ $proceduresUrl }}" class="cta-button">Consultar en Mi Portal</a>
+                <a href="{{ $proceduresUrl }}" class="cta-button">Consultar en mi portal</a>
             </center>
             
             <div style="background-color: #fff9e6; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; border-radius: 4px; font-size: 13px; color: #856404;">

@@ -36,20 +36,42 @@
                         {{ __('app.sidebar_home') }}
                     </a>
                 </li>
-                <li>
-                    @if (Auth::user()->user_type === 'CLASIFICADOR')
+
+                @if (Auth::user()->user_type === 'CLASIFICADOR')
+                    <li>
                         <a href="{{ route('clasificador.index') }}" @if(Route::currentRouteName() === 'clasificador.index' || Route::currentRouteName() === 'clasificador.show') class="active" @endif>
                             <i class="fa fa-list"></i>
                             Clasificaciones
                         </a>
-                    @else
+                    </li>
+
+                @elseif (Auth::user()->user_type === 'EMPRESA')
+                    <li>
+                        <a href="{{ route('user.empresa.classifications') }}" @if(Str::startsWith(Route::currentRouteName(), 'user.empresa') && Route::currentRouteName() !== 'user.empresa.billing') class="active" @endif>
+                            <i class="fa fa-building"></i>
+                            Clasificaciones de la empresa
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('user.empresa.billing') }}" @if(Route::currentRouteName() === 'user.empresa.billing') class="active" @endif>
+                            <i class="fa fa-usd"></i>
+                            Facturación y Totales
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('user.procedures') }}" @if(Route::currentRouteName() === 'user.procedures') class="active" @endif>
+                            <i class="fa fa-folder-open"></i>
+                            {{ __('app.dashboard_procedures_title') }}
+                        </a>
+                    </li>
+
+                @else
+                    <li>
                         <a href="{{ route('user.classifications') }}" @if(Route::currentRouteName() === 'user.classifications' || Route::currentRouteName() === 'user.classifications.create') class="active" @endif>
                             <i class="fa fa-list"></i>
                             Clasificaciones
                         </a>
-                    @endif
-                </li>
-                @if (Auth::user()->user_type !== 'CLASIFICADOR')
+                    </li>
                     <li>
                         <a href="{{ route('user.procedures') }}" @if(Route::currentRouteName() === 'user.procedures') class="active" @endif>
                             <i class="fa fa-folder-open"></i>
@@ -83,6 +105,8 @@
                         <strong>
                             @if (Auth::user()->user_type === 'CLASIFICADOR')
                                 {{ __('app.user_type_clasificador') }}
+                            @elseif (Auth::user()->user_type === 'EMPRESA')
+                                Empresa
                             @else
                                 {{ Auth::user()->client_type ?? __('app.dashboard_account_type') }}
                             @endif
@@ -97,6 +121,10 @@
 
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <!-- jQuery + DataTables -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Ocultar alertas después de 3 segundos
@@ -171,5 +199,6 @@
             }
         });
     </script>
+    @yield('extra_js')
 </body>
 </html>

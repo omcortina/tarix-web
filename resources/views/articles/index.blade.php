@@ -88,18 +88,27 @@
                             @endif
 
                             <div class="news-footer">
-                                <span class="news-author">Por {{ $article->user->name ?? 'Admin' }}</span>
-                                <a href="{{ route('articles.show', $article->slug) }}" class="btn-read-more">Ver más</a>
+                                <span class="news-author">{{ __('articles.created_by') }} {{ $article->user->name ?? 'Admin' }}</span>
+                                <a href="{{ route('articles.show', $article->slug) }}" class="btn-read-more">{{ __('articles.show_more') }}</a>
                             </div>
                         </div>
                     </div>
                 @endforeach
             </div>
 
+            @if ($articles->hasPages())
+                <div class="pagination-container">
+                    <div class="pagination-info">
+                        {{ __('articles.showing') }} {{ $articles->firstItem() }} {{ __('articles.to') }} {{ $articles->lastItem() }} {{ __('articles.of') }} {{ $articles->total() }} {{ __('articles.records') }}
+                    </div>
+                    {{ $articles->links('vendor.pagination.custom') }}
+                </div>
+            @endif
+
         @else
             <div class="empty-state">
-                <p>No hay artículos disponibles en este momento.</p>
-                <a href="/" class="btn-primary">Volver al inicio</a>
+                <p>{{ __('articles.no_articles_available') }}</p>
+                <a href="/" class="btn-primary">{{ __('articles.back_to_home') }}</a>
             </div>
         @endif
     </div>

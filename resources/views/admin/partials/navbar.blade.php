@@ -85,6 +85,16 @@
         </li>
         
         <li>
+            <a href="{{ route('admin.companies.index') }}" class="{{ request()->routeIs('admin.companies.*') ? 'active' : '' }}">
+                <div class="menu-icon">
+                    <i class="fa fa-building"></i>
+                </div>
+                <span>Empresas</span>
+                <div class="menu-indicator"></div>
+            </a>
+        </li>
+        
+        <li>
             <a href="{{ route('admin.classifications.settings') }}" class="{{ request()->routeIs('admin.classifications.*') ? 'active' : '' }}">
                 <div class="menu-icon">
                     <i class="fa fa-cog"></i>

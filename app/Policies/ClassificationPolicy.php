@@ -21,7 +21,17 @@ class ClassificationPolicy
      */
     public function view(User $user, Classification $classification): bool
     {
-        return $user->id === $classification->user_id || $user->user_type === 'ADMIN';
+        // Dueño de la clasificación o admin
+        if ($user->id === $classification->user_id || $user->user_type === 'ADMIN') {
+            return true;
+        }
+
+        // Usuario EMPRESA puede ver clasificaciones de usuarios de su misma empresa
+        if ($user->user_type === 'EMPRESA' && $user->company_id !== null) {
+            return $classification->user->company_id === $user->company_id;
+        }
+
+        return false;
     }
 
     /**

@@ -14,6 +14,7 @@ use App\Http\Controllers\ClassificationController;
 use App\Http\Controllers\ClassificationSettingController;
 use App\Http\Controllers\ClassificadorController;
 use App\Http\Controllers\ArticleCommentController;
+use App\Http\Controllers\CompanyController;
 
 Route::get('/', function () {
     $services = \App\Models\Service::where('published', true)->get();
@@ -28,6 +29,12 @@ Route::get('/register', [AuthController::class, 'showRegister'])->name('register
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/pending', [AuthController::class, 'pendingApproval'])->name('auth.pending');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Cambio obligatorio de contraseña (solo auth, sin user-verified ni admin)
+Route::middleware('auth')->group(function () {
+    Route::get('/change-password', [AuthController::class, 'showChangePassword'])->name('password.change');
+    Route::post('/change-password', [AuthController::class, 'changePassword'])->name('password.update');
+});
 
 // Google OAuth routes
 Route::get('/auth/google/redirect', [AuthController::class, 'redirectToGoogle'])->name('google.redirect');
@@ -46,9 +53,9 @@ Route::prefix('dashboard')->name('user.')->middleware(['auth', 'user-verified'])
     Route::post('classifications', [ClassificationController::class, 'store'])->name('classifications.store');
     Route::get('classifications/{classification}', [ClassificationController::class, 'show'])->name('classifications.show');
     
-    // Rutas para correcciones de ítems
-    Route::get('classifications/{classification}/items/{item}/corrections', [ClassificationController::class, 'showCorrections'])->name('classifications.items.corrections');
-    Route::post('classifications/{classification}/items/{item}/corrections/{correction}/respond', [ClassificationController::class, 'respondCorrection'])->name('classifications.corrections.respond');
+    // Rutas exclusivas para usuario tipo EMPRESA
+    Route::get('empresa/classifications', [ClassificationController::class, 'empresaIndex'])->name('empresa.classifications');
+    Route::get('empresa/billing', [ClassificationController::class, 'empresaBilling'])->name('empresa.billing');
     
     // Rutas para consulta de trámites
     Route::get('procedures', [ClassificationController::class, 'procedures'])->name('procedures');
@@ -60,6 +67,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::resource('services', ServiceController::class);
     Route::resource('articles', ArticleController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy']);
     Route::resource('values', ValueController::class);
+    Route::resource('companies', CompanyController::class);
     Route::resource('contacts', ContactMessagesController::class)->only(['index', 'show', 'destroy']);
     
     // Rutas para comentarios de artículos
@@ -93,6 +101,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('users/{user}/edit-clasificador', [UserManagementController::class, 'editClasificador'])->name('users.edit-clasificador');
     Route::put('users/{user}/clasificador', [UserManagementController::class, 'updateClasificador'])->name('users.update-clasificador');
     Route::delete('users/{user}/clasificador', [UserManagementController::class, 'deleteClasificador'])->name('users.delete-clasificador');
+    Route::get('users/{user}/edit-externo', [UserManagementController::class, 'editExterno'])->name('users.edit-externo');
+    Route::put('users/{user}/externo', [UserManagementController::class, 'updateExterno'])->name('users.update-externo');
+    Route::get('users/{user}/edit-empresa', [UserManagementController::class, 'editEmpresa'])->name('users.edit-empresa');
+    Route::put('users/{user}/empresa', [UserManagementController::class, 'updateEmpresa'])->name('users.update-empresa');
 });
 
 // Clasificador routes (protegidas con middleware auth, user-verified y clasificador)
@@ -107,6 +119,15 @@ Route::prefix('clasificador')->name('clasificador.')->middleware(['auth', 'user-
 
 // Rutas de contacto (pública)
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// Rutas para descargar attachments (accesibles para usuario autenticado, usuario verificado)
+// IMPORTANTE: Deben ir ANTES de la ruta dinámica /{service}
+Route::middleware(['auth', 'user-verified'])->group(function () {
+    Route::prefix('download')->group(function () {
+        Route::get('attachment/{attachment}', [ClassificationController::class, 'downloadAttachment'])->name('attachments.download');
+        Route::get('correction-attachment/{attachment}', [ClassificationController::class, 'downloadCorrectionAttachment'])->name('corrections.attachments.download');
+    });
+});
 
 // Ruta para cambiar idioma
 Route::get('/lang/{locale}', [LanguageController::class, 'setLanguage'])->name('lang.set');

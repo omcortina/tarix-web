@@ -233,13 +233,13 @@
         <h1>{{ $article->title }}</h1>
         <div class="article-meta">
             <span>{{ $article->created_at->translatedFormat('d \\d\\e F \\d\\e Y') }}</span>
-            <span>Por {{ $article->user->name ?? 'Admin' }}</span>
+            <span>{{ __('articles.by') }} {{ $article->user->name ?? 'Admin' }}</span>
         </div>
     </div>
 
     <!-- ARTICLE CONTENT -->
     <div class="article-container">
-        <a href="/blog" class="back-link"> Volver al Blog</a>
+        <a href="/blog" class="back-link">{{ __('articles.back_to_news') }}</a>
 
         <div class="article-content">
             <!-- Media Gallery Section -->
@@ -276,8 +276,8 @@
                                     </div>
                                 @else
                                     <div style="background: #f0f0f0; padding: 40px; text-align: center; border-radius: 6px; color: #999;">
-                                        <p>URL de YouTube no válida o video no disponible</p>
-                                        <p style="font-size: 12px; margin-top: 8px;">URL guardada: <code style="background: #e0e0e0; padding: 4px 8px; border-radius: 3px;">{{ $media->url }}</code></p>
+                                        <p>{{ __('articles.invalid_youtube') }}</p>
+                                        <p style="font-size: 12px; margin-top: 8px;">{{ __('articles.url_saved') }}: <code style="background: #e0e0e0; padding: 4px 8px; border-radius: 3px;">{{ $media->url }}</code></p>
                                     </div>
                                 @endif
                                 @if($media->description)
@@ -299,7 +299,7 @@
 
         @if($related->count())
             <div class="related-section">
-                <h2 class="related-title">Artículos Relacionados</h2>
+                <h2 class="related-title">{{ __('articles.related_articles') }}</h2>
                 <div class="related-grid">
                     @foreach($related as $relatedArticle)
                         <div class="related-card">
@@ -307,7 +307,7 @@
                                 <div class="related-date">{{ $relatedArticle->created_at->translatedFormat('d M Y') }}</div>
                                 <h3>{{ $relatedArticle->title }}</h3>
                                 <p class="related-excerpt">{{ $relatedArticle->excerpt ?: substr(strip_tags($relatedArticle->content), 0, 100) . '...' }}</p>
-                                <a href="{{ route('articles.show', $relatedArticle->slug) }}" class="related-link">Leer más →</a>
+                                <a href="{{ route('articles.show', $relatedArticle->slug) }}" class="related-link">{{ __('articles.read_more') }} →</a>
                             </div>
                         </div>
                     @endforeach

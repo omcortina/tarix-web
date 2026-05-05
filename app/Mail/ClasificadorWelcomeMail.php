@@ -20,7 +20,8 @@ class ClasificadorWelcomeMail extends Mailable implements ShouldQueue
      */
     public function __construct(
         public User $user,
-        string $locale = 'es'
+        string $locale = 'es',
+        public string $plainPassword = ''
     )
     {
         $this->locale($locale);
@@ -48,6 +49,7 @@ class ClasificadorWelcomeMail extends Mailable implements ShouldQueue
             with: [
                 'user' => $this->user,
                 'loginUrl' => route('login'),
+                'plainPassword' => $this->plainPassword,
             ]
         );
     }

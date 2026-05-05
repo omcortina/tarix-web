@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\User;
 use App\Mail\UserVerificationMail;
 use App\Mail\ClasificadorWelcomeMail;
@@ -18,23 +19,28 @@ class UserManagementController extends Controller
     /**
      * Mostrar lista de usuarios pendientes de verificación
      */
-    public function index()
+    public function index(Request $request)
     {
-        $unverifiedUsers = User::where('user_type', 'EXTERNO')
-            ->where('is_verified', false)
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $selectedCompanyId = $request->get('company_id');
 
-        $verifiedUsers = User::where('user_type', 'EXTERNO')
-            ->where('is_verified', true)
-            ->orderBy('verified_at', 'desc')
-            ->get();
+        $verifiedQuery   = User::whereIn('user_type', ['EXTERNO', 'EMPRESA'])->where('is_verified', true);
+        $unverifiedQuery = User::where('user_type', 'EXTERNO')->where('is_verified', false);
+
+        if ($selectedCompanyId) {
+            $verifiedQuery->where('company_id', $selectedCompanyId);
+            $unverifiedQuery->where('company_id', $selectedCompanyId);
+        }
+
+        $verifiedUsers   = $verifiedQuery->orderBy('verified_at', 'desc')->get();
+        $unverifiedUsers = $unverifiedQuery->orderBy('created_at', 'desc')->get();
 
         $clasificadores = User::where('user_type', 'CLASIFICADOR')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return view('admin.users.index', compact('unverifiedUsers', 'verifiedUsers', 'clasificadores'));
+        $companies = Company::orderBy('name')->get();
+
+        return view('admin.users.index', compact('unverifiedUsers', 'verifiedUsers', 'clasificadores', 'companies', 'selectedCompanyId'));
     }
 
     /**
@@ -120,12 +126,115 @@ class UserManagementController extends Controller
             'user_type' => 'CLASIFICADOR',
             'is_verified' => true,
             'verified_at' => now(),
+            'must_change_password' => true,
         ]);
 
         // Enviar email de bienvenida
-        Mail::queue(new ClasificadorWelcomeMail($user, app()->getLocale()));
+        Mail::queue(new ClasificadorWelcomeMail($user, app()->getLocale(), $validated['password']));
 
         return redirect()->route('admin.users.index')->with('success', "Usuario CLASIFICADOR {$user->email} creado exitosamente.");
+    }
+
+    /**
+     * Mostrar formulario para editar usuario EXTERNO
+     */
+    public function editExterno(User $user)
+    {
+        if ($user->user_type !== 'EXTERNO') {
+            return redirect()->route('admin.users.index')->withErrors('Este usuario no es de tipo EXTERNO.');
+        }
+
+        $companies = Company::orderBy('name')->get();
+        return view('admin.users.edit-externo', compact('user', 'companies'));
+    }
+
+    /**
+     * Actualizar usuario EXTERNO
+     */
+    public function updateExterno(Request $request, User $user)
+    {
+        if ($user->user_type !== 'EXTERNO') {
+            return redirect()->route('admin.users.index')->withErrors('Este usuario no es de tipo EXTERNO.');
+        }
+
+        $validated = $request->validate([
+            'name'       => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email,' . $user->id,
+            'phone'      => 'nullable|string|max:20',
+            'company_id' => 'nullable|exists:companies,id',
+            'password'   => 'nullable|min:8|confirmed',
+        ], [
+            'email.unique'    => 'El correo ya está registrado por otro usuario.',
+            'password.min'    => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+        ]);
+
+        $user->update([
+            'name'       => $validated['name'],
+            'email'      => $validated['email'],
+            'phone'      => $validated['phone'] ?? $user->phone,
+            'company_id' => $validated['company_id'] ?? null,
+        ]);
+
+        if (!empty($validated['password'])) {
+            $user->update([
+                'password'             => \Illuminate\Support\Facades\Hash::make($validated['password']),
+                'must_change_password' => true,
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', "Usuario {$user->email} actualizado exitosamente.");
+    }
+
+    /**
+     * Mostrar formulario para editar usuario EMPRESA
+     */
+    public function editEmpresa(User $user)
+    {
+        if ($user->user_type !== 'EMPRESA') {
+            return redirect()->route('admin.users.index')->withErrors('Este usuario no es de tipo EMPRESA.');
+        }
+
+        $companies = Company::orderBy('name')->get();
+        return view('admin.users.edit-empresa', compact('user', 'companies'));
+    }
+
+    /**
+     * Actualizar usuario EMPRESA
+     */
+    public function updateEmpresa(Request $request, User $user)
+    {
+        if ($user->user_type !== 'EMPRESA') {
+            return redirect()->route('admin.users.index')->withErrors('Este usuario no es de tipo EMPRESA.');
+        }
+
+        $validated = $request->validate([
+            'name'       => 'required|string|max:255',
+            'email'      => 'required|email|unique:users,email,' . $user->id,
+            'phone'      => 'nullable|string|max:20',
+            'company_id' => 'nullable|exists:companies,id',
+            'password'   => 'nullable|min:8|confirmed',
+        ], [
+            'email.unique'       => 'El correo ya está registrado por otro usuario.',
+            'password.min'       => 'La contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+        ]);
+
+        $user->update([
+            'name'       => $validated['name'],
+            'email'      => $validated['email'],
+            'phone'      => $validated['phone'] ?? $user->phone,
+            'company_id' => $validated['company_id'] ?? null,
+        ]);
+
+        if (!empty($validated['password'])) {
+            $user->update([
+                'password'             => \Illuminate\Support\Facades\Hash::make($validated['password']),
+                'must_change_password' => true,
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', "Usuario empresa {$user->email} actualizado exitosamente.");
     }
 
     /**
@@ -163,6 +272,7 @@ class UserManagementController extends Controller
         if ($validated['password']) {
             $user->update([
                 'password' => \Illuminate\Support\Facades\Hash::make($validated['password']),
+                'must_change_password' => true,
             ]);
         }
 

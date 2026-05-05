@@ -64,7 +64,28 @@
                     </div>
                 </div>
             </fieldset>
-            
+
+            <fieldset style="border: none; padding: 0; margin-top: 30px;">
+                <legend style="font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #2c3e50;">Impuestos</legend>
+
+                <div class="price-row">
+                    <div class="form-group">
+                        <label for="iva_percentage">Porcentaje de IVA (%)</label>
+                        <input
+                            type="number"
+                            id="iva_percentage"
+                            name="iva_percentage"
+                            value="{{ $setting->iva_percentage ?? 19 }}"
+                            step="0.01"
+                            min="0"
+                            max="100"
+                            required
+                        >
+                        <div class="form-description">Porcentaje de IVA aplicado al subtotal (ej: 19 para 19%)</div>
+                    </div>
+                </div>
+            </fieldset>
+
             <fieldset style="border: none; padding: 0; margin-top: 30px;">
                 <legend style="font-size: 16px; font-weight: 700; margin-bottom: 20px; color: #2c3e50;">Límites del Sistema</legend>
                 

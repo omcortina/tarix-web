@@ -12,6 +12,7 @@ class ClassificationSetting extends Model
     protected $fillable = [
         'price_general',
         'price_preferential',
+        'iva_percentage',
         'max_items',
         'max_attachment_size_mb',
         'required_fields',

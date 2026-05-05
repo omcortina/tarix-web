@@ -71,6 +71,29 @@
                     @enderror
                 </div>
 
+                <!-- Company Selection -->
+                @if($companies->count() > 0)
+                <div class="form-group">
+                    <label for="company_id">{{ __('auth.company') }} *</label>
+                    <select 
+                        id="company_id" 
+                        name="company_id"
+                        required
+                        class="@error('company_id') error @enderror"
+                    >
+                        <option value="">Seleccionar empresa...</option>
+                        @foreach($companies as $company)
+                            <option value="{{ $company->id }}" @selected(old('company_id') == $company->id)>
+                                {{ $company->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('company_id')
+                        <span class="form-error">{{ $message }}</span>
+                    @enderror
+                </div>
+                @endif
+
                 <!-- Submit Button -->
                 <button type="submit" class="btn-continue">{{ __('auth.complete_button') }}</button>
             </form>

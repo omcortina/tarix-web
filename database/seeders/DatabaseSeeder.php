@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             UsefulResourceSeeder::class,
             ArticleSeeder::class,
             ValueSeeder::class,
+            CompanySeeder::class,
+            ClassificationSettingSeeder::class,
         ]);
     }
 }

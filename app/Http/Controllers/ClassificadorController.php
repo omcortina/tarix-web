@@ -8,6 +8,9 @@ use App\Models\ClassificationHistory;
 use App\Models\ItemCorrection;
 use App\Mail\CorrectionRequestedMail;
 use App\Mail\ClassificationApprovedMail;
+use App\Mail\EmpresaPaymentVerifiedMail;
+use App\Mail\EmpresaClassificationApprovedMail;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -23,7 +26,7 @@ class ClassificadorController extends Controller
         
         $classifications = Classification::where('clasificador_id', $clasificador->id)
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(6);
         
         return view('admin.classifications.clasificador-dashboard', [
             'classifications' => $classifications,
@@ -149,12 +152,28 @@ class ClassificadorController extends Controller
         $classification->update([
             'status' => 'Aprobado'
         ]);
-        
-        // Send approval email to client
+
+        $cliente = $classification->user;
+
+        // Send approval email to client (sin PDF — ya se envió al crear)
         try {
             Mail::queue(new ClassificationApprovedMail($classification));
         } catch (\Exception $e) {
             \Log::error('Error sending classification approved email: ' . $e->getMessage());
+        }
+
+        // Send approval email to empresa user if applicable (sin PDF — ya se envió al crear)
+        if ($cliente->company_id) {
+            $empresaUser = User::where('company_id', $cliente->company_id)
+                ->where('user_type', 'EMPRESA')
+                ->first();
+            if ($empresaUser) {
+                try {
+                    Mail::queue(new EmpresaClassificationApprovedMail($classification, $empresaUser));
+                } catch (\Exception $e) {
+                    \Log::error('Error sending approved email to empresa: ' . $e->getMessage());
+                }
+            }
         }
         
         // Record history
@@ -190,6 +209,21 @@ class ClassificadorController extends Controller
             'changed_by' => Auth::id()
         ]);
         
+        // Notificar al usuario EMPRESA sobre la verificación del pago
+        $cliente = $classification->user;
+        if ($cliente->company_id) {
+            $empresaUser = User::where('company_id', $cliente->company_id)
+                ->where('user_type', 'EMPRESA')
+                ->first();
+            if ($empresaUser) {
+                try {
+                    Mail::queue(new EmpresaPaymentVerifiedMail($classification, $empresaUser));
+                } catch (\Exception $e) {
+                    \Log::error('Error sending payment verified email to empresa: ' . $e->getMessage());
+                }
+            }
+        }
+
         return redirect()->route('clasificador.show', $classification)
             ->with('success', 'Pago verificado. Ahora puedes proceder con la verificación de ítems');
     }

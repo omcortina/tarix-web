@@ -143,25 +143,6 @@
         <p class="page-subtitle">Administra clientes y clasificadores del sistema</p>
     </div>
 
-    <!-- Alerts -->
-    @if (session('success'))
-        <div class="alert alert-success" id="success-alert">
-            <i class="fa fa-check-circle"></i>
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="alert alert-error" id="error-alert">
-            <i class="fa fa-exclamation-circle"></i>
-            <div>
-                @foreach ($errors->all() as $error)
-                    <div>{{ $error }}</div>
-                @endforeach
-            </div>
-        </div>
-    @endif
-
     <!-- Tabs Navigation -->
     <div class="tabs-container">
         <div class="tabs-header">
@@ -175,6 +156,29 @@
 
         <!-- Tab: Clientes -->
         <div id="tab-clientes" class="tab-content active">
+
+            <!-- Filtro por empresa -->
+            <form style="margin-bottom: 20px; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;"
+                  onsubmit="filterByCompany(event)">
+                <label style="font-size: 13px; font-weight: 600; color: #555;">Filtrar por empresa:</label>
+                <select name="company_id" style="padding: 8px 14px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; min-width: 220px; color: #333;">
+                    <option value="">Todas las empresas</option>
+                    @foreach ($companies as $company)
+                        <option value="{{ $company->id }}" @selected($selectedCompanyId == $company->id)>
+                            {{ $company->name }}
+                        </option>
+                    @endforeach
+                </select>
+                <button type="submit" style="padding: 8px 18px; background: #22c5bc; color: white; border: none; border-radius: 5px; font-size: 14px; font-weight: 600; cursor: pointer;">
+                    Filtrar
+                </button>
+                @if ($selectedCompanyId)
+                    <a href="{{ route('admin.users.index') }}" style="padding: 8px 14px; background: #f0f0f0; color: #555; border-radius: 5px; font-size: 14px; text-decoration: none; font-weight: 500;">
+                        Limpiar
+                    </a>
+                @endif
+            </form>
+
             <div class="clients-container">
                 <!-- Verified Users - Left Side -->
                 <div class="clients-section left-section">
@@ -217,12 +221,28 @@
                                                     <i class="fa fa-calendar"></i>
                                                     <span>Verificado: {{ $user->verified_at->format('d/m/Y H:i') }}</span>
                                                 </div>
+
+                                                <div class="user-actions" style="flex-direction: row; align-items: center; margin-left: 0; margin-top: 8px; gap: 8px;">
+                                                    @if ($user->user_type === 'EMPRESA')
+                                                        <a href="{{ route('admin.users.edit-empresa', $user) }}" class="btn-verify btn-edit" title="Editar usuario empresa">
+                                                            <i class="fa fa-edit"></i> Editar
+                                                        </a>
+                                                    @else
+                                                        <a href="{{ route('admin.users.edit-externo', $user) }}" class="btn-verify btn-edit" title="Editar usuario">
+                                                            <i class="fa fa-edit"></i> Editar
+                                                        </a>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
 
                                         <!-- Badges -->
                                         <div class="badges-group">
-                                            @if ($user->client_type === 'GENERAL')
+                                            @if ($user->user_type === 'EMPRESA')
+                                                <div class="badge-verified" style="background: #FFF3E0; color: #e65100;">
+                                                    <i class="fa fa-building"></i> Empresa
+                                                </div>
+                                            @elseif ($user->client_type === 'GENERAL')
                                                 <div class="badge-verified">
                                                     <i class="fa fa-user"></i> General
                                                 </div>
@@ -368,20 +388,20 @@
                                             <i class="fa fa-calendar"></i>
                                             <span>Creado: {{ $user->created_at->format('d/m/Y H:i') }}</span>
                                         </div>
-                                    </div>
 
-                                    <!-- Actions -->
-                                    <div class="user-actions">
-                                        <a href="{{ route('admin.users.edit-clasificador', $user) }}" class="btn-verify btn-general" title="Editar información del clasificador">
-                                            <i class="fa fa-edit"></i> Editar
-                                        </a>
-                                        <form method="POST" action="{{ route('admin.users.delete-clasificador', $user) }}" style="display: contents;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-verify btn-reject" onclick="return confirm('¿Deseas eliminar este clasificador? Esta acción no se puede deshacer.');" title="Eliminar este clasificador">
-                                                <i class="fa fa-trash"></i> Eliminar
-                                            </button>
-                                        </form>
+                                        <!-- Actions -->
+                                        <div class="user-actions" style="flex-direction: row; align-items: center; margin-left: 0; margin-top: 8px; gap: 8px;">
+                                            <a href="{{ route('admin.users.edit-clasificador', $user) }}" class="btn-verify btn-edit" title="Editar información del clasificador">
+                                                <i class="fa fa-edit"></i> Editar
+                                            </a>
+                                            <form method="POST" action="{{ route('admin.users.delete-clasificador', $user) }}" style="display: contents;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn-verify btn-reject" onclick="return confirm('¿Deseas eliminar este clasificador? Esta acción no se puede deshacer.');" title="Eliminar este clasificador">
+                                                    <i class="fa fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -423,6 +443,13 @@
             autoHideAlert('success-alert', 3000);
             autoHideAlert('error-alert', 3000);
         });
+
+        function filterByCompany(e) {
+            e.preventDefault();
+            const select = e.target.querySelector('select[name="company_id"]');
+            const base = '{{ route('admin.users.index') }}';
+            window.location.href = select.value ? base + '?company_id=' + select.value : base;
+        }
 
         function switchTab(tabName) {
             const tabs = document.querySelectorAll('.tab-content');

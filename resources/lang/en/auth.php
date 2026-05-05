@@ -20,6 +20,7 @@ return [
     'email_placeholder' => 'Your email address',
     'phone' => 'Phone Number',
     'phone_placeholder' => 'Your phone number',
+    'company' => 'Company',
     'password_placeholder' => 'Minimum 8 characters',
     'confirm_password' => 'Confirm Password',
     'confirm_password_placeholder' => 'Repeat your password',

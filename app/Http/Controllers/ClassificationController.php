@@ -11,6 +11,10 @@ use App\Models\ItemCorrection;
 use App\Models\CorrectionAttachment;
 use App\Models\User;
 use App\Mail\ClassificationAssignedMail;
+use App\Mail\ClassificationCreatedMail;
+use App\Mail\EmpresaNewClassificationMail;
+use App\Mail\CorrectionRespondedMail;
+use App\Services\InvoicePdfService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
@@ -29,9 +33,95 @@ class ClassificationController extends Controller
         $user = Auth::user();
         $classifications = Classification::where('user_id', $user->id)
             ->orderByDesc('created_at')
-            ->paginate(10);
+            ->paginate(6);
         
         return view('user.classifications.index', compact('classifications'));
+    }
+
+    /**
+     * Listado de clasificaciones de la empresa (para usuario EMPRESA)
+     */
+    public function empresaIndex(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->user_type !== 'EMPRESA') {
+            abort(403);
+        }
+
+        $companyUsers = User::where('company_id', $user->company_id)
+            ->where('user_type', 'EXTERNO')
+            ->get();
+
+        $selectedUserId = $request->get('user_id');
+
+        $query = Classification::with(['user', 'items'])
+            ->whereIn('user_id', $companyUsers->pluck('id'))
+            ->orderByDesc('created_at');
+
+        if ($selectedUserId) {
+            $query->where('user_id', $selectedUserId);
+        }
+
+        $classifications = $query->get();
+
+        $totalGeneral = $classifications->sum('total_cost');
+
+        // Totales por usuario
+        $totalesPorUsuario = Classification::whereIn('user_id', $companyUsers->pluck('id'))
+            ->selectRaw('user_id, SUM(total_cost) as total, COUNT(*) as cantidad')
+            ->groupBy('user_id')
+            ->with('user:id,name,email')
+            ->get();
+
+        return view('user.classifications.empresa-index', compact(
+            'classifications',
+            'companyUsers',
+            'selectedUserId',
+            'totalGeneral',
+            'totalesPorUsuario'
+        ));
+    }
+
+    /**
+     * Resumen de facturación de la empresa (para usuario EMPRESA)
+     */
+    public function empresaBilling()
+    {
+        $user = Auth::user();
+
+        if ($user->user_type !== 'EMPRESA') {
+            abort(403);
+        }
+
+        $companyUsers = User::where('company_id', $user->company_id)
+            ->where('user_type', 'EXTERNO')
+            ->get();
+
+        $userIds = $companyUsers->pluck('id');
+
+        // Resumen por usuario
+        $resumenPorUsuario = Classification::whereIn('user_id', $userIds)
+            ->selectRaw('user_id, status, SUM(total_cost) as total, COUNT(*) as cantidad')
+            ->groupBy('user_id', 'status')
+            ->with('user:id,name,email')
+            ->get()
+            ->groupBy('user_id');
+
+        // Total general
+        $totalGeneral = Classification::whereIn('user_id', $userIds)->sum('total_cost');
+        $totalPendientePago = Classification::whereIn('user_id', $userIds)->where('payment_verified', false)->sum('total_cost');
+        $totalPagado = Classification::whereIn('user_id', $userIds)->where('payment_verified', true)->sum('total_cost');
+        $cantidadTotal = Classification::whereIn('user_id', $userIds)->count();
+
+        return view('user.classifications.empresa-billing', compact(
+            'companyUsers',
+            'resumenPorUsuario',
+            'totalGeneral',
+            'totalPendientePago',
+            'totalPagado',
+            'cantidadTotal'
+        ));
     }
 
     /**
@@ -109,18 +199,24 @@ class ClassificationController extends Controller
             $radicado = $this->generateRadicado();
             
             // Calcular costo total
-            $pricePerItem = $user->client_type === 'PREFERENTIAL' 
-                ? $setting->price_preferential 
+            $pricePerItem = $user->client_type === 'PREFERENTIAL'
+                ? $setting->price_preferential
                 : $setting->price_general;
-            $totalCost = count($validated['items']) * $pricePerItem;
-            
+            $subtotal   = count($validated['items']) * $pricePerItem;
+            $ivaPercent = $setting->iva_percentage ?? 0;
+            $ivaAmount  = round($subtotal * ($ivaPercent / 100), 2);
+            $totalCost  = $subtotal + $ivaAmount;
+
             // Crear clasificación
             $classification = Classification::create([
-                'user_id' => $user->id,
-                'radicado' => $radicado,
-                'type' => $validated['type'],
-                'total_cost' => $totalCost,
-                'status' => 'Pendiente de Pago',
+                'user_id'        => $user->id,
+                'radicado'       => $radicado,
+                'type'           => $validated['type'],
+                'subtotal'       => $subtotal,
+                'iva_percentage' => $ivaPercent,
+                'iva_amount'     => $ivaAmount,
+                'total_cost'     => $totalCost,
+                'status'         => 'Pendiente de Pago',
                 'payment_verified' => false,
             ]);
             
@@ -142,7 +238,10 @@ class ClassificationController extends Controller
                 if ($request->hasFile("items.{$itemIndex}.attachments")) {
                     $files = $request->file("items.{$itemIndex}.attachments");
                     foreach ($files as $file) {
-                        $path = $file->store("classifications/{$classification->id}/items/{$item->id}", 'public');
+                        // Generar nombre único preservando extensión original
+                        $extension = $file->getClientOriginalExtension();
+                        $hashName = uniqid() . '_' . time() . '.' . $extension;
+                        $path = $file->storeAs("classifications/{$classification->id}/items/{$item->id}", $hashName, 'public');
                         ClassificationAttachment::create([
                             'classification_item_id' => $item->id,
                             'file_path' => $path,
@@ -163,8 +262,46 @@ class ClassificationController extends Controller
             
             // Asignar a clasificador con menos carga
             $this->assignClasificador($classification);
-            
-            // TODO: Enviar email al usuario con radicado
+
+            // Generar PDF de factura (solo para usuarios que ven precios: Tarix o sin empresa)
+            $pdfPath = null;
+            $shouldAttachPdf = !$user->company_id || ($user->company && $user->company->isTarix());
+            if ($shouldAttachPdf) {
+                try {
+                    $pdfPath = app(InvoicePdfService::class)->generateAndStore($classification);
+                } catch (\Exception $e) {
+                    \Log::error('Error generating invoice PDF on creation: ' . $e->getMessage());
+                }
+            }
+
+            // Enviar email al usuario con radicado (con PDF si aplica)
+            try {
+                Mail::queue(new ClassificationCreatedMail($classification, $pdfPath));
+            } catch (\Exception $e) {
+                \Log::error('Error sending classification created email to user: ' . $e->getMessage());
+            }
+
+            // Enviar email al usuario EMPRESA si el cliente pertenece a una empresa (con PDF)
+            if ($user->company_id) {
+                $empresaUser = User::where('company_id', $user->company_id)
+                    ->where('user_type', 'EMPRESA')
+                    ->first();
+                if ($empresaUser) {
+                    // Generar PDF para EMPRESA si no se generó antes
+                    if (!$pdfPath) {
+                        try {
+                            $pdfPath = app(InvoicePdfService::class)->generateAndStore($classification);
+                        } catch (\Exception $e) {
+                            \Log::error('Error generating invoice PDF for empresa: ' . $e->getMessage());
+                        }
+                    }
+                    try {
+                        Mail::queue(new EmpresaNewClassificationMail($classification, $empresaUser, $pdfPath));
+                    } catch (\Exception $e) {
+                        \Log::error('Error sending new classification email to empresa: ' . $e->getMessage());
+                    }
+                }
+            }
             
             DB::commit();
             
@@ -196,10 +333,22 @@ class ClassificationController extends Controller
         $classification = null;
         
         if ($radicado) {
-            $classification = Classification::where('radicado', strtoupper($radicado))
-                ->where('user_id', Auth::id())
-                ->first();
-            
+            $user = Auth::user();
+
+            if ($user->user_type === 'EMPRESA') {
+                $companyUserIds = User::where('company_id', $user->company_id)
+                    ->where('user_type', 'EXTERNO')
+                    ->pluck('id');
+
+                $classification = Classification::where('radicado', strtoupper($radicado))
+                    ->whereIn('user_id', $companyUserIds)
+                    ->first();
+            } else {
+                $classification = Classification::where('radicado', strtoupper($radicado))
+                    ->where('user_id', $user->id)
+                    ->first();
+            }
+
             if (!$classification) {
                 return back()->withErrors(['radicado' => 'Radicado no encontrado']);
             }
@@ -429,8 +578,10 @@ class ClassificationController extends Controller
         // Handle file uploads
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs("classifications/{$classification->id}/corrections/{$item->id}", $fileName, 'public');
+                // Generar nombre único preservando extensión original
+                $extension = $file->getClientOriginalExtension();
+                $hashName = uniqid() . '_' . time() . '.' . $extension;
+                $path = $file->storeAs("classifications/{$classification->id}/corrections/{$item->id}", $hashName, 'public');
                 
                 \App\Models\CorrectionAttachment::create([
                     'item_correction_id' => $correction->id,
@@ -453,8 +604,119 @@ class ClassificationController extends Controller
             'note' => 'Cliente respondió a solicitud de corrección del ítem: ' . $item->commercial_name,
             'changed_by' => Auth::id()
         ]);
-        
+
+        // Notificar al clasificador que el cliente respondió
+        try {
+            Mail::queue(new CorrectionRespondedMail($item, $correction));
+        } catch (\Exception $e) {
+            \Log::error('Error sending correction responded email to clasificador: ' . $e->getMessage());
+        }
+
         return redirect()->route('user.classifications.show', $classification)
             ->with('success', 'Respuesta enviada. El clasificador revisará los cambios.');
+    }
+
+    /**
+     * Descargar archivo adjunto de clasificación con headers MIME correctos
+     */
+    public function downloadAttachment($attachmentId)
+    {
+        $attachment = ClassificationAttachment::find($attachmentId);
+        
+        if (!$attachment) {
+            abort(404, 'Archivo no encontrado');
+        }
+        
+        // Verificar acceso: solo el usuario propietario o clasificador pueden descargar
+        $user = Auth::user();
+        $classification = $attachment->classificationItem->classification;
+        
+        if ($user->id !== $classification->user_id && $user->id !== $classification->clasificador_id && $user->user_type !== 'ADMIN') {
+            abort(403, 'No tienes permiso para descargar este archivo');
+        }
+        
+        $filePath = Storage::disk('public')->path($attachment->file_path);
+        
+        if (!file_exists($filePath)) {
+            abort(404, 'El archivo no existe en el servidor');
+        }
+        
+        // Determinar el tipo MIME basado en la extensión
+        $extension = strtolower(pathinfo($attachment->file_name, PATHINFO_EXTENSION));
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls' => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'txt' => 'text/plain',
+        ];
+        
+        $mimeType = $mimeTypes[$extension] ?? 'application/octet-stream';
+        
+        return response()->download(
+            $filePath,
+            $attachment->file_name,
+            [
+                'Content-Type' => $mimeType,
+                'Content-Disposition' => 'attachment; filename="' . $attachment->file_name . '"'
+            ]
+        );
+    }
+
+    /**
+     * Descargar archivo adjunto de corrección con headers MIME correctos
+     */
+    public function downloadCorrectionAttachment($attachmentId)
+    {
+        $attachment = CorrectionAttachment::find($attachmentId);
+        
+        if (!$attachment) {
+            abort(404, 'Archivo no encontrado');
+        }
+        
+        // Verificar acceso: solo el usuario propietario o clasificador pueden descargar
+        $user = Auth::user();
+        $classification = $attachment->itemCorrection->item->classification;
+        
+        if ($user->id !== $classification->user_id && $user->id !== $classification->clasificador_id && $user->user_type !== 'ADMIN') {
+            abort(403, 'No tienes permiso para descargar este archivo');
+        }
+        
+        $filePath = Storage::disk('public')->path($attachment->file_path);
+        
+        if (!file_exists($filePath)) {
+            abort(404, 'El archivo no existe en el servidor');
+        }
+        
+        // Determinar el tipo MIME basado en la extensión
+        $extension = strtolower(pathinfo($attachment->file_name, PATHINFO_EXTENSION));
+        $mimeTypes = [
+            'pdf' => 'application/pdf',
+            'doc' => 'application/msword',
+            'docx' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'xls' => 'application/vnd.ms-excel',
+            'xlsx' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+            'jpg' => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png' => 'image/png',
+            'gif' => 'image/gif',
+            'txt' => 'text/plain',
+        ];
+        
+        $mimeType = $mimeTypes[$extension] ?? 'application/octet-stream';
+        
+        return response()->download(
+            $filePath,
+            $attachment->file_name,
+            [
+                'Content-Type' => $mimeType,
+                'Content-Disposition' => 'attachment; filename="' . $attachment->file_name . '"'
+            ]
+        );
     }
 }
