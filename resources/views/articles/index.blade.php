@@ -87,7 +87,12 @@
                             @endif
 
                             <div class="news-footer">
-                                <span class="news-author">{{ __('articles.created_by') }} {{ $article->user->name ?? 'Admin' }}</span>
+                                <div>
+                                    <span class="news-author">{{ __('articles.created_by') }} {{ $article->user->name ?? 'Admin' }}</span>
+                                    <div style="font-size: 12px; color: #aaa; margin-top: 3px;">
+                                        <i class="fa fa-eye" style="margin-right: 4px;"></i>{{ number_format($article->views) }} visualizaciones
+                                    </div>
+                                </div>
                                 <a href="{{ route('articles.show', $article->slug) }}" class="btn-read-more">{{ __('articles.show_more') }}</a>
                             </div>
                         </div>

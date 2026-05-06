@@ -36,6 +36,7 @@
                         <th>Título</th>
                         <th>Autor</th>
                         <th>Estado</th>
+                        <th>Visualizaciones</th>
                         <th>Comentarios</th>
                         <th>Acciones</th>
                     </tr>
@@ -48,6 +49,12 @@
                             <td>
                                 <span class="badge {{ $article->published ? 'badge-published' : 'badge-draft' }}">
                                     {{ $article->published ? 'Publicado' : 'Borrador' }}
+                                </span>
+                            </td>
+                            <td>
+                                <span style="display: inline-flex; align-items: center; gap: 5px; font-weight: 600; color: #555;">
+                                    <i class="fa fa-eye" style="color: #22c5bc;"></i>
+                                    {{ number_format($article->views) }}
                                 </span>
                             </td>
                             <td>
@@ -69,7 +76,7 @@
                             </td>
                             <td>
                                 <a href="{{ route('admin.articles.edit', $article) }}" class="btn-edit">Editar</a>
-                                <form id="deleteForm-{{ $article->id }}" action="{{ route('admin.articles.destroy', $article) }}" method="POST" style="display:inline;">
+                                <form id="deleteForm-{{ $article->id }}" action="{{ route('admin.articles.destroy', $article) }}" method="POST" style="display:inline; margin-top: 4px;">
                                     @csrf
                                     @method('DELETE')
                                     <button type="button" class="btn-delete" onclick="confirmDelete(event, '{{ $article->id }}', 'artículo')">Eliminar</button>

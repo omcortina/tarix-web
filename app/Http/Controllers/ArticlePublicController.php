@@ -31,6 +31,8 @@ class ArticlePublicController extends Controller
             ->where('published', true)
             ->firstOrFail();
 
+        $article->increment('views');
+
         // Obtener artículos relacionados (últimos 3)
         $related = Article::where('published', true)
             ->where('id', '!=', $article->id)

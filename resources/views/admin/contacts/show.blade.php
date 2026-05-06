@@ -51,7 +51,7 @@
         color: #aaa;
         margin-top: 4px;
     }
-    .info-row { margin-bottom: 22px; }
+    .info-row { margin-bottom: 0px; }
     .info-label {
         font-size: 11px;
         font-weight: 700;

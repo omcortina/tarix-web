@@ -19,6 +19,7 @@ class Article extends Model
         'content',
         'user_id',
         'published',
+        'views',
     ];
 
     public function user()
