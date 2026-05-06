@@ -78,7 +78,7 @@
         .feature-item {
             display: flex;
             gap: 12px;
-            margin: 12px 0;
+            margin: 5px 0;
             padding: 10px 0;
         }
         .feature-icon {
@@ -129,22 +129,18 @@
 
             <!-- Features -->
             <div class="email-features">
-                <strong style="color: #1a2e44; margin-bottom: 12px; display: block;">Con tu acceso podrás:</strong>
+                <strong style="color: #1a2e44; display: block;">Con tu acceso podrás:</strong>
                 <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <span>Solicitar clasificaciones arancelarias para tus productos</span>
+                    <span>1. Solicitar clasificaciones arancelarias para tus productos</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <span>Consultar el estado de tus solicitudes en tiempo real</span>
+                    <span>2. Consultar el estado de tus solicitudes en tiempo real</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <span>Acceder a reportes y documentación de clasificaciones</span>
+                    <span>3. Acceder a reportes y documentación de clasificaciones</span>
                 </div>
                 <div class="feature-item">
-                    <span class="feature-icon">✓</span>
-                    <span>Descargar certificados de clasificación</span>
+                    <span>4. Descargar certificados de clasificación</span>
                 </div>
             </div>
 

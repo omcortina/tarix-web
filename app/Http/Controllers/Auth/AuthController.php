@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Company;
+use App\Mail\CompanyRegistrationLinkMail;
+use App\Mail\PendingRegistrationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
@@ -77,6 +82,91 @@ class AuthController extends Controller
             'user_type' => 'EXTERNO',
             'company_id' => $validated['company_id'],
         ]);
+
+        return redirect()->route('auth.pending')->with('success', '¡Registro completado! Por favor revisa tu correo.');
+    }
+
+    // -------------------------------------------------------------------------
+    // Company registration link flow
+    // -------------------------------------------------------------------------
+
+    public function showSendRegistrationLink()
+    {
+        return view('user.send-registration-link');
+    }
+
+    public function sendRegistrationLink(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        /** @var \App\Models\User $user */
+        $user = auth()->user();
+        $company = Company::find($user->company_id);
+
+        if (!$company) {
+            return back()->with('error', 'No se encontró la empresa asociada a tu cuenta.');
+        }
+
+        $token = Crypt::encryptString((string) $company->id);
+        $registrationUrl = route('register.by-link', $token);
+
+        Mail::to($request->email)->send(
+            new CompanyRegistrationLinkMail($company, $registrationUrl, $request->email)
+        );
+
+        return back()->with('success', "El link de registro fue enviado a {$request->email}.");
+    }
+
+    public function showRegisterByLink(string $token)
+    {
+        try {
+            $companyId = (int) Crypt::decryptString($token);
+        } catch (DecryptException) {
+            abort(404);
+        }
+
+        $company = Company::where('id', $companyId)->where('is_active', true)->firstOrFail();
+
+        return view('auth.register-by-link', compact('company', 'token'));
+    }
+
+    public function registerByLink(Request $request, string $token)
+    {
+        try {
+            $companyId = (int) Crypt::decryptString($token);
+        } catch (DecryptException) {
+            abort(404);
+        }
+
+        $company = Company::where('id', $companyId)->where('is_active', true)->firstOrFail();
+
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email',
+            'phone'    => 'required|string|max:20',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        if (User::where('email', $validated['email'])->exists()) {
+            return back()
+                ->withInput($request->only('name', 'email', 'phone'))
+                ->withErrors([
+                    'email' => 'Ya existe una cuenta registrada con este correo electrónico. Puedes iniciar sesión directamente.',
+                ]);
+        }
+
+        $newUser = User::create([
+            'name'       => $validated['name'],
+            'email'      => $validated['email'],
+            'phone'      => $validated['phone'],
+            'password'   => Hash::make($validated['password']),
+            'user_type'  => 'EXTERNO',
+            'company_id' => $company->id,
+        ]);
+
+        Mail::to($newUser->email)->send(new PendingRegistrationMail($newUser));
 
         return redirect()->route('auth.pending')->with('success', '¡Registro completado! Por favor revisa tu correo.');
     }

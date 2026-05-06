@@ -103,5 +103,15 @@
                 <div class="menu-indicator"></div>
             </a>
         </li>
+
+        <li>
+            <a href="{{ route('admin.billing') }}" class="{{ request()->routeIs('admin.billing') ? 'active' : '' }}">
+                <div class="menu-icon">
+                    <i class="fa fa-usd"></i>
+                </div>
+                <span>Facturación y Totales</span>
+                <div class="menu-indicator"></div>
+            </a>
+        </li>
     </ul>
 </aside>

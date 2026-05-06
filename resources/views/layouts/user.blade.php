@@ -47,7 +47,7 @@
 
                 @elseif (Auth::user()->user_type === 'EMPRESA')
                     <li>
-                        <a href="{{ route('user.empresa.classifications') }}" @if(Str::startsWith(Route::currentRouteName(), 'user.empresa') && Route::currentRouteName() !== 'user.empresa.billing') class="active" @endif>
+                        <a href="{{ route('user.empresa.classifications') }}" @if(Str::startsWith(Route::currentRouteName(), 'user.empresa') && !in_array(Route::currentRouteName(), ['user.empresa.billing', 'user.empresa.send-link'])) class="active" @endif>
                             <i class="fa fa-building"></i>
                             Clasificaciones de la empresa
                         </a>
@@ -62,6 +62,12 @@
                         <a href="{{ route('user.procedures') }}" @if(Route::currentRouteName() === 'user.procedures') class="active" @endif>
                             <i class="fa fa-folder-open"></i>
                             {{ __('app.dashboard_procedures_title') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('user.empresa.send-link') }}" @if(Route::currentRouteName() === 'user.empresa.send-link') class="active" @endif>
+                            <i class="fa fa-link"></i>
+                            Link de Registro
                         </a>
                     </li>
 

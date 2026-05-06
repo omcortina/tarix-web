@@ -10,6 +10,7 @@ use App\Models\ClassificationSetting;
 use App\Models\ItemCorrection;
 use App\Models\CorrectionAttachment;
 use App\Models\User;
+use App\Models\Company;
 use App\Mail\ClassificationAssignedMail;
 use App\Mail\ClassificationCreatedMail;
 use App\Mail\EmpresaNewClassificationMail;
@@ -121,6 +122,44 @@ class ClassificationController extends Controller
             'totalPendientePago',
             'totalPagado',
             'cantidadTotal'
+        ));
+    }
+
+    public function adminBilling()
+    {
+        $companies = Company::where('is_active', true)->orderBy('name')->get();
+
+        // All user IDs per company
+        $companiesData = $companies->map(function ($company) {
+            $userIds = User::where('company_id', $company->id)->pluck('id');
+
+            $resumen = Classification::whereIn('user_id', $userIds)
+                ->selectRaw('status, SUM(total_cost) as total, COUNT(*) as cantidad')
+                ->groupBy('status')
+                ->get();
+
+            return [
+                'company'             => $company,
+                'resumen'             => $resumen,
+                'total'               => $resumen->sum('total'),
+                'pendiente_pago'      => Classification::whereIn('user_id', $userIds)->where('payment_verified', false)->sum('total_cost'),
+                'pagado'              => Classification::whereIn('user_id', $userIds)->where('payment_verified', true)->sum('total_cost'),
+                'cantidad'            => $resumen->sum('cantidad'),
+                'usuarios_activos'    => $userIds->count(),
+            ];
+        });
+
+        $totalGlobal          = $companiesData->sum('total');
+        $totalPendienteGlobal = $companiesData->sum('pendiente_pago');
+        $totalPagadoGlobal    = $companiesData->sum('pagado');
+        $cantidadGlobal       = $companiesData->sum('cantidad');
+
+        return view('admin.billing', compact(
+            'companiesData',
+            'totalGlobal',
+            'totalPendienteGlobal',
+            'totalPagadoGlobal',
+            'cantidadGlobal'
         ));
     }
 

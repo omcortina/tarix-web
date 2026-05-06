@@ -27,6 +27,8 @@ Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
+Route::get('/register/{token}', [AuthController::class, 'showRegisterByLink'])->name('register.by-link');
+Route::post('/register/{token}', [AuthController::class, 'registerByLink']);
 Route::get('/pending', [AuthController::class, 'pendingApproval'])->name('auth.pending');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
@@ -56,6 +58,8 @@ Route::prefix('dashboard')->name('user.')->middleware(['auth', 'user-verified'])
     // Rutas exclusivas para usuario tipo EMPRESA
     Route::get('empresa/classifications', [ClassificationController::class, 'empresaIndex'])->name('empresa.classifications');
     Route::get('empresa/billing', [ClassificationController::class, 'empresaBilling'])->name('empresa.billing');
+    Route::get('empresa/send-link', [AuthController::class, 'showSendRegistrationLink'])->name('empresa.send-link');
+    Route::post('empresa/send-link', [AuthController::class, 'sendRegistrationLink'])->name('empresa.send-link.send');
     
     // Rutas para consulta de trámites
     Route::get('procedures', [ClassificationController::class, 'procedures'])->name('procedures');
@@ -90,6 +94,9 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Rutas para configuración de clasificaciones
     Route::get('classifications/settings', [ClassificationSettingController::class, 'index'])->name('classifications.settings');
     Route::put('classifications/settings', [ClassificationSettingController::class, 'update'])->name('classifications.settings.update');
+
+    // Facturación y Totales (admin)
+    Route::get('billing', [ClassificationController::class, 'adminBilling'])->name('billing');
     
     // Rutas para gestión de usuarios (solo para ADMIN)
     Route::get('users', [UserManagementController::class, 'index'])->name('users.index');

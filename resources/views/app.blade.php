@@ -67,7 +67,6 @@
             <a href="/blog">{{ __('app.blog') }}</a>
             <a href="#recursos">{{ __('app.recursos') }}</a>
             <a href="#contacto">{{ __('app.contacto') }}</a>
-            <a href="{{ route('register') }}" class="nav-cta">{{ __('app.conoce_servicios') }}</a>
             <a href="{{ route('login') }}" class="nav-cta">{{ __('app.login') }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
@@ -84,7 +83,6 @@
             <h1>{{ __('app.titulo_hero') }} <span>{{ __('app.operacion_internacional') }}</span></h1>
             <p>{{ __('app.descripcion_hero') }}</p>
             <div class="hero-btns">
-                <a href="{{ route('register') }}" class="btn-primary">{{ __('app.conoce_servicios') }}</a>
                 <a href="#contacto" class="btn-secondary">{{ __('app.contactanos') }}</a>
             </div>
         </div>
