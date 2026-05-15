@@ -96,3 +96,19 @@
     @endif
 </div>
 @endsection
+
+@section('extra_js')
+@if ($errors->has('error'))
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        Swal.fire({
+            icon: 'error',
+            title: 'No se puede eliminar',
+            text: '{{ $errors->first('error') }}',
+            confirmButtonColor: '#22c5bc',
+            confirmButtonText: 'Entendido',
+        });
+    });
+</script>
+@endif
+@endsection

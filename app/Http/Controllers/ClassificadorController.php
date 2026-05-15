@@ -10,6 +10,7 @@ use App\Mail\CorrectionRequestedMail;
 use App\Mail\ClassificationApprovedMail;
 use App\Mail\EmpresaPaymentVerifiedMail;
 use App\Mail\EmpresaClassificationApprovedMail;
+use App\Mail\ItemsVerifiedMail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -75,7 +76,33 @@ class ClassificadorController extends Controller
             'note' => 'Ítem #' . ($classification->items->search(fn($i) => $i->id === $item->id) + 1) . ' verificado con subpartida: ' . $validated['final_tariff'],
             'changed_by' => Auth::id()
         ]);
-        
+
+        // Si todos los ítems están verificados, notificar por correo
+        $classification->load('items');
+        $allVerified = $classification->items->every(fn($i) => $i->status === 'Verificado');
+        if ($allVerified) {
+            // Correo al usuario que creó la clasificación
+            try {
+                Mail::queue(new ItemsVerifiedMail($classification, $classification->user));
+            } catch (\Exception $e) {
+                \Log::error('Error enviando correo items-verified al usuario: ' . $e->getMessage());
+            }
+
+            // Correo al usuario EMPRESA si el solicitante pertenece a una empresa
+            if ($classification->user->company_id) {
+                $empresaUser = User::where('company_id', $classification->user->company_id)
+                    ->where('user_type', 'EMPRESA')
+                    ->first();
+                if ($empresaUser && $empresaUser->id !== $classification->user->id) {
+                    try {
+                        Mail::queue(new ItemsVerifiedMail($classification, $empresaUser));
+                    } catch (\Exception $e) {
+                        \Log::error('Error enviando correo items-verified a empresa: ' . $e->getMessage());
+                    }
+                }
+            }
+        }
+
         return redirect()->route('clasificador.show', $classification)
             ->with('success', 'Ítem verificado exitosamente con subpartida: ' . $validated['final_tariff']);
     }
@@ -169,7 +196,7 @@ class ClassificadorController extends Controller
                 ->first();
             if ($empresaUser) {
                 try {
-                    Mail::queue(new EmpresaClassificationApprovedMail($classification, $empresaUser));
+                    Mail::queue(new EmpresaClassificationApprovedMail($classification, $empresaUser, null, true));
                 } catch (\Exception $e) {
                     \Log::error('Error sending approved email to empresa: ' . $e->getMessage());
                 }

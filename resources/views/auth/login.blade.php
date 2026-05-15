@@ -100,7 +100,7 @@
                     setTimeout(() => {
                         alert.remove();
                     }, 300);
-                }, 2500);
+                }, 3000);
             });
         });
     </script>

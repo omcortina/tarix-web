@@ -54,6 +54,7 @@ Route::prefix('dashboard')->name('user.')->middleware(['auth', 'user-verified'])
     Route::get('classifications/download-template', [ClassificationController::class, 'downloadTemplate'])->name('classifications.download-template');
     Route::post('classifications', [ClassificationController::class, 'store'])->name('classifications.store');
     Route::get('classifications/{classification}', [ClassificationController::class, 'show'])->name('classifications.show');
+    Route::get('classifications/{classification}/pdf', [ClassificationController::class, 'printPdf'])->name('classifications.pdf');
     
     // Rutas exclusivas para usuario tipo EMPRESA
     Route::get('empresa/classifications', [ClassificationController::class, 'empresaIndex'])->name('empresa.classifications');
@@ -95,6 +96,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('classifications/settings', [ClassificationSettingController::class, 'index'])->name('classifications.settings');
     Route::put('classifications/settings', [ClassificationSettingController::class, 'update'])->name('classifications.settings.update');
 
+    // Cancelar clasificación (admin)
+    Route::patch('classifications/{classification}/cancel', [ClassificationController::class, 'adminCancel'])->name('classifications.cancel');
+    Route::get('classifications/{classification}', [ClassificationController::class, 'adminShow'])->name('classifications.show');
+
     // Facturación y Totales (admin)
     Route::get('billing', [ClassificationController::class, 'adminBilling'])->name('billing');
     
@@ -112,6 +117,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::put('users/{user}/externo', [UserManagementController::class, 'updateExterno'])->name('users.update-externo');
     Route::get('users/{user}/edit-empresa', [UserManagementController::class, 'editEmpresa'])->name('users.edit-empresa');
     Route::put('users/{user}/empresa', [UserManagementController::class, 'updateEmpresa'])->name('users.update-empresa');
+    Route::patch('users/{user}/desactivate', [UserManagementController::class, 'desactivate'])->name('users.desactivate');
 });
 
 // Clasificador routes (protegidas con middleware auth, user-verified y clasificador)

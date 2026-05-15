@@ -26,11 +26,31 @@
         font-weight: 600;
         border: none;
         cursor: pointer;
-        transition: all 0.2s;
+        transition: background 0.2s, color 0.2s;
     }
 
-    .btn-toggle:hover {
-        opacity: 0.8;
+    .btn-deactivate {
+        background: #FFF3E0;
+        color: #F57C00;
+        border: 1px solid #FFD699;
+    }
+
+    .btn-deactivate:hover {
+        background: #F57C00;
+        color: white;
+        border-color: #F57C00;
+    }
+
+    .btn-activate {
+        background: #E8F5E9;
+        color: #388E3C;
+        border: 1px solid #C8E6C9;
+    }
+
+    .btn-activate:hover {
+        background: #388E3C;
+        color: white;
+        border-color: #388E3C;
     }
 </style>
 @endsection
@@ -103,7 +123,7 @@
                                 <form id="toggleForm-{{ $value->id }}" action="{{ route('admin.values.toggle', $value) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('PATCH')
-                                    <button type="submit" class="btn-view" style="background: {{ $value->is_active ? '#fff3e0' : '#e8f5e9' }}; color: {{ $value->is_active ? '#f57c00' : '#388e3c' }}; border: 1px solid {{ $value->is_active ? '#ffd699' : '#c8e6c9' }};">
+                                    <button type="submit" class="btn-toggle {{ $value->is_active ? 'btn-deactivate' : 'btn-activate' }}">
                                         {{ $value->is_active ? 'Desactivar' : 'Activar' }}
                                     </button>
                                 </form>

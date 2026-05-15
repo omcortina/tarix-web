@@ -23,7 +23,12 @@ class UserManagementController extends Controller
     {
         $selectedCompanyId = $request->get('company_id');
 
-        $verifiedQuery   = User::whereIn('user_type', ['EXTERNO', 'EMPRESA'])->where('is_verified', true);
+        $tarixCompanyId  = Company::where('name', 'Tarix')->value('id');
+
+        $verifiedQuery   = User::whereIn('user_type', ['EXTERNO', 'EMPRESA'])
+                               ->where('is_verified', true)
+                               ->where('state', 1)
+                               ->when($tarixCompanyId, fn($q) => $q->where('company_id', '!=', $tarixCompanyId));
         $unverifiedQuery = User::where('user_type', 'EXTERNO')->where('is_verified', false);
 
         if ($selectedCompanyId) {
@@ -289,8 +294,19 @@ class UserManagementController extends Controller
         }
 
         $email = $user->email;
-        $user->delete();
+        $user->state = 0;
+        $user->save();
 
         return redirect()->route('admin.users.index')->with('success', "Usuario CLASIFICADOR {$email} eliminado exitosamente.");
+    }
+
+    /**
+     * Desactivar usuario (cambiar state a 0)
+     */
+    public function desactivate(User $user)
+    {
+        $user->state = 0;
+        $user->save();
+        return redirect()->back()->with('success', 'Usuario desactivado correctamente.');
     }
 }

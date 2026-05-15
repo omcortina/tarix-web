@@ -26,11 +26,24 @@ class AuthController extends Controller
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:6',
+        ], [
+            'email.required'    => 'El correo electrónico es obligatorio.',
+            'email.email'       => 'El correo electrónico no tiene un formato válido.',
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.min'      => 'La contraseña debe tener al menos 6 caracteres.',
         ]);
 
         if (auth()->attempt($credentials, $request->filled('remember'))) {
             $user = auth()->user();
             $request->session()->regenerate();
+
+            // Verificar que el usuario esté activo
+            if ($user->state != 1) {
+                auth()->logout();
+                return back()->withErrors([
+                    'email' => 'Tu usuario no se encuentra activo en el sistema.',
+                ])->onlyInput('email');
+            }
 
             // Validar que usuarios EXTERNO estén verificados
             if ($user->user_type === 'EXTERNO' && !$user->is_verified) {
@@ -271,15 +284,47 @@ class AuthController extends Controller
 
     public function dashboard()
     {
+        // Services & Articles
         $servicesCount = \App\Models\Service::count();
         $publishedCount = \App\Models\Service::where('published', true)->count();
         $services = \App\Models\Service::latest()->limit(3)->get();
-        
         $articlesCount = \App\Models\Article::count();
         $publishedArticlesCount = \App\Models\Article::where('published', true)->count();
         $articles = \App\Models\Article::latest()->limit(3)->get();
-        
-        return view('admin.dashboard', compact('servicesCount', 'publishedCount', 'services', 'articlesCount', 'publishedArticlesCount', 'articles'));
+
+        // Classifications
+        $totalClassifications = \App\Models\Classification::count();
+        $pendingPaymentCount = \App\Models\Classification::where('status', 'Pendiente de pago')->count();
+        $inProcessCount = \App\Models\Classification::where('status', 'En proceso')->count();
+        $approvedCount = \App\Models\Classification::where('status', 'Aprobado')->count();
+        $createdCount = \App\Models\Classification::where('status', 'Creado')->count();
+        $cancelledCount = \App\Models\Classification::where('status', 'Cancelado')->count();
+        $recentClassifications = \App\Models\Classification::with('user')->latest()->limit(7)->get();
+
+        // Users
+        $activeUsersCount = User::whereIn('user_type', ['EXTERNO', 'EMPRESA'])
+            ->where('is_verified', true)
+            ->where('state', 1)
+            ->count();
+        $pendingUsersCount = User::whereIn('user_type', ['EXTERNO', 'EMPRESA'])
+            ->where('is_verified', false)
+            ->count();
+        $clasificadoresCount = User::where('user_type', 'CLASIFICADOR')
+            ->where('state', 1)
+            ->count();
+
+        // Companies
+        $activeCompaniesCount = Company::where('is_active', true)->count();
+
+        return view('admin.dashboard', compact(
+            'servicesCount', 'publishedCount', 'services',
+            'articlesCount', 'publishedArticlesCount', 'articles',
+            'totalClassifications', 'pendingPaymentCount', 'inProcessCount',
+            'approvedCount', 'createdCount', 'cancelledCount',
+            'recentClassifications',
+            'activeUsersCount', 'pendingUsersCount', 'clasificadoresCount',
+            'activeCompaniesCount'
+        ));
     }
 
     public function userDashboard()

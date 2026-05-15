@@ -149,7 +149,7 @@
                                     @endif
 
                                     @if ($item->observations)
-                                        <div class="detail-row">
+                                        <div class="detail-row full-width">
                                             <strong>Observaciones:</strong>
                                             <p>{{ $item->observations }}</p>
                                         </div>
@@ -162,8 +162,22 @@
                                         </div>
                                     @endif
 
+                                    @if ($item->status === 'Verificado' && $item->final_tariff)
+                                        <div class="detail-row full-width" style="background:#e8f5e9;border-left:3px solid #22c5bc;padding:10px 14px;border-radius:4px;">
+                                            <strong style="color:#1a7a5e;">Subpartida Final Asignada:</strong>
+                                            <p style="font-weight:700;color:#1a7a5e;font-size:15px;margin-top:4px;">{{ $item->final_tariff }}</p>
+                                        </div>
+                                    @endif
+
+                                    @if ($item->status === 'Verificado' && $item->clasificador_observations)
+                                        <div class="detail-row full-width">
+                                            <strong>Observaciones del Clasificador:</strong>
+                                            <p style="font-style:italic;color:#555;">{{ $item->clasificador_observations }}</p>
+                                        </div>
+                                    @endif
+
                                     @if ($item->corrections()->count() > 0)
-                                        <div style="margin-top: 15px;">
+                                        <div style="grid-column:1/-1;margin-top:4px;">
                                             <a href="{{ route('user.classifications.items.corrections', [$classification, $item]) }}" class="btn-corrections" style="display: inline-block; background: #fff3cd; color: #856404; padding: 8px 12px; border-radius: 4px; text-decoration: none; font-size: 13px; font-weight: 600; border: 1px solid #ffc107;">
                                                 Ver Correcciones ({{ $item->corrections()->count() }})
                                             </a>
@@ -194,7 +208,7 @@
             </div>
 
             <div class="history-section">
-                <h2>Histórico de Cambios</h2>
+                <h2>Historial de la solicitud</h2>
                 
                 @if ($classification->histories->count() > 0)
                     <div class="timeline">

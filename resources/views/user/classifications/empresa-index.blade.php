@@ -353,10 +353,17 @@
                                 {{ $classification->created_at->format('d/m/Y') }}
                             </td>
                             <td>
-                                <a href="{{ route('user.classifications.show', $classification) }}" 
-                                   style="color: #22c5bc; font-size: 13px; font-weight: 600; text-decoration: none;">
-                                    Ver
-                                </a>
+                                <div style="display:flex;gap:8px;align-items:center;">
+                                    <a href="{{ route('user.classifications.show', $classification) }}" 
+                                       style="color: #22c5bc; font-size: 13px; font-weight: 600; text-decoration: none;">
+                                        Ver
+                                    </a>
+                                    <a href="{{ route('user.classifications.pdf', $classification) }}"
+                                       target="_blank"
+                                       style="color: #555; font-size: 13px; font-weight: 600; text-decoration: none;">
+                                        Imprimir
+                                    </a>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

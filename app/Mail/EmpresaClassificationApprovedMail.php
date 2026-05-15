@@ -21,6 +21,7 @@ class EmpresaClassificationApprovedMail extends Mailable implements ShouldQueue
         public Classification $classification,
         public User $empresaUser,
         public ?string $pdfPath = null,
+        public bool $attachClassificationPdf = false,
         string $locale = 'es'
     ) {
         $this->locale($locale);
@@ -50,13 +51,25 @@ class EmpresaClassificationApprovedMail extends Mailable implements ShouldQueue
 
     public function attachments(): array
     {
+        $attachments = [];
+
         if ($this->pdfPath && file_exists($this->pdfPath)) {
-            return [
-                Attachment::fromPath($this->pdfPath)
-                    ->as('Factura-' . $this->classification->radicado . '.pdf')
-                    ->withMime('application/pdf'),
-            ];
+            $attachments[] = Attachment::fromPath($this->pdfPath)
+                ->as('Factura-' . $this->classification->radicado . '.pdf')
+                ->withMime('application/pdf');
         }
-        return [];
+
+        if ($this->attachClassificationPdf) {
+            $this->classification->loadMissing(['user.company', 'items', 'clasificador']);
+            $pdfContent = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.classification', [
+                'classification' => $this->classification,
+            ])->setPaper('a4', 'portrait')->output();
+
+            $filename = 'clasificacion-' . $this->classification->radicado . '.pdf';
+            $attachments[] = Attachment::fromData(fn () => $pdfContent, $filename)
+                ->withMime('application/pdf');
+        }
+
+        return $attachments;
     }
 }

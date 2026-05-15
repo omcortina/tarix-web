@@ -27,6 +27,39 @@ use PhpOffice\PhpSpreadsheet\Reader\Xls as XlsReader;
 class ClassificationController extends Controller
 {
     /**
+     * Mostrar detalle de una clasificación desde el panel admin (solo lectura)
+     */
+    public function adminShow(Classification $classification)
+    {
+        $this->authorize('view', $classification);
+        $classification->loadMissing(['user.company', 'items.attachments', 'clasificador', 'histories']);
+        return view('admin.classifications.show', compact('classification'));
+    }
+
+    /**
+     * Cancelar una clasificación (solo admin)
+     */
+    public function adminCancel(Classification $classification)
+    {
+        if (!in_array($classification->status, ['Creado', 'Pendiente de pago'])) {
+            return back()->with('error', 'Solo se pueden cancelar clasificaciones en estado Creado o Pendiente de pago.');
+        }
+
+        $previousStatus = $classification->status;
+
+        $classification->update(['status' => 'Cancelado']);
+
+        ClassificationHistory::create([
+            'classification_id' => $classification->id,
+            'status' => 'Cancelado',
+            'note' => "Clasificación cancelada por el administrador. Estado anterior: {$previousStatus}.",
+            'changed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', "Clasificación {$classification->radicado} cancelada correctamente.");
+    }
+
+    /**
      * Mostrar listado de clasificaciones del usuario
      */
     public function index()
@@ -361,6 +394,24 @@ class ClassificationController extends Controller
         $this->authorize('view', $classification);
         
         return view('user.classifications.show', compact('classification'));
+    }
+
+    /**
+     * Generar PDF de la clasificación y enviarlo como stream
+     */
+    public function printPdf(Classification $classification)
+    {
+        $this->authorize('view', $classification);
+
+        $classification->loadMissing(['user.company', 'items', 'clasificador', 'histories']);
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.classification', [
+            'classification' => $classification,
+        ])->setPaper('a4', 'portrait');
+
+        $filename = 'clasificacion-' . $classification->radicado . '.pdf';
+
+        return $pdf->stream($filename);
     }
 
     /**

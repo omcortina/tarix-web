@@ -1,32 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crear Nuevo Valor - TARIX</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin-services-form.css') }}">
-</head>
-<body>
-    <!-- NAV -->
-    <nav>
-        <a href="/" class="nav-logo">
-            <div class="logo-icon">
-                <div class="logo-t">T</div>
-            </div>
-            <div class="logo-text">
-                <span class="logo-name">TARIX</span>
-                <span class="logo-sub">Soluciones en Comercio Exterior</span>
-            </div>
-        </a>
-        <div class="nav-links">
-            <a href="/">Volver al Sitio</a>
-            <a href="{{ route('admin.values.index') }}" class="nav-cta">Volver a Valores</a>
-        </div>
-    </nav>
+@extends('layouts.admin')
 
-    <div class="admin-container">
+@section('title', 'Crear Nuevo Valor')
+
+@section('extra_css')
+<link rel="stylesheet" href="{{ asset('css/admin-services-form.css') }}">
+@endsection
+
+@section('content')
+<div class="admin-container">
         <div style="margin-bottom: 20px; display: flex; gap: 8px; align-items: center; font-size: 14px; color: #666;">
             <a href="{{ route('admin.dashboard') }}" style="color: #22c5bc; text-decoration: none; font-weight: 600;">
                 Dashboard
@@ -135,28 +116,29 @@
             </div>
         </div>
     </div>
+@endsection
 
-    <script>
-        document.getElementById('name').addEventListener('input', function() {
-            document.getElementById('preview-name').textContent = this.value || 'Nombre del Valor';
-        });
-        document.getElementById('description').addEventListener('input', function() {
-            document.getElementById('preview-desc').textContent = this.value || 'Descripción del valor';
-        });
-        document.getElementById('icon_color').addEventListener('input', function() {
-            document.getElementById('icon-preview').style.backgroundColor = this.value;
-        });
-        document.getElementById('icon_svg').addEventListener('input', function() {
-            const svg = document.querySelector('#icon-preview svg');
-            if (this.value.trim()) {
-                svg.innerHTML = this.value;
-            }
-        });
+@section('extra_js')
+<script>
+    document.getElementById('name').addEventListener('input', function() {
+        document.getElementById('preview-name').textContent = this.value || 'Nombre del Valor';
+    });
+    document.getElementById('description').addEventListener('input', function() {
+        document.getElementById('preview-desc').textContent = this.value || 'Descripción del valor';
+    });
+    document.getElementById('icon_color').addEventListener('input', function() {
+        document.getElementById('icon-preview').style.backgroundColor = this.value;
+    });
+    document.getElementById('icon_svg').addEventListener('input', function() {
+        const svg = document.querySelector('#icon-preview svg');
+        if (this.value.trim()) {
+            svg.innerHTML = this.value;
+        }
+    });
 
-        document.getElementById('name').dispatchEvent(new Event('input'));
-        document.getElementById('description').dispatchEvent(new Event('input'));
-        document.getElementById('icon_color').dispatchEvent(new Event('input'));
-        document.getElementById('icon_svg').dispatchEvent(new Event('input'));
-    </script>
-</body>
-</html>
+    document.getElementById('name').dispatchEvent(new Event('input'));
+    document.getElementById('description').dispatchEvent(new Event('input'));
+    document.getElementById('icon_color').dispatchEvent(new Event('input'));
+    document.getElementById('icon_svg').dispatchEvent(new Event('input'));
+</script>
+@endsection

@@ -1,16 +1,13 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionar Recursos - {{ $service->title }}</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/index.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin-services-resources.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-    <div class="admin-container">
+@extends('layouts.admin')
+
+@section('title', 'Gestionar Recursos - ' . $service->title)
+
+@section('extra_css')
+<link rel="stylesheet" href="{{ asset('css/admin-services-resources.css') }}">
+@endsection
+
+@section('content')
+<div class="admin-container">
         <!-- Header -->
         <div class="admin-header">
             <div class="breadcrumb">
@@ -131,26 +128,27 @@
             <a href="{{ route('admin.services.edit', $service) }}" class="btn btn-secondary">Volver a Editar Servicio</a>
         </div>
     </div>
+@endsection
 
-    <script>
-        function confirmDelete(event, resourceId) {
-            event.preventDefault();
-            Swal.fire({
-                title: '¿Estás seguro?',
-                text: '¿Deseas eliminar este recurso? Esta acción no se puede deshacer.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ff6b6b',
-                cancelButtonColor: '#6b7280',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar',
-                reverseButtons: true
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('deleteForm-' + resourceId).submit();
-                }
-            });
-        }
-    </script>
-</body>
-</html>
+@section('extra_js')
+<script>
+    function confirmDelete(event, resourceId) {
+        event.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¿Deseas eliminar este recurso? Esta acción no se puede deshacer.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ff6b6b',
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('deleteForm-' + resourceId).submit();
+            }
+        });
+    }
+</script>
+@endsection

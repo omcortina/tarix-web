@@ -224,7 +224,7 @@
                                 @if (!$classification->payment_verified)
                                     <div class="item-actions" style="opacity: 0.5; pointer-events: none;">
                                         <div style="background: #fff3cd; padding: 12px; border-radius: 4px; text-align: center; font-size: 13px; color: #856404;">
-                                            ⚠️ Verifica el pago antes de proceder
+                                            Verifica el pago antes de proceder
                                         </div>
                                     </div>
                                 @else

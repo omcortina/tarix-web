@@ -96,6 +96,12 @@
                             <a href="{{ route('user.classifications.show', $classification) }}" class="btn btn-primary">
                                 Ver Detalles
                             </a>
+                            <a href="{{ route('user.classifications.pdf', $classification) }}"
+                               target="_blank"
+                               class="btn btn-secondary"
+                               title="Imprimir PDF">
+                                <i class="fa fa-print"></i> Imprimir
+                            </a>
                         </div>
                     </div>
                 @endforeach

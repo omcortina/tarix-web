@@ -36,7 +36,7 @@
                         <th>Título</th>
                         <th>Autor</th>
                         <th>Estado</th>
-                        <th>Visualizaciones</th>
+                        <th style="text-align:center;">Visualizaciones</th>
                         <th>Comentarios</th>
                         <th>Acciones</th>
                     </tr>
@@ -51,7 +51,7 @@
                                     {{ $article->published ? 'Publicado' : 'Borrador' }}
                                 </span>
                             </td>
-                            <td>
+                            <td style="text-align:center;">
                                 <span style="display: inline-flex; align-items: center; gap: 5px; font-weight: 600; color: #555;">
                                     <i class="fa fa-eye" style="color: #22c5bc;"></i>
                                     {{ number_format($article->views) }}

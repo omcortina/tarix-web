@@ -232,6 +232,13 @@
                                                             <i class="fa fa-edit"></i> Editar
                                                         </a>
                                                     @endif
+                                                    <form method="POST" action="{{ route('admin.users.desactivate', $user) }}" style="display: inline;" id="form-desactivate-{{ $user->id }}">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button type="button" class="btn-verify btn-reject" onclick="confirmAction('form-desactivate-{{ $user->id }}', '¿Desactivar usuario?', '¿Deseas desactivar a {{ addslashes($user->name) }}? Esta acción puede revertirse.')" title="Desactivar usuario">
+                                                            <i class="fa fa-trash"></i> Eliminar
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -323,10 +330,10 @@
                                                     <i class="fa fa-star"></i> Preferencial
                                                 </button>
                                             </form>
-                                            <form method="POST" action="{{ route('admin.users.reject', $user) }}" style="display: contents;">
+                                            <form method="POST" action="{{ route('admin.users.reject', $user) }}" style="display: contents;" id="form-reject-{{ $user->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn-verify btn-reject" onclick="return confirm('¿Deseas rechazar este registro? Esta acción no se puede deshacer.');" title="Rechazar este usuario">
+                                                <button type="button" class="btn-verify btn-reject" onclick="confirmAction('form-reject-{{ $user->id }}', '¿Rechazar registro?', '¿Deseas rechazar a {{ addslashes($user->name) }}? Esta acción no se puede deshacer.', 'warning')" title="Rechazar este usuario">
                                                     <i class="fa fa-trash"></i> Rechazar
                                                 </button>
                                             </form>
@@ -394,10 +401,10 @@
                                             <a href="{{ route('admin.users.edit-clasificador', $user) }}" class="btn-verify btn-edit" title="Editar información del clasificador">
                                                 <i class="fa fa-edit"></i> Editar
                                             </a>
-                                            <form method="POST" action="{{ route('admin.users.delete-clasificador', $user) }}" style="display: contents;">
+                                            <form method="POST" action="{{ route('admin.users.delete-clasificador', $user) }}" style="display: contents;" id="form-del-clasificador-{{ $user->id }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn-verify btn-reject" onclick="return confirm('¿Deseas eliminar este clasificador? Esta acción no se puede deshacer.');" title="Eliminar este clasificador">
+                                                <button type="button" class="btn-verify btn-reject" onclick="confirmAction('form-del-clasificador-{{ $user->id }}', '¿Eliminar clasificador?', '¿Deseas eliminar a {{ addslashes($user->name) }}? Esta acción no se puede deshacer.', 'warning')" title="Eliminar este clasificador">
                                                     <i class="fa fa-trash"></i> Eliminar
                                                 </button>
                                             </form>
@@ -449,6 +456,23 @@
             const select = e.target.querySelector('select[name="company_id"]');
             const base = '{{ route('admin.users.index') }}';
             window.location.href = select.value ? base + '?company_id=' + select.value : base;
+        }
+
+        function confirmAction(formId, title, text, icon = 'question') {
+            Swal.fire({
+                title: title,
+                text: text,
+                icon: icon,
+                showCancelButton: true,
+                confirmButtonColor: '#22c5bc',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, continuar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(formId).submit();
+                }
+            });
         }
 
         function switchTab(tabName) {

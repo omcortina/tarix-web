@@ -46,12 +46,14 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('admin.services.edit', $service) }}" class="btn-edit">Editar</a>
-                                <form id="deleteForm-{{ $service->id }}" action="{{ route('admin.services.destroy', $service) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn-delete" onclick="confirmDelete(event, '{{ $service->id }}', 'servicio')">Eliminar</button>
-                                </form>
+                                <div style="display:flex; gap:6px; align-items:center; flex-wrap:nowrap;">
+                                    <a href="{{ route('admin.services.edit', $service) }}" class="btn-edit">Editar</a>
+                                    <form id="deleteForm-{{ $service->id }}" action="{{ route('admin.services.destroy', $service) }}" method="POST" style="display:inline;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn-delete" onclick="confirmDelete(event, '{{ $service->id }}', 'servicio')">Eliminar</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @endforeach

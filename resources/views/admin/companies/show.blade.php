@@ -4,7 +4,7 @@
 
 @section('extra_css')
 <style>
-    .admin-container { max-width: 1200px; }
+    .admin-container { max-width: 100%; }
     .admin-header { display: flex; justify-content: space-between; align-items: center; }
     .admin-header h1 { font-size: 28px; }
     .card { padding: 30px; margin-bottom: 30px; }
@@ -21,6 +21,9 @@
     .btn-danger:hover { background: #ff5252; }
     .section-title { font-size: 18px; font-weight: 700; color: #0d2340; margin-bottom: 20px; margin-top: 30px; }
     .dt-wrapper {width: 100%;padding: 0px !important; display: flex; flex-direction: column}
+    .badge-cancelado { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; background: #FDECEA; color: #b71c1c; }
+    .btn-cancel-classification { background: none; border: 1px solid #d32f2f; color: #d32f2f; padding: 4px 10px; border-radius: 5px; font-size: 12px; font-weight: 600; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .btn-cancel-classification:hover { background: #d32f2f; color: white; }
 </style>
 @endsection
 
@@ -194,6 +197,7 @@
                             <th>Items</th>
                             <th>Costo</th>
                             <th>Fecha</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -202,11 +206,38 @@
                                 <td>{{ $classification->radicado }}</td>
                                 <td>{{ $classification->user->name ?? '-' }}</td>
                                 <td>
-                                    <span class="badge badge-info">{{ $classification->status }}</span>
+                                    @if ($classification->status === 'Cancelado')
+                                        <span class="badge-cancelado">Cancelado</span>
+                                    @else
+                                        <span class="badge badge-info">{{ $classification->status }}</span>
+                                    @endif
                                 </td>
                                 <td>{{ $classification->items->count() }}</td>
                                 <td>${{ number_format($classification->total_cost, 0, ',', '.') }}</td>
                                 <td>{{ $classification->created_at->format('d/m/Y') }}</td>
+                                <td>
+                                    <div style="display:flex;gap:10px;align-items:center;">
+                                        <a href="{{ route('admin.classifications.show', $classification) }}"
+                                           style="color:#22c5bc;font-size:13px;font-weight:600;text-decoration:none;">
+                                            Ver
+                                        </a>
+                                        @if (in_array($classification->status, ['Creado', 'Pendiente de pago']))
+                                            <form method="POST"
+                                                  action="{{ route('admin.classifications.cancel', $classification) }}"
+                                                  id="form-cancel-{{ $classification->id }}"
+                                                  style="display: inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="button"
+                                                        class="btn-cancel-classification"
+                                                        onclick="confirmCancel('form-cancel-{{ $classification->id }}', '{{ addslashes($classification->radicado) }}')"
+                                                        title="Cancelar clasificación">
+                                                    <i class="fa fa-ban"></i> Cancelar
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -223,6 +254,23 @@
 
 @section('extra_js')
 <script>
+function confirmCancel(formId, radicado) {
+    Swal.fire({
+        title: '¿Cancelar clasificación?',
+        text: 'La clasificación ' + radicado + ' será marcada como Cancelado. Esta acción puede registrarse en el historial.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d32f2f',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sí, cancelar',
+        cancelButtonText: 'No, volver'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            document.getElementById(formId).submit();
+        }
+    });
+}
+
 $(document).ready(function() {
     const dtConfig = {
         language: { url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/es-ES.json' },

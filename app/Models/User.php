@@ -28,6 +28,7 @@ class User extends Authenticatable
         'verified_at',
         'must_change_password',
         'company_id',
+        'state',
     ];
 
     /**

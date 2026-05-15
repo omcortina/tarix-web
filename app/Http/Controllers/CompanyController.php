@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\User;
+use App\Models\Classification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -154,15 +155,25 @@ class CompanyController extends Controller
             return back()->withErrors(['error' => 'No se puede eliminar la empresa Tarix']);
         }
 
-        // No permitir eliminar si tiene usuarios
-        if ($company->users()->count() > 0) {
-            return back()->withErrors(['error' => 'No se puede eliminar una empresa que tiene usuarios asociados']);
+        // Bloquear si tiene clasificaciones que no estén canceladas
+        $userIds = $company->users()->pluck('id');
+        $hasActiveClassifications = Classification::whereIn('user_id', $userIds)
+            ->where('status', '!=', 'Cancelado')
+            ->exists();
+
+        if ($hasActiveClassifications) {
+            return back()->withErrors(['error' => 'No se puede eliminar la empresa porque tiene clasificaciones activas. Cancele primero todas las clasificaciones antes de continuar.']);
         }
 
         $name = $company->name;
-        $company->delete();
+
+        // Desactivar todos los usuarios de la empresa
+        $company->users()->update(['state' => 0]);
+
+        // Desactivar la empresa en lugar de eliminarla físicamente
+        $company->update(['is_active' => false]);
 
         return redirect()->route('admin.companies.index')
-            ->with('success', "Empresa '{$name}' eliminada correctamente");
+            ->with('success', "Empresa '{$name}' desactivada correctamente junto con todos sus usuarios");
     }
 }

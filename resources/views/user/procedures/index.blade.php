@@ -138,6 +138,17 @@
                                                     <p>{{ $item->revision_note }}</p>
                                                 </div>
                                             @endif
+
+                                            @if ($item->status === 'Verificado' && $item->final_tariff)
+                                                <div style="background:#e8f5e9;border-left:3px solid #22c5bc;padding:8px 12px;border-radius:4px;margin-top:8px;">
+                                                    <strong style="color:#1a7a5e;">Subpartida Final:</strong>
+                                                    <span style="font-weight:700;color:#1a7a5e;"> {{ $item->final_tariff }}</span>
+                                                </div>
+                                            @endif
+
+                                            @if ($item->status === 'Verificado' && $item->clasificador_observations)
+                                                <p style="margin-top:6px;font-style:italic;color:#555;"><strong>Obs. Clasificador:</strong> {{ $item->clasificador_observations }}</p>
+                                            @endif
                                         </div>
                                     </div>
                                 @endforeach
