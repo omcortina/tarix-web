@@ -5,10 +5,7 @@
     <title>Clasificacion - {{ $classification->radicado }}</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: DejaVu Sans, sans-serif; color: #333; font-size: 11px; }
-        @page { margin: 30px 32px; }
-        .page { padding: 0; }
-
+        body { font-family: DejaVu Sans, sans-serif; color: #333; font-size: 11px; margin: 30px 35px; }
         /* Header */
         .header { display: table; width: 100%; margin-bottom: 20px; border-bottom: 3px solid #22c5bc; padding-bottom: 14px; }
         .header-left  { display: table-cell; width: 50%; vertical-align: middle; }
