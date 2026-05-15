@@ -6,7 +6,8 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: DejaVu Sans, sans-serif; color: #333; font-size: 11px; }
-        .page { padding: 28px 32px; }
+        @page { margin: 30px 32px; }
+        .page { padding: 0; }
 
         /* Header */
         .header { display: table; width: 100%; margin-bottom: 20px; border-bottom: 3px solid #22c5bc; padding-bottom: 14px; }
