@@ -23,12 +23,9 @@ class UserManagementController extends Controller
     {
         $selectedCompanyId = $request->get('company_id');
 
-        $tarixCompanyId  = Company::where('name', 'Tarix')->value('id');
-
         $verifiedQuery   = User::whereIn('user_type', ['EXTERNO', 'EMPRESA'])
                                ->where('is_verified', true)
-                               ->where('state', 1)
-                               ->when($tarixCompanyId, fn($q) => $q->where('company_id', '!=', $tarixCompanyId));
+                               ->where('state', 1);
         $unverifiedQuery = User::where('user_type', 'EXTERNO')->where('is_verified', false);
 
         if ($selectedCompanyId) {
@@ -43,7 +40,7 @@ class UserManagementController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $companies = Company::orderBy('name')->get();
+        $companies = Company::active()->get();
 
         return view('admin.users.index', compact('unverifiedUsers', 'verifiedUsers', 'clasificadores', 'companies', 'selectedCompanyId'));
     }
@@ -305,6 +302,23 @@ class UserManagementController extends Controller
      */
     public function desactivate(User $user)
     {
+        // Bloquear si el usuario tiene clasificaciones propias
+        if ($user->classifications()->exists()) {
+            return redirect()->back()->with('error', "No se puede eliminar a {$user->name} porque tiene clasificaciones asociadas.");
+        }
+
+        // Bloquear si es usuario EMPRESA y la empresa tiene clasificaciones de algún usuario
+        if ($user->user_type === 'EMPRESA' && $user->company_id) {
+            $companyHasClassifications = \App\Models\Classification::whereIn(
+                'user_id',
+                \App\Models\User::where('company_id', $user->company_id)->pluck('id')
+            )->exists();
+
+            if ($companyHasClassifications) {
+                return redirect()->back()->with('error', "No se puede eliminar a {$user->name} porque su empresa tiene clasificaciones asociadas.");
+            }
+        }
+
         $user->state = 0;
         $user->save();
         return redirect()->back()->with('success', 'Usuario desactivado correctamente.');

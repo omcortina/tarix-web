@@ -23,12 +23,6 @@
         <a href="{{ route('admin.companies.create') }}" class="btn-new">+ Nueva Empresa</a>
     </div>
 
-    @if (session('success'))
-        <div class="alert alert-success">
-            <i class="fa fa-check-circle"></i> {{ session('success') }}
-        </div>
-    @endif
-
     @if ($companies->count() > 0)
         <div class="companies-table">
             <table class="table" id="adminTable">
