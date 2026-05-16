@@ -38,7 +38,6 @@
             <a href="/blog">{{ __('service.news') }}</a>
             <a href="/#recursos">{{ __('service.resources') }}</a>
             <a href="/#contacto">{{ __('service.contact') }}</a>
-            <a href="{{ route('register') }}" class="nav-cta">{{ __('service.register') }}</a>
             <a href="{{ route('login') }}" class="nav-cta">{{ __('service.login') }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>
