@@ -62,7 +62,7 @@ class AuthController extends Controller
             if ($user->user_type === 'ADMIN') {
                 return redirect()->route('admin.dashboard')->with('success', '¡Bienvenido al admin!');
             } elseif ($user->user_type === 'CLASIFICADOR') {
-                return redirect()->route('clasificador.dashboard')->with('success', '¡Bienvenido!');
+                return redirect()->route('clasificador.index')->with('success', '¡Bienvenido!');
             } elseif ($user->user_type === 'COTIZADOR') {
                 return redirect()->route('cotizador.dashboard')->with('success', '¡Bienvenido!');
             } else {
@@ -213,7 +213,7 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
             } elseif ($user->user_type === 'CLASIFICADOR') {
                 auth()->login($user);
-                return redirect()->route('clasificador.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
+                return redirect()->route('clasificador.index')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
             } elseif ($user->user_type === 'COTIZADOR') {
                 auth()->login($user);
                 return redirect()->route('cotizador.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
@@ -410,7 +410,7 @@ class AuthController extends Controller
     {
         return match($user->user_type) {
             'ADMIN'       => 'admin.dashboard',
-            'CLASIFICADOR'=> 'clasificador.dashboard',
+            'CLASIFICADOR'=> 'clasificador.index',
             'COTIZADOR'   => 'cotizador.dashboard',
             default       => 'user.dashboard',
         };
