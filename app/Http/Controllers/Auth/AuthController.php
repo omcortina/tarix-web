@@ -61,6 +61,10 @@ class AuthController extends Controller
             // Redirigir según tipo de usuario
             if ($user->user_type === 'ADMIN') {
                 return redirect()->route('admin.dashboard')->with('success', '¡Bienvenido al admin!');
+            } elseif ($user->user_type === 'CLASIFICADOR') {
+                return redirect()->route('clasificador.dashboard')->with('success', '¡Bienvenido!');
+            } elseif ($user->user_type === 'COTIZADOR') {
+                return redirect()->route('cotizador.dashboard')->with('success', '¡Bienvenido!');
             } else {
                 return redirect()->route('user.dashboard')->with('success', '¡Bienvenido!');
             }
@@ -209,7 +213,10 @@ class AuthController extends Controller
                 return redirect()->route('admin.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
             } elseif ($user->user_type === 'CLASIFICADOR') {
                 auth()->login($user);
-                return redirect()->route('user.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
+                return redirect()->route('clasificador.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
+            } elseif ($user->user_type === 'COTIZADOR') {
+                auth()->login($user);
+                return redirect()->route('cotizador.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
             } elseif ($user->user_type === 'EXTERNO' && $user->is_verified) {
                 auth()->login($user);
                 return redirect()->route('user.dashboard')->with('success', '¡Bienvenido de vuelta! Has iniciado sesión con Google.');
@@ -370,9 +377,9 @@ class AuthController extends Controller
 
     public function showChangePassword()
     {
-        // Si ya no necesita cambiar contraseña, redirigir al dashboard
+        // Si ya no necesita cambiar contraseña, redirigir al dashboard según tipo
         if (!auth()->user()->must_change_password) {
-            return redirect()->route('user.dashboard');
+            return redirect()->route($this->dashboardRouteForUser(auth()->user()));
         }
         return view('auth.change-password');
     }
@@ -396,6 +403,16 @@ class AuthController extends Controller
             'must_change_password' => false,
         ]);
 
-        return redirect()->route('user.dashboard')->with('success', '¡Contraseña actualizada correctamente! Bienvenido.');
+        return redirect()->route($this->dashboardRouteForUser($user))->with('success', '¡Contraseña actualizada correctamente! Bienvenido.');
+    }
+
+    private function dashboardRouteForUser($user): string
+    {
+        return match($user->user_type) {
+            'ADMIN'       => 'admin.dashboard',
+            'CLASIFICADOR'=> 'clasificador.dashboard',
+            'COTIZADOR'   => 'cotizador.dashboard',
+            default       => 'user.dashboard',
+        };
     }
 }

@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'admin' => \App\Http\Middleware\IsAdmin::class,
         'user-verified' => \App\Http\Middleware\IsVerified::class,
         'clasificador' => \App\Http\Middleware\IsClasificador::class,
+        'cotizador' => \App\Http\Middleware\IsCotizador::class,
     ];
 }

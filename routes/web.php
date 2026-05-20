@@ -15,6 +15,7 @@ use App\Http\Controllers\ClassificationSettingController;
 use App\Http\Controllers\ClassificadorController;
 use App\Http\Controllers\ArticleCommentController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CotizadorController;
 
 Route::get('/', function () {
     $services = \App\Models\Service::where('published', true)->get();
@@ -118,6 +119,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('users/{user}/edit-empresa', [UserManagementController::class, 'editEmpresa'])->name('users.edit-empresa');
     Route::put('users/{user}/empresa', [UserManagementController::class, 'updateEmpresa'])->name('users.update-empresa');
     Route::patch('users/{user}/desactivate', [UserManagementController::class, 'desactivate'])->name('users.desactivate');
+    // Cotizador user management
+    Route::get('users/create-cotizador', [UserManagementController::class, 'showCreateCotizador'])->name('users.create-cotizador');
+    Route::post('users/cotizador', [UserManagementController::class, 'storeCotizador'])->name('users.store-cotizador');
+    Route::get('users/{user}/edit-cotizador', [UserManagementController::class, 'editCotizador'])->name('users.edit-cotizador');
+    Route::put('users/{user}/cotizador', [UserManagementController::class, 'updateCotizador'])->name('users.update-cotizador');
+    Route::delete('users/{user}/cotizador', [UserManagementController::class, 'deleteCotizador'])->name('users.delete-cotizador');
 });
 
 // Clasificador routes (protegidas con middleware auth, user-verified y clasificador)
@@ -132,6 +139,41 @@ Route::prefix('clasificador')->name('clasificador.')->middleware(['auth', 'user-
 
 // Rutas de contacto (pública)
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+
+// ─────────────────────────────────────────────
+// Cotizador routes
+// ─────────────────────────────────────────────
+Route::prefix('cotizador')->name('cotizador.')->middleware(['auth', 'cotizador'])->group(function () {
+    Route::get('/', [CotizadorController::class, 'dashboard'])->name('dashboard');
+
+    // Plantillas de mensajes
+    Route::get('templates', [CotizadorController::class, 'templates'])->name('templates');
+    Route::get('templates/create', [CotizadorController::class, 'createTemplate'])->name('templates.create');
+    Route::post('templates', [CotizadorController::class, 'storeTemplate'])->name('templates.store');
+    Route::get('templates/{template}/edit', [CotizadorController::class, 'editTemplate'])->name('templates.edit');
+    Route::put('templates/{template}', [CotizadorController::class, 'updateTemplate'])->name('templates.update');
+    Route::delete('templates/{template}', [CotizadorController::class, 'destroyTemplate'])->name('templates.destroy');
+    Route::get('templates/{template}/body', [CotizadorController::class, 'templateBody'])->name('templates.body');
+
+    // Envío de cotizaciones
+    Route::get('quotes/send', [CotizadorController::class, 'sendQuoteForm'])->name('quotes.send');
+    Route::post('quotes/send', [CotizadorController::class, 'sendQuote'])->name('quotes.send.post');
+    Route::get('quotes/history', [CotizadorController::class, 'quotesHistory'])->name('quotes.history');
+
+    // Cuentas de correo
+    Route::get('email-accounts', [CotizadorController::class, 'emailAccounts'])->name('email-accounts');
+    Route::get('email-accounts/create', [CotizadorController::class, 'createEmailAccount'])->name('email-accounts.create');
+    Route::post('email-accounts', [CotizadorController::class, 'storeEmailAccount'])->name('email-accounts.store');
+    Route::get('email-accounts/{emailAccount}/edit', [CotizadorController::class, 'editEmailAccount'])->name('email-accounts.edit');
+    Route::put('email-accounts/{emailAccount}', [CotizadorController::class, 'updateEmailAccount'])->name('email-accounts.update');
+    Route::delete('email-accounts/{emailAccount}', [CotizadorController::class, 'destroyEmailAccount'])->name('email-accounts.destroy');
+
+    // Bandeja de entrada
+    Route::get('inbox', [CotizadorController::class, 'inbox'])->name('inbox');
+    Route::post('inbox/sync', [CotizadorController::class, 'syncInbox'])->name('inbox.sync');
+    Route::get('inbox/{inboxEmail}', [CotizadorController::class, 'showEmail'])->name('inbox.show');
+    Route::post('inbox/{inboxEmail}/reply', [CotizadorController::class, 'replyEmail'])->name('inbox.reply');
+});
 
 // Rutas para descargar attachments (accesibles para usuario autenticado, usuario verificado)
 // IMPORTANTE: Deben ir ANTES de la ruta dinámica /{service}

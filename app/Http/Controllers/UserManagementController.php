@@ -40,9 +40,13 @@ class UserManagementController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $cotizadores = User::where('user_type', 'COTIZADOR')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         $companies = Company::active()->get();
 
-        return view('admin.users.index', compact('unverifiedUsers', 'verifiedUsers', 'clasificadores', 'companies', 'selectedCompanyId'));
+        return view('admin.users.index', compact('unverifiedUsers', 'verifiedUsers', 'clasificadores', 'cotizadores', 'companies', 'selectedCompanyId'));
     }
 
     /**
@@ -322,5 +326,95 @@ class UserManagementController extends Controller
         $user->state = 0;
         $user->save();
         return redirect()->back()->with('success', 'Usuario desactivado correctamente.');
+    }
+
+    /**
+     * Mostrar formulario para crear usuario COTIZADOR
+     */
+    public function showCreateCotizador()
+    {
+        return view('admin.users.create-cotizador');
+    }
+
+    /**
+     * Guardar nuevo usuario COTIZADOR
+     */
+    public function storeCotizador(Request $request)
+    {
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users',
+            'password' => 'required|min:8|confirmed',
+        ]);
+
+        $user = User::create([
+            'name'                 => $validated['name'],
+            'email'                => $validated['email'],
+            'password'             => \Illuminate\Support\Facades\Hash::make($validated['password']),
+            'user_type'            => 'COTIZADOR',
+            'is_verified'          => true,
+            'verified_at'          => now(),
+            'must_change_password' => true,
+        ]);
+
+        return redirect()->route('admin.users.index')->with('success', "Usuario COTIZADOR {$user->email} creado exitosamente.");
+    }
+
+    /**
+     * Mostrar formulario para editar usuario COTIZADOR
+     */
+    public function editCotizador(User $user)
+    {
+        if ($user->user_type !== 'COTIZADOR') {
+            return redirect()->route('admin.users.index')->withErrors('Este usuario no es de tipo COTIZADOR.');
+        }
+
+        return view('admin.users.edit-cotizador', compact('user'));
+    }
+
+    /**
+     * Actualizar usuario COTIZADOR
+     */
+    public function updateCotizador(Request $request, User $user)
+    {
+        if ($user->user_type !== 'COTIZADOR') {
+            return redirect()->route('admin.users.index')->withErrors('Este usuario no es de tipo COTIZADOR.');
+        }
+
+        $validated = $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:8|confirmed',
+        ]);
+
+        $user->update([
+            'name'  => $validated['name'],
+            'email' => $validated['email'],
+        ]);
+
+        if (!empty($validated['password'])) {
+            $user->update([
+                'password'             => \Illuminate\Support\Facades\Hash::make($validated['password']),
+                'must_change_password' => true,
+            ]);
+        }
+
+        return redirect()->route('admin.users.index')->with('success', "Usuario COTIZADOR {$user->email} actualizado exitosamente.");
+    }
+
+    /**
+     * Desactivar/eliminar usuario COTIZADOR
+     */
+    public function deleteCotizador(User $user)
+    {
+        if ($user->user_type !== 'COTIZADOR') {
+            return redirect()->route('admin.users.index')->withErrors('Este usuario no es de tipo COTIZADOR.');
+        }
+
+        $email = $user->email;
+        $user->state = 0;
+        $user->save();
+
+        return redirect()->route('admin.users.index')->with('success', "Usuario COTIZADOR {$email} desactivado exitosamente.");
     }
 }

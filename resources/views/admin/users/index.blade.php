@@ -152,6 +152,9 @@
             <button class="tab-button" onclick="switchTab('clasificadores')">
                 <i class="fa fa-check-square"></i> Clasificadores
             </button>
+            <button class="tab-button" onclick="switchTab('cotizadores')">
+                <i class="fa fa-send"></i> Cotizadores
+            </button>
         </div>
 
         <!-- Tab: Clientes -->
@@ -347,6 +350,10 @@
             </div>
         </div>
 
+        </div>
+    </div>
+</div>
+
         <!-- Tab: Clasificadores -->
         <div id="tab-clasificadores" class="tab-content">
             <!-- Botón para crear Clasificador -->
@@ -428,6 +435,74 @@
                 @endif
             </div>
         </div>
+
+        <!-- Tab: Cotizadores -->
+        <div id="tab-cotizadores" class="tab-content">
+            <div style="margin-bottom: 30px;">
+                <a href="{{ route('admin.users.create-cotizador') }}" style="display: inline-block; padding: 12px 24px; background: #22c5bc; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+                    <i class="fa fa-plus"></i> Crear Usuario Cotizador
+                </a>
+            </div>
+
+            <div class="section">
+                <div class="section-title">
+                    <i class="fa fa-send"></i>
+                    Usuarios Cotizadores
+                    <span class="badge-count" style="background: #E8F5E9; color: #2e7d32;">{{ $cotizadores->count() }}</span>
+                </div>
+
+                @if ($cotizadores->isEmpty())
+                    <div class="empty-state">
+                        <i class="fa fa-inbox"></i>
+                        <p>No hay usuarios cotizadores creados aún</p>
+                    </div>
+                @else
+                    <div class="users-grid">
+                        @foreach ($cotizadores as $user)
+                            <div class="user-card verified-card">
+                                <div class="user-avatar" style="background: #E8F5E9; color: #2e7d32;">
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                </div>
+                                <div class="user-main-info">
+                                    <div class="user-name">{{ $user->name }}</div>
+                                    <div class="user-details">
+                                        <div class="user-detail-item">
+                                            <i class="fa fa-envelope"></i>
+                                            <span>{{ $user->email }}</span>
+                                        </div>
+                                        <div class="user-detail-item">
+                                            <i class="fa fa-calendar"></i>
+                                            <span>Creado: {{ $user->created_at->format('d/m/Y H:i') }}</span>
+                                        </div>
+                                        <div class="user-actions" style="flex-direction: row; align-items: center; margin-left: 0; margin-top: 8px; gap: 8px;">
+                                            <a href="{{ route('admin.users.edit-cotizador', $user) }}" class="btn-verify btn-edit">
+                                                <i class="fa fa-edit"></i> Editar
+                                            </a>
+                                            <form method="POST" action="{{ route('admin.users.delete-cotizador', $user) }}" style="display: contents;" id="form-del-cotizador-{{ $user->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="button" class="btn-verify btn-reject" onclick="confirmAction('form-del-cotizador-{{ $user->id }}', '¿Desactivar cotizador?', '¿Deseas desactivar a {{ addslashes($user->name) }}?', 'warning')">
+                                                    <i class="fa fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="badges-group">
+                                    <div class="badge-verified" style="background: #E8F5E9; color: #2e7d32;">
+                                        <i class="fa fa-send"></i> Cotizador
+                                    </div>
+                                    <div class="verified-status" style="background: #e8f5e9; color: #2e7d32;">
+                                        <i class="fa fa-check-circle"></i> Activo
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
+            </div>
+        </div>
+
     </div>
 </div>
 @endsection
