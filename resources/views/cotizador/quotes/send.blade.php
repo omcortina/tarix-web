@@ -53,19 +53,24 @@
             </div>
         </div>
 
-        <div class="form-row-2">
-            <div class="form-group">
-                <label class="form-label">Correo destinatario <span class="required">*</span></label>
-                <input type="email" name="to_email" class="form-input @error('to_email') is-invalid @enderror"
-                    value="{{ old('to_email') }}" placeholder="cliente@empresa.com" required>
-                @error('to_email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+        <div class="form-group">
+            <label class="form-label">Correos destinatarios <span class="required">*</span></label>
+            <div id="recipients-list">
+                <div class="recipient-row" style="display:flex;gap:8px;margin-bottom:8px;align-items:center;">
+                    <input type="email" name="to_emails[]" class="form-input" placeholder="cliente@empresa.com" required style="flex:1">
+                    <button type="button" class="btn-remove-recipient" onclick="removeRecipient(this)" style="display:none;padding:6px 10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;cursor:pointer;color:#dc2626;font-size:13px;">✕</button>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Nombre del destinatario</label>
-                <input type="text" name="to_name" class="form-input"
-                    value="{{ old('to_name') }}" placeholder="Nombre completo (opcional)">
-                <small class="form-hint">Variable: <code>@{{nombre_cliente}}</code></small>
-            </div>
+            <button type="button" onclick="addRecipient()" style="margin-top:4px;font-size:13px;color:#1d7afc;background:none;border:none;cursor:pointer;padding:0;">+ Agregar otro destinatario</button>
+            @error('to_emails')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+            @error('to_emails.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">Nombre del destinatario</label>
+            <input type="text" name="to_name" class="form-input"
+                value="{{ old('to_name') }}" placeholder="Nombre completo (opcional)">
+            <small class="form-hint">Variable: <code>@{{nombre_cliente}}</code></small>
         </div>
 
         <div class="form-row-2">
@@ -209,5 +214,29 @@
         btn.disabled = true;
         btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Enviando...';
     });
+
+    function addRecipient() {
+        const list = document.getElementById('recipients-list');
+        const row = document.createElement('div');
+        row.className = 'recipient-row';
+        row.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center;';
+        row.innerHTML = `<input type="email" name="to_emails[]" class="form-input" placeholder="otro@empresa.com" style="flex:1">
+            <button type="button" class="btn-remove-recipient" onclick="removeRecipient(this)" style="padding:6px 10px;background:#fee2e2;border:1px solid #fca5a5;border-radius:6px;cursor:pointer;color:#dc2626;font-size:13px;">✕</button>`;
+        list.appendChild(row);
+        updateRemoveButtons();
+    }
+
+    function removeRecipient(btn) {
+        btn.closest('.recipient-row').remove();
+        updateRemoveButtons();
+    }
+
+    function updateRemoveButtons() {
+        const rows = document.querySelectorAll('.recipient-row');
+        rows.forEach((row, i) => {
+            const removeBtn = row.querySelector('.btn-remove-recipient');
+            removeBtn.style.display = rows.length > 1 ? 'block' : 'none';
+        });
+    }
 </script>
 @endsection

@@ -136,7 +136,8 @@ class CotizadorController extends Controller
     {
         $request->validate([
             'email_account_id'  => 'required|exists:email_accounts,id',
-            'to_email'          => 'required|email',
+            'to_emails'         => 'required|array|min:1|max:20',
+            'to_emails.*'       => 'required|email',
             'to_name'           => 'nullable|string|max:120',
             'to_company'        => 'nullable|string|max:150',
             'to_nit'            => 'nullable|string|max:30',
@@ -192,23 +193,36 @@ class CotizadorController extends Controller
             }
         }
 
-        $success = true;
+        $success  = true;
         $errorMsg = null;
+        $errors   = [];
 
         try {
             $fromName = $account->smtp_from_name ?: $account->email;
             $htmlBody = $this->wrapInEmailTemplate($finalBody, $fromName, $account->email, $request->sender_title, $request->sender_phone);
-            $this->sendViaSmtp($account, $request->to_email, $request->to_name, $finalSubject, $htmlBody, $attachmentPaths);
+            foreach ($request->to_emails as $toEmail) {
+                $toEmail = trim($toEmail);
+                if (!$toEmail) continue;
+                try {
+                    $this->sendViaSmtp($account, $toEmail, $request->to_name, $finalSubject, $htmlBody, $attachmentPaths);
+                } catch (\Exception $e) {
+                    $errors[] = "{$toEmail}: " . $e->getMessage();
+                }
+            }
+            if (!empty($errors)) {
+                $success  = false;
+                $errorMsg = implode(' | ', $errors);
+            }
         } catch (\Exception $e) {
-            $success   = false;
-            $errorMsg  = $e->getMessage();
+            $success  = false;
+            $errorMsg = $e->getMessage();
         }
 
         SentQuote::create([
             'sent_by'           => auth()->id(),
             'email_account_id'  => $account->id,
             'template_id'       => $request->template_id,
-            'to_email'          => $request->to_email,
+            'to_email'          => implode(', ', $request->to_emails),
             'to_name'           => $request->to_name,
             'subject'           => $finalSubject,
             'body'              => $finalBody,
