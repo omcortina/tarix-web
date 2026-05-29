@@ -48,9 +48,13 @@ class CotizadorController extends Controller
 
     public function templates()
     {
-        $templates = QuoteTemplate::where('created_by', auth()->id())
-            ->latest()
-            ->paginate(15);
+        $query = QuoteTemplate::with('creator');
+
+        if (auth()->user()->user_type !== 'ADMIN') {
+            $query->where('created_by', auth()->id());
+        }
+
+        $templates = $query->latest()->paginate(15);
 
         return view('cotizador.templates.index', compact('templates'));
     }

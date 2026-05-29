@@ -25,6 +25,9 @@
                 <tr>
                     <th>Nombre</th>
                     <th>Asunto</th>
+                    @if(auth()->user()->user_type === 'ADMIN')
+                    <th>Creada por</th>
+                    @endif
                     <th>Estado</th>
                     <th>Creada</th>
                     <th>Acciones</th>
@@ -35,6 +38,9 @@
                 <tr>
                     <td><strong>{{ $template->name }}</strong></td>
                     <td>{{ Str::limit($template->subject, 60) }}</td>
+                    @if(auth()->user()->user_type === 'ADMIN')
+                    <td>{{ $template->creator->name ?? '-' }}</td>
+                    @endif
                     <td>
                         @if($template->is_active)
                             <span class="badge badge-success">Activa</span>
