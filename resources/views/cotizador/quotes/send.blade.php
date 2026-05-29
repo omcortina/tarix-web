@@ -68,6 +68,21 @@
             </div>
         </div>
 
+        <div class="form-row-2">
+            <div class="form-group">
+                <label class="form-label">Cargo del cotizador</label>
+                <input type="text" name="sender_title" class="form-input"
+                    value="{{ old('sender_title') }}" placeholder="Ej: Asesor Comercial">
+                <small class="form-hint">Aparece en la firma del correo. Variable: <code>@{{cargo_cotizador}}</code></small>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Teléfono del cotizador</label>
+                <input type="text" name="sender_phone" class="form-input"
+                    value="{{ old('sender_phone') }}" placeholder="+57 300 000 0000">
+                <small class="form-hint">Aparece en la firma del correo. Variable: <code>@{{telefono_cotizador}}</code></small>
+            </div>
+        </div>
+
         {{-- Datos adicionales para variables de plantilla --}}
         <details class="form-details-block" {{ old('to_company') || old('to_nit') || old('to_phone') || old('to_city') || old('quote_total') || old('quote_validity') ? 'open' : '' }}>
             <summary class="form-details-summary">Datos adicionales del destinatario <span class="form-hint-inline">(usados para reemplazar variables en la plantilla)</span></summary>

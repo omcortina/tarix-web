@@ -147,6 +147,8 @@ class CotizadorController extends Controller
             'quote_total'       => 'nullable|string|max:50',
             'quote_validity'    => 'nullable|string|max:50',
             'template_id'       => 'nullable|exists:quote_templates,id',
+            'sender_title'      => 'nullable|string|max:120',
+            'sender_phone'      => 'nullable|string|max:50',
             'attachments'       => 'nullable|array|max:10',
             'attachments.*'     => 'file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:20480',
         ]);
@@ -158,15 +160,23 @@ class CotizadorController extends Controller
         // Reemplazar variables de plantilla en asunto y cuerpo
         $templateVars = [
             '{{nombre_cliente}}'   => $request->to_name      ?? '',
+            '{{nombre cliente}}'   => $request->to_name      ?? '',
             '{{email_cliente}}'    => $request->to_email     ?? '',
+            '{{email cliente}}'    => $request->to_email     ?? '',
             '{{empresa_cliente}}'  => $request->to_company   ?? '',
+            '{{empresa cliente}}'  => $request->to_company   ?? '',
             '{{nit_cliente}}'      => $request->to_nit       ?? '',
+            '{{nit cliente}}'      => $request->to_nit       ?? '',
             '{{telefono_cliente}}' => $request->to_phone     ?? '',
+            '{{telefono cliente}}' => $request->to_phone     ?? '',
             '{{ciudad_cliente}}'   => $request->to_city      ?? '',
-            '{{total}}'            => $request->quote_total    ?? '',
-            '{{vigencia}}'         => $request->quote_validity ?? '',
-            '{{fecha}}'            => now()->format('d/m/Y'),
-            '{{remitente}}'        => auth()->user()->name,
+            '{{ciudad cliente}}'   => $request->to_city      ?? '',
+            '{{total}}'              => $request->quote_total    ?? '',
+            '{{vigencia}}'           => $request->quote_validity ?? '',
+            '{{fecha}}'              => now()->format('d/m/Y'),
+            '{{remitente}}'          => auth()->user()->name,
+            '{{cargo_cotizador}}'    => $request->sender_title  ?? '',
+            '{{telefono_cotizador}}' => $request->sender_phone  ?? '',
         ];
 
         $finalSubject = str_replace(array_keys($templateVars), array_values($templateVars), $request->subject);
@@ -187,7 +197,7 @@ class CotizadorController extends Controller
 
         try {
             $fromName = $account->smtp_from_name ?: $account->email;
-            $htmlBody = $this->wrapInEmailTemplate($finalBody, $fromName, $account->email);
+            $htmlBody = $this->wrapInEmailTemplate($finalBody, $fromName, $account->email, $request->sender_title, $request->sender_phone);
             $this->sendViaSmtp($account, $request->to_email, $request->to_name, $finalSubject, $htmlBody, $attachmentPaths);
         } catch (\Exception $e) {
             $success   = false;
@@ -536,10 +546,12 @@ class CotizadorController extends Controller
         $mailer->send($email);
     }
 
-    private function wrapInEmailTemplate(string $bodyContent, string $fromName, string $fromEmail): string
+    private function wrapInEmailTemplate(string $bodyContent, string $fromName, string $fromEmail, ?string $senderTitle = null, ?string $senderPhone = null): string
     {
-        $year    = date('Y');
-        $date    = now()->format('d/m/Y');
+        $year       = date('Y');
+        $date       = now()->format('d/m/Y');
+        $titleLine  = $senderTitle  ? "<p style=\"margin:2px 0 0;font-size:12px;color:#374151;font-style:italic;\">{$senderTitle}</p>" : '';
+        $phoneLine  = $senderPhone  ? "<p style=\"margin:2px 0 0;font-size:12px;color:#64748b;\">Cel: {$senderPhone}</p>" : '';
 
         return <<<HTML
         <!DOCTYPE html>
@@ -588,7 +600,9 @@ class CotizadorController extends Controller
                             <tr>
                                 <td style="padding:20px 40px;">
                                     <p style="margin:0;font-size:13px;font-weight:700;color:#1a2332;">{$fromName}</p>
+                                    {$titleLine}
                                     <p style="margin:2px 0 0;font-size:12px;color:#64748b;">{$fromEmail}</p>
+                                    {$phoneLine}
                                     <p style="margin:2px 0 0;font-size:12px;color:#64748b;">TARIX — Soluciones en comercio exterior</p>
                                 </td>
                             </tr>

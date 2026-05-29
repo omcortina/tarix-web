@@ -57,7 +57,7 @@ class ImapSyncService
                     $fromAddr  = $from->first();
                     if ($fromAddr) {
                         $fromEmail = $fromAddr->mail ?? '';
-                        $fromName  = mb_decode_mimeheader($fromAddr->personal ?? '');
+                        $fromName  = $this->decodeHeader($fromAddr->personal ?? '');
                     }
                 }
 
@@ -70,9 +70,9 @@ class ImapSyncService
                     }
                 }
 
-                $subject  = mb_decode_mimeheader((string) $message->getSubject());
-                $bodyText = (string) $message->getTextBody();
-                $bodyHtml = (string) $message->getHtmlBody();
+                $subject  = $this->decodeHeader((string) $message->getSubject());
+                $bodyText = $this->toUtf8((string) $message->getTextBody());
+                $bodyHtml = $this->toUtf8((string) $message->getHtmlBody());
 
                 $date = $message->getDate();
                 $receivedAt = now()->toDateTimeString();
@@ -126,5 +126,32 @@ class ImapSyncService
         }
 
         return $result;
+    }
+
+    /**
+     * Decodifica un header MIME (subject, from name) forzando salida UTF-8.
+     */
+    private function decodeHeader(string $value): string
+    {
+        if ($value === '') {
+            return '';
+        }
+        // iconv_mime_decode convierte a UTF-8 cualquier encoded-word (=?charset?...?=)
+        $decoded = iconv_mime_decode($value, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+        return $decoded !== false ? $decoded : $this->toUtf8($value);
+    }
+
+    /**
+     * Garantiza que un string esté en UTF-8, convirtiendo desde ISO-8859-1 si es necesario.
+     */
+    private function toUtf8(string $value): string
+    {
+        if ($value === '') {
+            return '';
+        }
+        if (mb_check_encoding($value, 'UTF-8')) {
+            return $value;
+        }
+        return mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
     }
 }
