@@ -26,7 +26,7 @@ class CotizadorController extends Controller
     {
         $totalTemplates   = QuoteTemplate::where('created_by', auth()->id())->count();
         $totalSent        = SentQuote::where('sent_by', auth()->id())->count();
-        $totalAccounts    = EmailAccount::where('created_by', auth()->id())->count();
+        $totalAccounts    = EmailAccount::count();
         $totalInbox       = InboxEmail::whereHas('emailAccount', fn($q) => $q->where('created_by', auth()->id()))->count();
         $unreadInbox      = InboxEmail::whereHas('emailAccount', fn($q) => $q->where('created_by', auth()->id()))
                             ->where('is_read', false)->count();
@@ -122,8 +122,12 @@ class CotizadorController extends Controller
 
     public function sendQuoteForm()
     {
-        $templates = QuoteTemplate::where('created_by', auth()->id())->where('is_active', true)->get();
-        $accounts  = EmailAccount::where('created_by', auth()->id())->where('is_active', true)->get();
+        $isAdmin = auth()->user()->user_type === 'ADMIN';
+
+        $templates = QuoteTemplate::where('is_active', true)
+            ->when(!$isAdmin, fn($q) => $q->where('created_by', auth()->id()))
+            ->get();
+        $accounts  = EmailAccount::where('is_active', true)->get();
 
         return view('cotizador.quotes.send', compact('templates', 'accounts'));
     }
@@ -147,7 +151,7 @@ class CotizadorController extends Controller
         ]);
 
         $account = EmailAccount::where('id', $request->email_account_id)
-            ->where('created_by', auth()->id())
+            ->where('is_active', true)
             ->firstOrFail();
 
         // Reemplazar variables de plantilla en asunto y cuerpo
@@ -227,7 +231,8 @@ class CotizadorController extends Controller
 
     public function emailAccounts()
     {
-        $accounts = EmailAccount::where('created_by', auth()->id())->latest()->get();
+        $isAdmin  = auth()->user()->user_type === 'ADMIN';
+        $accounts = EmailAccount::latest()->get();
         return view('cotizador.email-accounts.index', compact('accounts'));
     }
 
@@ -342,7 +347,8 @@ class CotizadorController extends Controller
 
     public function inbox(Request $request)
     {
-        $accounts = EmailAccount::where('created_by', auth()->id())->where('is_active', true)->get();
+        $isAdmin  = auth()->user()->user_type === 'ADMIN';
+        $accounts = EmailAccount::where('is_active', true)->get();
 
         $selectedAccountId = $request->get('account_id', $accounts->first()?->id);
         $selectedAccount   = $accounts->firstWhere('id', $selectedAccountId);
@@ -364,7 +370,6 @@ class CotizadorController extends Controller
         ]);
 
         $account = EmailAccount::where('id', $request->account_id)
-            ->where('created_by', auth()->id())
             ->firstOrFail();
 
         $result = $imapService->sync($account);
@@ -385,8 +390,12 @@ class CotizadorController extends Controller
             $inboxEmail->update(['is_read' => true]);
         }
 
-        $templates = QuoteTemplate::where('created_by', auth()->id())->where('is_active', true)->get();
-        $accounts  = EmailAccount::where('created_by', auth()->id())->where('is_active', true)->get();
+        $isAdmin = auth()->user()->user_type === 'ADMIN';
+
+        $templates = QuoteTemplate::where('is_active', true)
+            ->when(!$isAdmin, fn($q) => $q->where('created_by', auth()->id()))
+            ->get();
+        $accounts  = EmailAccount::where('is_active', true)->get();
         $replies   = $inboxEmail->replies()->with('sender', 'emailAccount')->latest()->get();
 
         return view('cotizador.inbox.show', compact('inboxEmail', 'templates', 'accounts', 'replies'));
@@ -404,7 +413,7 @@ class CotizadorController extends Controller
         ]);
 
         $account = EmailAccount::where('id', $request->email_account_id)
-            ->where('created_by', auth()->id())
+            ->where('is_active', true)
             ->firstOrFail();
 
         $success  = true;
