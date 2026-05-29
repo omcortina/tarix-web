@@ -113,5 +113,39 @@
                 <div class="menu-indicator"></div>
             </a>
         </li>
+
+        <li class="sidebar-section-label" style="padding: 18px 20px 4px 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8899a6;">
+            Cotizador
+        </li>
+
+        <li>
+            <a href="{{ route('cotizador.templates') }}" class="{{ request()->routeIs('cotizador.templates*') ? 'active' : '' }}">
+                <div class="menu-icon">
+                    <i class="fa fa-file-text-o"></i>
+                </div>
+                <span>Plantillas</span>
+                <div class="menu-indicator"></div>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('cotizador.quotes.history') }}" class="{{ request()->routeIs('cotizador.quotes.*') ? 'active' : '' }}">
+                <div class="menu-icon">
+                    <i class="fa fa-paper-plane"></i>
+                </div>
+                <span>Cotizaciones</span>
+                <div class="menu-indicator"></div>
+            </a>
+        </li>
+
+        <li>
+            <a href="{{ route('cotizador.email-accounts') }}" class="{{ request()->routeIs('cotizador.email-accounts*') ? 'active' : '' }}">
+                <div class="menu-icon">
+                    <i class="fa fa-cog"></i>
+                </div>
+                <span>Config. Correo</span>
+                <div class="menu-indicator"></div>
+            </a>
+        </li>
     </ul>
 </aside>

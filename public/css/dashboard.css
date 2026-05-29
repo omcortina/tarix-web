@@ -84,13 +84,14 @@ body {
     background: linear-gradient(180deg, #ffffff 0%, #f8fffe 100%);
     border-right: 1px solid #e0e8ed;
     padding: 0;
-    min-height: calc(100vh - 65px);
+    height: calc(100vh - 65px);
     position: fixed;
     left: 0;
     top: 65px;
     display: flex;
     flex-direction: column;
     box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
 }
 
 .sidebar-header {

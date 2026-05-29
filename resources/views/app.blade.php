@@ -77,13 +77,13 @@
 
     <!-- HERO -->
     <section class="hero" id="inicio">
-        <img src="{{ asset('img/img-index.png') }}" alt="Comercio Internacional" class="hero-image">
+        {{-- <img src="{{ asset('img/img-index.png') }}" alt="Comercio Internacional" class="hero-image"> --}}
         <div class="hero-content">
             <div class="hero-tag">{{ __('app.expertos') }}</div>
             <h1>{{ __('app.titulo_hero') }} <span>{{ __('app.operacion_internacional') }}</span></h1>
             <p>{{ __('app.descripcion_hero') }}</p>
             <div class="hero-btns">
-                <a href="#contacto" class="btn-secondary">{{ __('app.contactanos') }}</a>
+                <a href="#contacto" class="btn-primary">{{ __('app.contactanos') }}</a>
             </div>
         </div>
     </section>

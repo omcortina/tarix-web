@@ -14,7 +14,7 @@ class IsCotizador
             return redirect()->route('login')->with('error', 'Debes iniciar sesión.');
         }
 
-        if (auth()->user()->user_type !== 'COTIZADOR') {
+        if (!in_array(auth()->user()->user_type, ['COTIZADOR', 'ADMIN'])) {
             return redirect()->route('user.dashboard')->with('error', 'No tienes acceso al módulo de cotizaciones.');
         }
 

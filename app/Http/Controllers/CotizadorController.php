@@ -570,7 +570,7 @@ class CotizadorController extends Controller
                                 <td style="padding:20px 40px;">
                                     <p style="margin:0;font-size:13px;font-weight:700;color:#1a2332;">{$fromName}</p>
                                     <p style="margin:2px 0 0;font-size:12px;color:#64748b;">{$fromEmail}</p>
-                                    <p style="margin:2px 0 0;font-size:12px;color:#64748b;">TARIX — Gestión Arancelaria</p>
+                                    <p style="margin:2px 0 0;font-size:12px;color:#64748b;">TARIX — Soluciones en comercio exterior</p>
                                 </td>
                             </tr>
                         </table>
@@ -586,7 +586,6 @@ class CotizadorController extends Controller
                     </td>
                 </tr>
             </table>
-
         </body>
         </html>
         HTML;
