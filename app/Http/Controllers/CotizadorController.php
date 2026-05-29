@@ -147,7 +147,8 @@ class CotizadorController extends Controller
             'quote_total'       => 'nullable|string|max:50',
             'quote_validity'    => 'nullable|string|max:50',
             'template_id'       => 'nullable|exists:quote_templates,id',
-            'pdf_file'          => 'nullable|file|mimes:pdf|max:20480',
+            'attachments'       => 'nullable|array|max:10',
+            'attachments.*'     => 'file|mimes:pdf,doc,docx,xls,xlsx,png,jpg,jpeg|max:20480',
         ]);
 
         $account = EmailAccount::where('id', $request->email_account_id)
@@ -171,12 +172,14 @@ class CotizadorController extends Controller
         $finalSubject = str_replace(array_keys($templateVars), array_values($templateVars), $request->subject);
         $finalBody    = str_replace(array_keys($templateVars), array_values($templateVars), $request->body);
 
-        $pdfPath = null;
+        $attachmentPaths = [];
 
-        // Guardar PDF adjunto si el cotizador subió uno
-        if ($request->hasFile('pdf_file')) {
-            $pdfName = 'propuesta_' . now()->format('Ymd_His') . '_' . $request->file('pdf_file')->getClientOriginalName();
-            $pdfPath = $request->file('pdf_file')->storeAs('quotes', $pdfName);
+        // Guardar archivos adjuntos si el cotizador subió alguno
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $fileName = 'adjunto_' . now()->format('Ymd_His') . '_' . $file->getClientOriginalName();
+                $attachmentPaths[] = $file->storeAs('quotes', $fileName);
+            }
         }
 
         $success = true;
@@ -185,7 +188,7 @@ class CotizadorController extends Controller
         try {
             $fromName = $account->smtp_from_name ?: $account->email;
             $htmlBody = $this->wrapInEmailTemplate($finalBody, $fromName, $account->email);
-            $this->sendViaSmtp($account, $request->to_email, $request->to_name, $finalSubject, $htmlBody, $pdfPath);
+            $this->sendViaSmtp($account, $request->to_email, $request->to_name, $finalSubject, $htmlBody, $attachmentPaths);
         } catch (\Exception $e) {
             $success   = false;
             $errorMsg  = $e->getMessage();
@@ -199,7 +202,7 @@ class CotizadorController extends Controller
             'to_name'           => $request->to_name,
             'subject'           => $finalSubject,
             'body'              => $finalBody,
-            'pdf_path'          => $pdfPath,
+            'pdf_path'          => !empty($attachmentPaths) ? $attachmentPaths : null,
             'sent_at'           => now(),
             'success'           => $success,
             'error_message'     => $errorMsg,
@@ -495,7 +498,7 @@ class CotizadorController extends Controller
         ?string $toName,
         string $subject,
         string $body,
-        ?string $pdfStoragePath = null
+        array $attachmentPaths = []
     ): void {
         if (!$account->smtp_host || !$account->smtp_username || !$account->smtp_password) {
             throw new \RuntimeException('La cuenta de correo no tiene configuración SMTP completa.');
@@ -523,12 +526,12 @@ class CotizadorController extends Controller
             ->subject($subject)
             ->html($body);
 
-        if ($pdfStoragePath) {
-            $fullPath = storage_path('app/' . $pdfStoragePath);
+        foreach ($attachmentPaths as $storagePath) {
+            $fullPath = storage_path('app/' . $storagePath);
             if (file_exists($fullPath)) {
-                $email->addPart(new DataPart(new File($fullPath), basename($fullPath), 'application/pdf'));
+                $email->addPart(new DataPart(new File($fullPath), basename($fullPath)));
             }
-        }
+}
 
         $mailer->send($email);
     }

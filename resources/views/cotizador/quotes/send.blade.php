@@ -64,6 +64,7 @@
                 <label class="form-label">Nombre del destinatario</label>
                 <input type="text" name="to_name" class="form-input"
                     value="{{ old('to_name') }}" placeholder="Nombre completo (opcional)">
+                <small class="form-hint">Variable: <code>@{{nombre_cliente}}</code></small>
             </div>
         </div>
 
@@ -117,10 +118,12 @@
         </details>
 
         <div class="form-group">
-            <label class="form-label">Adjuntar propuesta PDF</label>
-            <input type="file" name="pdf_file" class="form-input" accept="application/pdf">
-            <div class="hint-text">Opcional. Solo archivos PDF, máximo 20 MB.</div>
-            @error('pdf_file')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+            <label class="form-label">Adjuntar archivos de soporte</label>
+            <input type="file" name="attachments[]" class="form-input" multiple
+                accept=".pdf,.doc,.docx,.xls,.xlsx,.png,.jpg,.jpeg">
+            <div class="hint-text">Opcional. Puede seleccionar varios archivos. PDF, Word, Excel o imágenes. Máximo 20 MB por archivo.</div>
+            @error('attachments')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
+            @error('attachments.*')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
         </div>
 
         <div class="form-group">

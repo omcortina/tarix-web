@@ -24,8 +24,9 @@ class SentQuote extends Model
     ];
 
     protected $casts = [
-        'sent_at' => 'datetime',
-        'success' => 'boolean',
+        'sent_at'  => 'datetime',
+        'success'  => 'boolean',
+        'pdf_path' => 'array',
     ];
 
     public function sender()

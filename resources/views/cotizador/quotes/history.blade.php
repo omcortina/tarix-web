@@ -48,8 +48,11 @@
                     @endif
                     <td>{{ $quote->emailAccount->name ?? '-' }}</td>
                     <td>
-                        @if($quote->pdf_path)
-                            <span class="badge badge-info"><i class="fa fa-file-pdf-o"></i> Adjunto</span>
+                        @if($quote->pdf_path && count($quote->pdf_path) > 0)
+                            <span class="badge badge-info">
+                                <i class="fa fa-paperclip"></i>
+                                {{ count($quote->pdf_path) }} adjunto{{ count($quote->pdf_path) > 1 ? 's' : '' }}
+                            </span>
                         @else
                             <span class="text-muted">—</span>
                         @endif
