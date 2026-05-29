@@ -570,7 +570,7 @@ class CotizadorController extends Controller
                             <tr>
                                 <td style="padding:28px 40px;">
                                     <p style="margin:0;font-size:22px;font-weight:800;color:#ffffff;letter-spacing:1px;">TARIX</p>
-                                    <p style="margin:4px 0 0;font-size:12px;color:#94a3b8;letter-spacing:0.5px;text-transform:uppercase;">Gestión Arancelaria</p>
+                                    <p style="margin:4px 0 0;font-size:12px;color:#94a3b8;letter-spacing:0.5px;text-transform:uppercase;">Soluciones en comercio exterior</p>
                                 </td>
                                 <td style="padding:28px 40px;text-align:right;">
                                     <p style="margin:0;font-size:11px;color:#64748b;">{$date}</p>
