@@ -458,21 +458,21 @@ class CotizadorController extends Controller
 
     private function authorizeTemplate(QuoteTemplate $template): void
     {
-        if ($template->created_by !== auth()->id()) {
+        if (auth()->user()->user_type !== 'ADMIN' && $template->created_by !== auth()->id()) {
             abort(403);
         }
     }
 
     private function authorizeAccount(EmailAccount $account): void
     {
-        if ($account->created_by !== auth()->id()) {
+        if (auth()->user()->user_type !== 'ADMIN' && $account->created_by !== auth()->id()) {
             abort(403);
         }
     }
 
     private function authorizeInboxEmail(InboxEmail $email): void
     {
-        if ($email->emailAccount->created_by !== auth()->id()) {
+        if (auth()->user()->user_type !== 'ADMIN' && $email->emailAccount->created_by !== auth()->id()) {
             abort(403);
         }
     }
