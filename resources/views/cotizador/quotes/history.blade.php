@@ -25,6 +25,9 @@
                     <th>#</th>
                     <th>Destinatario</th>
                     <th>Asunto</th>
+                    @if(auth()->user()->user_type === 'ADMIN')
+                    <th>Enviado por</th>
+                    @endif
                     <th>Cuenta usada</th>
                     <th>PDF</th>
                     <th>Estado</th>
@@ -40,6 +43,9 @@
                         <small class="text-muted">{{ $quote->to_email }}</small>
                     </td>
                     <td>{{ Str::limit($quote->subject, 55) }}</td>
+                    @if(auth()->user()->user_type === 'ADMIN')
+                    <td>{{ $quote->sender->name ?? '-' }}</td>
+                    @endif
                     <td>{{ $quote->emailAccount->name ?? '-' }}</td>
                     <td>
                         @if($quote->pdf_path)

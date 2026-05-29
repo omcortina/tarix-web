@@ -206,10 +206,13 @@ class CotizadorController extends Controller
 
     public function quotesHistory()
     {
-        $quotes = SentQuote::with(['emailAccount', 'template'])
-            ->where('sent_by', auth()->id())
-            ->latest()
-            ->paginate(20);
+        $query = SentQuote::with(['emailAccount', 'template', 'sender']);
+
+        if (auth()->user()->user_type !== 'ADMIN') {
+            $query->where('sent_by', auth()->id());
+        }
+
+        $quotes = $query->latest()->paginate(20);
 
         return view('cotizador.quotes.history', compact('quotes'));
     }
