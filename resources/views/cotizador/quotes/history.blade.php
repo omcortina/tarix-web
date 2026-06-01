@@ -1,4 +1,4 @@
-@extends('layouts.cotizador')
+@extends(auth()->user()->user_type === 'ADMIN' ? 'layouts.admin' : 'layouts.cotizador')
 
 @section('title', 'Historial de Cotizaciones')
 
@@ -19,7 +19,7 @@
     </div>
 @else
     <div class="form-card" style="padding: 0; overflow: hidden;">
-        <table class="admin-table">
+        <table class="admin-table" id="adminTable">
             <thead>
                 <tr>
                     <th>#</th>
@@ -51,7 +51,7 @@
                         @if($quote->pdf_path && count($quote->pdf_path) > 0)
                             <span class="badge badge-info">
                                 <i class="fa fa-paperclip"></i>
-                                {{ count($quote->pdf_path) }} adjunto{{ count($quote->pdf_path) > 1 ? 's' : '' }}
+                                {{ count($quote->pdf_path) }}
                             </span>
                         @else
                             <span class="text-muted">—</span>
@@ -69,10 +69,6 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-
-    <div class="pagination-wrapper">
-        {{ $quotes->links() }}
     </div>
 @endif
 @endsection

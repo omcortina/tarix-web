@@ -85,6 +85,13 @@
                     <div class="menu-indicator"></div>
                 </a>
             </li>
+            <li>
+                <a href="{{ route('cotizador.clients') }}" class="{{ request()->routeIs('cotizador.clients*') ? 'active' : '' }}">
+                    <div class="menu-icon"><i class="fa fa-address-book-o"></i></div>
+                    <span>Clientes</span>
+                    <div class="menu-indicator"></div>
+                </a>
+            </li>
         </ul>
     </aside>
 

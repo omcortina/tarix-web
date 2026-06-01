@@ -173,6 +173,14 @@ Route::prefix('cotizador')->name('cotizador.')->middleware(['auth', 'cotizador']
     Route::post('inbox/sync', [CotizadorController::class, 'syncInbox'])->name('inbox.sync');
     Route::get('inbox/{inboxEmail}', [CotizadorController::class, 'showEmail'])->name('inbox.show');
     Route::post('inbox/{inboxEmail}/reply', [CotizadorController::class, 'replyEmail'])->name('inbox.reply');
+
+    // Clientes
+    Route::get('clients', [CotizadorController::class, 'clients'])->name('clients');
+    Route::get('clients/create', [CotizadorController::class, 'createClient'])->name('clients.create');
+    Route::post('clients', [CotizadorController::class, 'storeClient'])->name('clients.store');
+    Route::get('clients/{client}/edit', [CotizadorController::class, 'editClient'])->name('clients.edit');
+    Route::put('clients/{client}', [CotizadorController::class, 'updateClient'])->name('clients.update');
+    Route::delete('clients/{client}', [CotizadorController::class, 'destroyClient'])->name('clients.destroy');
 });
 
 // Rutas para descargar attachments (accesibles para usuario autenticado, usuario verificado)

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin-general.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/cotizador.css') }}">
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
@@ -129,5 +130,6 @@
     </script>
 
     @yield('extra_js')
+    @yield('scripts')
 </body>
 </html>

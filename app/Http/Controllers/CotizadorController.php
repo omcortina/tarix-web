@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EmailAccount;
 use App\Models\EmailReply;
 use App\Models\InboxEmail;
+use App\Models\QuoteClient;
 use App\Models\QuoteTemplate;
 use App\Models\SentQuote;
 use App\Services\ImapSyncService;
@@ -54,7 +55,7 @@ class CotizadorController extends Controller
             $query->where('created_by', auth()->id());
         }
 
-        $templates = $query->latest()->paginate(15);
+        $templates = $query->latest()->get();
 
         return view('cotizador.templates.index', compact('templates'));
     }
@@ -128,8 +129,10 @@ class CotizadorController extends Controller
             ->when(!$isAdmin, fn($q) => $q->where('created_by', auth()->id()))
             ->get();
         $accounts  = EmailAccount::where('is_active', true)->get();
+        $clients   = QuoteClient::when(!$isAdmin, fn($q) => $q->where('created_by', auth()->id()))
+            ->orderBy('name')->get();
 
-        return view('cotizador.quotes.send', compact('templates', 'accounts'));
+        return view('cotizador.quotes.send', compact('templates', 'accounts', 'clients'));
     }
 
     public function sendQuote(Request $request)
@@ -247,7 +250,7 @@ class CotizadorController extends Controller
             $query->where('sent_by', auth()->id());
         }
 
-        $quotes = $query->latest()->paginate(20);
+        $quotes = $query->latest()->get();
 
         return view('cotizador.quotes.history', compact('quotes'));
     }
@@ -489,8 +492,103 @@ class CotizadorController extends Controller
     }
 
     // ─────────────────────────────────────────────
+    // CLIENTES
+    // ─────────────────────────────────────────────
+
+    public function clients()
+    {
+        $query = QuoteClient::query();
+
+        if (auth()->user()->user_type !== 'ADMIN') {
+            $query->where('created_by', auth()->id());
+        }
+
+        $clients = $query->latest()->paginate(20);
+
+        return view('cotizador.clients.index', compact('clients'));
+    }
+
+    public function createClient()
+    {
+        return view('cotizador.clients.create');
+    }
+
+    public function storeClient(Request $request)
+    {
+        $request->validate([
+            'name'    => 'required|string|max:120',
+            'email'   => 'required|email|max:180',
+            'company' => 'nullable|string|max:150',
+            'nit'     => 'nullable|string|max:30',
+            'phone'   => 'nullable|string|max:30',
+            'city'    => 'nullable|string|max:80',
+            'notes'   => 'nullable|string|max:500',
+        ]);
+
+        QuoteClient::create([
+            'name'       => $request->name,
+            'email'      => $request->email,
+            'company'    => $request->company,
+            'nit'        => $request->nit,
+            'phone'      => $request->phone,
+            'city'       => $request->city,
+            'notes'      => $request->notes,
+            'created_by' => auth()->id(),
+        ]);
+
+        return redirect()->route('cotizador.clients')->with('success', 'Cliente guardado correctamente.');
+    }
+
+    public function editClient(QuoteClient $client)
+    {
+        $this->authorizeClient($client);
+        return view('cotizador.clients.edit', compact('client'));
+    }
+
+    public function updateClient(Request $request, QuoteClient $client)
+    {
+        $this->authorizeClient($client);
+
+        $request->validate([
+            'name'    => 'required|string|max:120',
+            'email'   => 'required|email|max:180',
+            'company' => 'nullable|string|max:150',
+            'nit'     => 'nullable|string|max:30',
+            'phone'   => 'nullable|string|max:30',
+            'city'    => 'nullable|string|max:80',
+            'notes'   => 'nullable|string|max:500',
+        ]);
+
+        $client->update([
+            'name'    => $request->name,
+            'email'   => $request->email,
+            'company' => $request->company,
+            'nit'     => $request->nit,
+            'phone'   => $request->phone,
+            'city'    => $request->city,
+            'notes'   => $request->notes,
+        ]);
+
+        return redirect()->route('cotizador.clients')->with('success', 'Cliente actualizado.');
+    }
+
+    public function destroyClient(QuoteClient $client)
+    {
+        $this->authorizeClient($client);
+        $client->delete();
+        return redirect()->route('cotizador.clients')->with('success', 'Cliente eliminado.');
+    }
+
+    // ─────────────────────────────────────────────
     // HELPERS PRIVADOS
     // ─────────────────────────────────────────────
+
+    private function authorizeClient(QuoteClient $client): void
+    {
+        if (auth()->user()->user_type !== 'ADMIN' && $client->created_by !== auth()->id()) {
+            abort(403);
+        }
+    }
 
     private function authorizeTemplate(QuoteTemplate $template): void
     {

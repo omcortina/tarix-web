@@ -1,4 +1,4 @@
-@extends('layouts.cotizador')
+@extends(auth()->user()->user_type === 'ADMIN' ? 'layouts.admin' : 'layouts.cotizador')
 
 @section('title', 'Enviar Cotización')
 
@@ -51,6 +51,31 @@
                     @endforeach
                 </select>
             </div>
+        </div>
+
+        {{-- SELECTOR DE CLIENTE --}}
+        <div class="form-group" style="background:#f0f7ff;border:1px solid #c3dafe;border-radius:8px;padding:14px 16px;margin-bottom:4px;">
+            <label class="form-label" style="margin-bottom:6px;">Cargar datos desde un cliente guardado</label>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <select id="client-selector" class="form-input" style="flex:1;">
+                    <option value="">-- Seleccionar cliente (opcional) --</option>
+                    @foreach($clients as $client)
+                        <option value="{{ $client->id }}"
+                            data-name="{{ $client->name }}"
+                            data-email="{{ $client->email }}"
+                            data-company="{{ $client->company }}"
+                            data-nit="{{ $client->nit }}"
+                            data-phone="{{ $client->phone }}"
+                            data-city="{{ $client->city }}">
+                            {{ $client->name }}{{ $client->company ? ' — '.$client->company : '' }}
+                        </option>
+                    @endforeach
+                </select>
+                <a href="{{ route('cotizador.clients.create') }}" target="_blank" class="btn-secondary" style="white-space:nowrap;flex-shrink:0;">
+                    <i class="fa fa-plus"></i> Nuevo cliente
+                </a>
+            </div>
+            <small class="form-hint" style="margin-top:6px;display:block;">Al seleccionar un cliente se precargan los datos del destinatario. Puedes modificarlos antes de enviar.</small>
         </div>
 
         <div class="form-group">
@@ -186,6 +211,30 @@
                 [{ 'color': [] }, { 'background': [] }],
                 ['clean']
             ]
+        }
+    });
+
+    // ── Selector de cliente ──────────────────────
+    document.getElementById('client-selector').addEventListener('change', function () {
+        const opt = this.options[this.selectedIndex];
+        if (!opt.value) return;
+
+        // Primer campo de email
+        const firstEmail = document.querySelector('input[name="to_emails[]"]');
+        if (firstEmail) firstEmail.value = opt.dataset.email || '';
+
+        // Nombre
+        document.querySelector('input[name="to_name"]').value = opt.dataset.name || '';
+
+        // Datos adicionales
+        document.querySelector('input[name="to_company"]').value = opt.dataset.company || '';
+        document.querySelector('input[name="to_nit"]').value     = opt.dataset.nit     || '';
+        document.querySelector('input[name="to_phone"]').value   = opt.dataset.phone   || '';
+        document.querySelector('input[name="to_city"]').value    = opt.dataset.city    || '';
+
+        // Abrir sección datos adicionales si tiene info
+        if (opt.dataset.company || opt.dataset.nit || opt.dataset.phone || opt.dataset.city) {
+            document.querySelector('.form-details-block').open = true;
         }
     });
 

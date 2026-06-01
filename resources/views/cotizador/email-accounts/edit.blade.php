@@ -1,4 +1,4 @@
-@extends('layouts.cotizador')
+@extends(auth()->user()->user_type === 'ADMIN' ? 'layouts.admin' : 'layouts.cotizador')
 
 @section('title', 'Editar Cuenta de Correo')
 

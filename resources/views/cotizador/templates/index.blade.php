@@ -1,4 +1,4 @@
-@extends('layouts.cotizador')
+@extends(auth()->user()->user_type === 'ADMIN' ? 'layouts.admin' : 'layouts.cotizador')
 
 @section('title', 'Plantillas de Mensaje')
 
@@ -20,7 +20,7 @@
     </div>
 @else
     <div class="form-card" style="padding: 0; overflow: hidden;">
-        <table class="admin-table">
+        <table class="admin-table" id="adminTable">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -66,10 +66,6 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-
-    <div class="pagination-wrapper">
-        {{ $templates->links() }}
     </div>
 @endif
 @endsection
