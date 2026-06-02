@@ -114,6 +114,16 @@
             </a>
         </li>
 
+        <li>
+            <a href="{{ route('admin.inbox') }}" class="{{ request()->routeIs('admin.inbox*') ? 'active' : '' }}">
+                <div class="menu-icon">
+                    <i class="fa fa-inbox"></i>
+                </div>
+                <span>Bandeja de Entrada</span>
+                <div class="menu-indicator"></div>
+            </a>
+        </li>
+
         <li class="sidebar-section-label" style="padding: 18px 20px 4px 20px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #8899a6;">
             Cotizador
         </li>

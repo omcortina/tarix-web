@@ -199,7 +199,7 @@ class AuthController extends Controller
         try {
             $googleUser = Socialite::driver('google')->user();
         } catch (\Exception $e) {
-            return redirect()->route('register')->withErrors('Error al conectar con Google.');
+            return redirect()->route('login')->withErrors(['email' => 'Error al conectar con Google. Por favor intenta nuevamente.']);
         }
 
         // Buscar usuario existente
@@ -226,14 +226,10 @@ class AuthController extends Controller
             }
         }
 
-        // Crear nuevo usuario - Guardar en sesión para luego completar datos
-        session([
-            'google_name' => $googleUser->getName(),
-            'google_email' => $googleUser->getEmail(),
-            'google_id' => $googleUser->getId(),
-        ]);
-
-        return redirect()->route('register.google.complete');
+        // No se encontró cuenta asociada — redirigir al login con mensaje de error
+        return redirect()->route('login')->withErrors([
+            'email' => 'No se encontró una cuenta asociada al correo ' . $googleUser->getEmail() . '. Por favor inicia sesión con tu contraseña o contacta al administrador.',
+        ])->onlyInput('email');
     }
 
     public function showGoogleCompleteForm()

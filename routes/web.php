@@ -103,6 +103,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
 
     // Facturación y Totales (admin)
     Route::get('billing', [ClassificationController::class, 'adminBilling'])->name('billing');
+
+    // Bandeja de entrada (admin accede a todas las cuentas)
+    Route::get('inbox', [CotizadorController::class, 'inbox'])->name('inbox');
+    Route::post('inbox/sync', [CotizadorController::class, 'syncInbox'])->name('inbox.sync');
+    Route::get('inbox/{inboxEmail}', [CotizadorController::class, 'showEmail'])->name('inbox.show');
+    Route::post('inbox/{inboxEmail}/reply', [CotizadorController::class, 'replyEmail'])->name('inbox.reply');
     
     // Rutas para gestión de usuarios (solo para ADMIN)
     Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
