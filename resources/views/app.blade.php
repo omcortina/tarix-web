@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('app.title') }}</title>
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap"
-        rel="stylesheet">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -44,11 +42,8 @@
     <!-- NAV -->
     <nav>
         <a href="#" class="nav-logo">
-            <div class="logo-icon">
-                <div class="logo-t">T</div>
-            </div>
             <div class="logo-text">
-                <span class="logo-name">TARIX</span>
+                <img src="{{ asset('img/logo.png') }}" alt="Comercio Internacional">
                 <span class="logo-sub">{{ __('app.soluciones') }}</span>
             </div>
         </a>
@@ -308,14 +303,9 @@
         <div class="footer-top">
             <div class="footer-brand">
                 <div class="nav-logo" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-                    <div class="logo-icon">
-                        <div class="logo-t">T</div>
-                    </div>
-                    <div>
-                        <div
-                            style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:3px;">
-                            TARIX</div>
-                        <div style="font-size:8px;color:#22c5bc;letter-spacing:1.5px;text-transform:uppercase;">
+                    <div class="logo-text">
+                        <img src="{{ asset('img/logo.png') }}" alt="Comercio Internacional">
+                        <div style="font-size:8px;color:#1D9E75;letter-spacing:1.5px;text-transform:uppercase;">
                             {{ __('app.soluciones') }}</div>
                     </div>
                 </div>
