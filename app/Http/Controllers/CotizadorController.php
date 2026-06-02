@@ -422,13 +422,33 @@ class CotizadorController extends Controller
 
         $isAdmin = auth()->user()->user_type === 'ADMIN';
 
-        $templates = QuoteTemplate::where('is_active', true)
+        $templates   = QuoteTemplate::where('is_active', true)
             ->when(!$isAdmin, fn($q) => $q->where('created_by', auth()->id()))
             ->get();
-        $accounts  = EmailAccount::where('is_active', true)->get();
-        $replies   = $inboxEmail->replies()->with('sender', 'emailAccount')->latest()->get();
+        $accounts    = EmailAccount::where('is_active', true)->get();
+        $replies     = $inboxEmail->replies()->with('sender', 'emailAccount')->latest()->get();
+        $attachments = $inboxEmail->attachments()->where('is_inline', false)->orderBy('original_name')->get();
 
-        return view('cotizador.inbox.show', compact('inboxEmail', 'templates', 'accounts', 'replies'));
+        return view('cotizador.inbox.show', compact('inboxEmail', 'templates', 'accounts', 'replies', 'attachments'));
+    }
+
+    public function downloadInboxAttachment(InboxEmail $inboxEmail, \App\Models\InboxAttachment $attachment)
+    {
+        $this->authorizeInboxEmail($inboxEmail);
+
+        if ($attachment->inbox_email_id !== $inboxEmail->id) {
+            abort(404);
+        }
+
+        if (!\Illuminate\Support\Facades\Storage::disk('public')->exists($attachment->storage_path)) {
+            abort(404, 'Archivo no encontrado.');
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->download(
+            $attachment->storage_path,
+            $attachment->original_name,
+            ['Content-Type' => $attachment->mime_type ?? 'application/octet-stream']
+        );
     }
 
     public function replyEmail(Request $request, InboxEmail $inboxEmail)
@@ -653,7 +673,7 @@ class CotizadorController extends Controller
             if (file_exists($fullPath)) {
                 $email->addPart(new DataPart(new File($fullPath), basename($fullPath)));
             }
-}
+        }
 
         $mailer->send($email);
     }

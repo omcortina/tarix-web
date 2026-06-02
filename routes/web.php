@@ -109,6 +109,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::post('inbox/sync', [CotizadorController::class, 'syncInbox'])->name('inbox.sync');
     Route::get('inbox/{inboxEmail}', [CotizadorController::class, 'showEmail'])->name('inbox.show');
     Route::post('inbox/{inboxEmail}/reply', [CotizadorController::class, 'replyEmail'])->name('inbox.reply');
+    Route::get('inbox/{inboxEmail}/attachment/{attachment}/download', [CotizadorController::class, 'downloadInboxAttachment'])->name('inbox.attachment.download');
     
     // Rutas para gestión de usuarios (solo para ADMIN)
     Route::get('users', [UserManagementController::class, 'index'])->name('users.index');
@@ -179,6 +180,7 @@ Route::prefix('cotizador')->name('cotizador.')->middleware(['auth', 'cotizador']
     Route::post('inbox/sync', [CotizadorController::class, 'syncInbox'])->name('inbox.sync');
     Route::get('inbox/{inboxEmail}', [CotizadorController::class, 'showEmail'])->name('inbox.show');
     Route::post('inbox/{inboxEmail}/reply', [CotizadorController::class, 'replyEmail'])->name('inbox.reply');
+    Route::get('inbox/{inboxEmail}/attachment/{attachment}/download', [CotizadorController::class, 'downloadInboxAttachment'])->name('inbox.attachment.download');
 
     // Clientes
     Route::get('clients', [CotizadorController::class, 'clients'])->name('clients');

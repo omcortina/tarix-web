@@ -40,4 +40,9 @@ class InboxEmail extends Model
     {
         return $this->hasMany(EmailReply::class);
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(InboxAttachment::class);
+    }
 }
