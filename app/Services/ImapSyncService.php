@@ -367,34 +367,46 @@ class ImapSyncService
             return '';
         }
 
-        // mb_decode_mimeheader maneja =?charset?Q/B?...?= y siempre disponible con mbstring
-        if (function_exists('mb_decode_mimeheader')) {
-            $decoded = mb_decode_mimeheader($value);
-            if ($decoded !== $value || !preg_match('/=\?[^?]+\?[BQbq]\?/i', $value)) {
-                return $this->toUtf8($decoded);
-            }
+        // Si contiene encoded-words, decodificarlos manualmente (no depende de mbstring.internal_encoding)
+        if (preg_match('/=\?[^?]+\?[BQbq]\?/i', $value)) {
+            $result = preg_replace_callback(
+                '/=\?([^?]+)\?([BQbq])\?([^?]*)\?=/i',
+                function (array $m) {
+                    $charset  = strtoupper(trim($m[1]));
+                    $encoding = strtoupper($m[2]);
+                    $text     = $m[3];
+
+                    $raw = $encoding === 'B'
+                        ? base64_decode($text)
+                        : quoted_printable_decode(str_replace('_', ' ', $text));
+
+                    if (!$raw) {
+                        return '';
+                    }
+
+                    // Convertir al UTF-8 desde el charset original
+                    $charsetNorm = str_replace(['WINDOWS-', 'WIN-'], 'CP', $charset);
+                    $converted = @mb_convert_encoding($raw, 'UTF-8', $charsetNorm);
+                    if ($converted !== false && $converted !== '') {
+                        return $converted;
+                    }
+                    // Fallback con iconv
+                    if (function_exists('iconv')) {
+                        $ic = @iconv($charset, 'UTF-8//TRANSLIT//IGNORE', $raw);
+                        if ($ic !== false) {
+                            return $ic;
+                        }
+                    }
+                    return $raw;
+                },
+                $value
+            );
+
+            return $result ?? $value;
         }
 
-        // Fallback: iconv_mime_decode
-        if (function_exists('iconv_mime_decode')) {
-            $decoded = iconv_mime_decode($value, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
-            if ($decoded !== false) {
-                return $decoded;
-            }
-        }
-
-        // Fallback manual: decodificar cada encoded-word individualmente
-        return preg_replace_callback(
-            '/=\?([^?]+)\?([BQbq])\?([^?]*)\?=/',
-            function (array $m) {
-                $charset = $m[1];
-                $encoding = strtoupper($m[2]);
-                $text = $m[3];
-                $raw = $encoding === 'B' ? base64_decode($text) : quoted_printable_decode(str_replace('_', ' ', $text));
-                return mb_convert_encoding($raw, 'UTF-8', $charset);
-            },
-            $value
-        );
+        // Sin encoded-words: garantizar UTF-8
+        return $this->toUtf8($value);
     }
 
     /**
