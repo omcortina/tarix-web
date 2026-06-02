@@ -359,15 +359,42 @@ class ImapSyncService
 
     /**
      * Decodifica un header MIME (subject, from name) forzando salida UTF-8.
+     * Soporta múltiples encoded-words: =?iso-8859-1?Q?...?= =?utf-8?B?...?=
      */
     private function decodeHeader(string $value): string
     {
         if ($value === '') {
             return '';
         }
-        // iconv_mime_decode convierte a UTF-8 cualquier encoded-word (=?charset?...?=)
-        $decoded = iconv_mime_decode($value, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
-        return $decoded !== false ? $decoded : $this->toUtf8($value);
+
+        // mb_decode_mimeheader maneja =?charset?Q/B?...?= y siempre disponible con mbstring
+        if (function_exists('mb_decode_mimeheader')) {
+            $decoded = mb_decode_mimeheader($value);
+            if ($decoded !== $value || !preg_match('/=\?[^?]+\?[BQbq]\?/i', $value)) {
+                return $this->toUtf8($decoded);
+            }
+        }
+
+        // Fallback: iconv_mime_decode
+        if (function_exists('iconv_mime_decode')) {
+            $decoded = iconv_mime_decode($value, ICONV_MIME_DECODE_CONTINUE_ON_ERROR, 'UTF-8');
+            if ($decoded !== false) {
+                return $decoded;
+            }
+        }
+
+        // Fallback manual: decodificar cada encoded-word individualmente
+        return preg_replace_callback(
+            '/=\?([^?]+)\?([BQbq])\?([^?]*)\?=/',
+            function (array $m) {
+                $charset = $m[1];
+                $encoding = strtoupper($m[2]);
+                $text = $m[3];
+                $raw = $encoding === 'B' ? base64_decode($text) : quoted_printable_decode(str_replace('_', ' ', $text));
+                return mb_convert_encoding($raw, 'UTF-8', $charset);
+            },
+            $value
+        );
     }
 
     /**
