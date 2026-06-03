@@ -21,7 +21,7 @@
         .form-group input { width: 100%; padding: 12px 16px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: "Inter", sans-serif; box-sizing: border-box; }
         .form-group input:focus { outline: none; border-color: #22c5bc; box-shadow: 0 0 0 3px rgba(34,197,188,.1); }
         .form-error { color: #c53030; font-size: 13px; margin-top: 6px; }
-        .form-actions { display: flex; gap: 12px; margin-top: 30px; }
+        .form-actions { gap: 12px; margin-top: 30px; }
         .btn-primary { background: #22c5bc; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; flex: 1; }
         .btn-primary:hover { background: #1ba8a0; }
         .btn-secondary { background: #f0f0f0; color: #333; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; text-align: center; flex: 1; }
@@ -89,10 +89,10 @@
                 </div>
 
                 <div class="form-actions">
-                    <a href="{{ route('admin.users.index') }}" class="btn-secondary">Cancelar</a>
                     <button type="submit" class="btn-primary">
                         <i class="fa fa-save"></i> Guardar Cambios
                     </button>
+                    <a href="{{ route('admin.users.index') }}" class="btn-secondary">Cancelar</a>
                 </div>
             </form>
         </div>

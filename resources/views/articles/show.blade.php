@@ -11,28 +11,31 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/articles.css') }}">
     <style>
-        body { background: #f5f7fa; }
         .article-header {
-            background: linear-gradient(135deg, #1ba8a0 0%, #0d2340 100%);
-            color: white;
+            background: #171714;
+            color: #FFFFFF;
             padding: 100px 20px;
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
         .article-header h1 {
-            font-size: 38px;
-            margin: 0 0 20px 0;
+            font-size: clamp(24px, 4vw, 38px);
+            margin: 0 0 16px 0;
             font-family: 'Montserrat', sans-serif;
             font-weight: 800;
             line-height: 1.3;
+            max-width: 820px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .article-meta {
             display: flex;
             justify-content: center;
             gap: 20px;
             font-size: 14px;
-            opacity: 0.95;
+            opacity: 0.75;
         }
         .article-container {
             max-width: 900px;
@@ -43,7 +46,7 @@
             background: white;
             border-radius: 8px;
             padding: 50px 40px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             margin-bottom: 60px;
         }
         .article-content p {
@@ -54,7 +57,7 @@
         }
         .article-content h2 {
             font-size: 24px;
-            color: #0d2340;
+            color: #171714;
             margin-top: 35px;
             margin-bottom: 15px;
             font-family: 'Montserrat', sans-serif;
@@ -62,7 +65,7 @@
         }
         .article-content h3 {
             font-size: 18px;
-            color: #1ba8a0;
+            color: #1D9E75;
             margin-top: 25px;
             margin-bottom: 12px;
             font-family: 'Montserrat', sans-serif;
@@ -76,39 +79,23 @@
             margin-bottom: 10px;
             line-height: 1.8;
         }
-        .breadcrumb {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-        .breadcrumb a {
-            color: #22c5bc;
-            text-decoration: none;
-        }
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
         .back-link {
             display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 16px;
+            margin-bottom: 24px;
+            padding: 10px 18px;
             background: #f0f0f0;
             color: #333;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
             font-weight: 500;
             transition: background 0.2s;
         }
-        .back-link:hover {
-            background: #e0e0e0;
-        }
-        .related-section {
-            margin-top: 80px;
-        }
+        .back-link:hover { background: #e0e0e0; }
+        .related-section { margin-top: 80px; }
         .related-title {
             font-size: 24px;
-            color: #0d2340;
+            color: #171714;
             margin-bottom: 30px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
@@ -122,15 +109,11 @@
             background: white;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             transition: transform 0.3s ease;
         }
-        .related-card:hover {
-            transform: translateY(-5px);
-        }
-        .related-card-content {
-            padding: 24px;
-        }
+        .related-card:hover { transform: translateY(-5px); }
+        .related-card-content { padding: 24px; }
         .related-date {
             font-size: 12px;
             color: #999;
@@ -139,7 +122,7 @@
         }
         .related-card h3 {
             font-size: 16px;
-            color: #0d2340;
+            color: #171714;
             margin: 0 0 12px 0;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
@@ -157,37 +140,18 @@
         }
         .related-link {
             display: inline-block;
-            color: #22c5bc;
+            color: #1D9E75;
             text-decoration: none;
             font-size: 13px;
             font-weight: 600;
             transition: color 0.2s;
         }
-        .related-link:hover {
-            color: #1ba8a0;
+        .related-link:hover { color: #26b887; }
+        @media (max-width: 600px) {
+            .article-content { padding: 28px 20px; }
         }
-        .language-selector {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        .lang-btn {
-            padding: 6px 12px;
-            border: 2px solid transparent;
-            background: transparent;
-            color: #666;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 13px;
-            text-transform: uppercase;
-            transition: all 0.2s;
-        }
-        .lang-btn.active {
-            color: #22c5bc;
-            border-bottom: 2px solid #22c5bc;
-        }
-        .lang-btn:hover {
-            color: #22c5bc;
+    </style>
+            transition: background 0.2s;
         }
     </style>
 </head>
@@ -196,12 +160,9 @@
     <!-- NAV -->
     <nav>
         <a href="/" class="nav-logo">
-            <div class="logo-icon">
-                <div class="logo-t">T</div>
-            </div>
             <div class="logo-text">
-                <span class="logo-name">TARIX</span>
-                <span class="logo-sub">Soluciones en Comercio Exterior</span>
+                <img src="{{ asset('img/logo.png') }}" alt="Comercio Internacional">
+                <span class="logo-sub">{{ __('articles.solutions') }}</span>
             </div>
         </a>
         
@@ -293,6 +254,21 @@
             {!! nl2br($article->content) !!}
         </div>
 
+        <!-- LEAD MAGNET -->
+        <div class="article-cta-box">
+            <div class="article-cta-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4Z" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M2 6L12 13L22 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="article-cta-text">
+                <h3>{{ __('articles.cta_title') }}</h3>
+                <p>{{ __('articles.cta_body') }}</p>
+            </div>
+            <a href="https://wa.me/573024674923?text={{ urlencode(__('articles.cta_whatsapp_msg')) }}" class="article-cta-btn" target="_blank" rel="noopener noreferrer">{{ __('articles.cta_btn') }}</a>
+        </div>
+
         <!-- Comments Section -->
         @include('includes.article-comments')
 
@@ -320,14 +296,9 @@
         <div class="footer-top">
             <div class="footer-brand">
                 <div class="nav-logo" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-                    <div class="logo-icon">
-                        <div class="logo-t">T</div>
-                    </div>
-                    <div>
-                        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:3px;">
-                            TARIX</div>
-                        <div style="font-size:8px;color:#22c5bc;letter-spacing:1.5px;text-transform:uppercase;">
-                            {{ __('articles.solutions') }}</div>
+                    <div class="logo-text">
+                        <img src="{{ asset('img/logo.png') }}" alt="Comercio Internacional">
+                        <span class="logo-sub">{{ __('articles.solutions') }}</span>
                     </div>
                 </div>
                 <p>{{ __('articles.footer_experts') }}</p>
@@ -393,9 +364,13 @@
             </div>
         </div>
         <hr class="footer-divider">
+        <div class="footer-legal">
+            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Bogot&aacute; D.C., Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
+        </div>
         <div class="footer-bottom">
-            <span>© {{ date('Y') }} TARIX | {{ __('articles.solutions') }}. {{ __('articles.all_rights_reserved') }}</span>
-            <span>{{ __('articles.made_in_colombia') }} 🇨🇴</span>
+            <span>&copy; {{ date('Y') }} TARIX | {{ __('articles.solutions') }}. {{ __('articles.all_rights_reserved') }}</span>
+            <span>{{ __('articles.made_in_colombia') }}</span>
         </div>
     </footer>
 

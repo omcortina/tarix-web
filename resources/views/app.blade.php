@@ -250,51 +250,146 @@
         </div>
     </section>
 
+    <!-- TESTIMONIOS -->
+    <section class="testimonials reveal" id="testimonios">
+        <div class="testimonials-inner">
+            <div class="section-label">Clientes</div>
+            <h2 class="section-title">Lo que dicen nuestros clientes</h2>
+            <p class="section-desc">Empresas que confían en TARIX para optimizar su comercio exterior.</p>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-icon">&ldquo;</div>
+                    <p class="testimonial-text">Gracias a TARIX logramos clasificar correctamente toda nuestra mercancía y evitamos sobrecostos en aduanas. Su equipo es muy profesional y responde rápido.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">M</div>
+                        <div>
+                            <strong>Marcela Gómez</strong>
+                            <span>Gerente de Logística — ImportaCol S.A.S.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-icon">&ldquo;</div>
+                    <p class="testimonial-text">El proceso de registro INVIMA para nuestros productos fue mucho más ágil de lo esperado. TARIX conoce cada detalle normativo y eso marca la diferencia.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">J</div>
+                        <div>
+                            <strong>Julián Herrera</strong>
+                            <span>Director Comercial — TechMed Colombia</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-icon">&ldquo;</div>
+                    <p class="testimonial-text">Llevamos más de dos años trabajando con TARIX y no cambiaríamos el apoyo que nos brindan. Siempre dispuestos a resolver dudas y orientarnos ante cambios de regulación.</p>
+                    <div class="testimonial-author">
+                        <div class="testimonial-avatar">A</div>
+                        <div>
+                            <strong>Adriana Montoya</strong>
+                            <span>Coordinadora de Comercio Exterior — Grupo Andino</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CONTACT -->
     <section class="contact reveal" id="contacto">
         <div class="contact-inner">
-            <div class="section-label">{{ __('app.escribenos') }}</div>
-            <h2 class="section-title">{{ __('app.contactanos') }}</h2>
-            <p class="section-desc">{{ __('app.dudas_comercio') }}
-                {{ __('app.contact_text_end') }}</p>
-            <form id="contactForm" class="contact-form">
-                @csrf
-                <div class="form-group">
-                    <label for="name">{{ __('app.form_label_name') }}</label>
-                    <input type="text" id="name" name="name" placeholder="{{ __('app.form_placeholder_name') }}" required class="form-input">
-                    <span class="form-error" id="nameError"></span>
+
+            <!-- LEFT: info panel -->
+            <div class="contact-left">
+                <div class="section-label">{{ __('app.escribenos') }}</div>
+                <h2 class="section-title contact-title">{{ __('app.contactanos') }}</h2>
+                <p class="contact-desc">{{ __('app.dudas_comercio') }} {{ __('app.contact_text_end') }}</p>
+
+                <div class="contact-info-list">
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3 7L12 12.5L21 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M4 5H20C21.1 5 22 5.9 22 7V17C22 18.1 21.1 19 20 19H4C2.9 19 2 18.1 2 17V7C2 5.9 2.9 5 4 5Z" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="contact-info-label">Email</div>
+                            <a href="mailto:gerenciacomercial@tarix.com.co" class="contact-info-value">gerenciacomercial@tarix.com.co</a>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.014 8.008C6.014 8.008 8.006 12.49 10.886 15.375C13.766 18.26 18.25 20.248 18.25 20.248L20.5 18C20.5 18 21.5 17 20.5 15.5L17.5 13C16.5 12 15.5 12.5 15.5 12.5L13.5 14C13.5 14 11 12.5 9.5 11C8 9.5 6.5 7 6.5 7L8 5C8 5 8.5 4 7.5 3L5 0C3.5-1 2.5 0 2.5 0L0.252 2.252C0.252 2.252 2.014 4.008 6.014 8.008Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" transform="translate(1.5 1.5)"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="contact-info-label">WhatsApp</div>
+                            <a href="https://wa.me/573024674923" target="_blank" rel="noopener noreferrer" class="contact-info-value">+57 302 467 4923</a>
+                        </div>
+                    </div>
+                    <div class="contact-info-item">
+                        <div class="contact-info-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/>
+                                <path d="M2 12H22M12 2C14 5 14 8.5 14 12C14 15.5 14 19 12 22M12 2C10 5 10 8.5 10 12C10 15.5 10 19 12 22" stroke="currentColor" stroke-width="1.5"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="contact-info-label">Web</div>
+                            <a href="https://tarix.com.co" target="_blank" rel="noopener noreferrer" class="contact-info-value">tarix.com.co</a>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="company">{{ __('app.form_label_company') }}</label>
-                    <input type="text" id="company" name="company" placeholder="{{ __('app.form_placeholder_company') }}" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label for="email">{{ __('app.form_label_email') }}</label>
-                    <input type="email" id="email" name="email" placeholder="{{ __('app.form_placeholder_email') }}" required class="form-input">
-                    <span class="form-error" id="emailError"></span>
-                </div>
-                <div class="form-group">
-                    <label for="phone">{{ __('app.form_label_phone') }}</label>
-                    <input type="tel" id="phone" name="phone" placeholder="{{ __('app.form_placeholder_phone') }}" class="form-input">
-                </div>
-                <div class="form-group full">
-                    <label for="message">{{ __('app.form_label_message') }}</label>
-                    <textarea id="message" name="message" placeholder="{{ __('app.form_placeholder_message') }}" required class="form-input"></textarea>
-                    <span class="form-error" id="messageError"></span>
-                </div>
-                
-                <!-- reCAPTCHA v3 (invisible) -->
-                <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
-            </form>
-            <div class="form-submit">
-                <button type="submit" form="contactForm" class="btn-primary" id="submitBtn">{{ __('app.form_submit_btn') }}</button>
+
+                <div class="contact-divider"></div>
+                <p class="contact-tagline">Respondemos en menos de 24 horas hábiles.</p>
             </div>
-            
-            <!-- Mensajes de estado -->
-            <div id="successMessage" class="alert alert-success" style="display:none; margin-top: 20px;">
-                {{ __('app.form_success_message') }}
+
+            <!-- RIGHT: form card -->
+            <div class="contact-right">
+                <div class="contact-card">
+                    <form id="contactForm" class="contact-form">
+                        @csrf
+                        <div class="form-group">
+                            <label for="name">{{ __('app.form_label_name') }}</label>
+                            <input type="text" id="name" name="name" placeholder="{{ __('app.form_placeholder_name') }}" required class="form-input">
+                            <span class="form-error" id="nameError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="company">{{ __('app.form_label_company') }}</label>
+                            <input type="text" id="company" name="company" placeholder="{{ __('app.form_placeholder_company') }}" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">{{ __('app.form_label_email') }}</label>
+                            <input type="email" id="email" name="email" placeholder="{{ __('app.form_placeholder_email') }}" required class="form-input">
+                            <span class="form-error" id="emailError"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">{{ __('app.form_label_phone') }}</label>
+                            <input type="tel" id="phone" name="phone" placeholder="{{ __('app.form_placeholder_phone') }}" class="form-input">
+                        </div>
+                        <div class="form-group full">
+                            <label for="message">{{ __('app.form_label_message') }}</label>
+                            <textarea id="message" name="message" placeholder="{{ __('app.form_placeholder_message') }}" required class="form-input"></textarea>
+                            <span class="form-error" id="messageError"></span>
+                        </div>
+
+                        <!-- reCAPTCHA v3 (invisible) -->
+                        <input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
+                    </form>
+                    <div class="form-submit">
+                        <button type="submit" form="contactForm" class="btn-primary btn-contact-submit" id="submitBtn">{{ __('app.form_submit_btn') }}</button>
+                    </div>
+
+                    <!-- Mensajes de estado -->
+                    <div id="successMessage" class="alert alert-success" style="display:none; margin-top: 20px;">
+                        {{ __('app.form_success_message') }}
+                    </div>
+                    <div id="errorMessage" class="alert alert-error" style="display:none; margin-top: 20px;"></div>
+                </div>
             </div>
-            <div id="errorMessage" class="alert alert-error" style="display:none; margin-top: 20px;"></div>
+
         </div>
     </section>
 
@@ -346,7 +441,7 @@
                             <path d="M4 5H20C21.1 5 22 5.9 22 7V17C22 18.1 21.1 19 20 19H4C2.9 19 2 18.1 2 17V7C2 5.9 2.9 5 4 5Z" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
                     </span>
-                    <a href="mailto:info@tarix.com.co">info@tarix.com.co</a>
+                    <a href="mailto:gerenciacomercial@tarix.com.co">gerenciacomercial@tarix.com.co</a>
                 </div>
                 <div class="footer-contact-item">
                     <span class="footer-icon icon-phone">
@@ -372,9 +467,13 @@
             </div>
         </div>
         <hr class="footer-divider">
+        <div class="footer-legal">
+            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Cartagena, Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
+        </div>
         <div class="footer-bottom">
-            <span>© {{ date('Y') }} TARIX | Soluciones en Comercio Exterior. Todos los derechos reservados.</span>
-            <span>Hecho en Colombia 🇨🇴</span>
+            <span>&copy; {{ date('Y') }} TARIX | Soluciones en Comercio Exterior. Todos los derechos reservados.</span>
+            <span>Hecho en Colombia</span>
         </div>
     </footer>
 

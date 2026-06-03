@@ -6,6 +6,7 @@ return [
     'about' => 'Nosotros',
     'services' => 'Servicios',
     'news' => 'Blog',
+    'news_description' => 'Mantente actualizado con los últimos artículos sobre comercio exterior y soluciones empresariales',
     'resources' => 'Recursos',
     'contact' => 'Contacto',
     'contact_us' => 'Contáctanos',
@@ -50,4 +51,8 @@ return [
     'comment_note' => 'Nota: Tu comentario será revisado por nuestro equipo antes de ser publicado.',
     'invalid_youtube' => 'URL de YouTube no válida o video no disponible',
     'url_saved' => 'URL guardada',
+    'cta_title' => '¿Necesitas asesoría en comercio exterior?',
+    'cta_body' => 'Nuestro equipo de especialistas puede ayudarte a optimizar tus procesos de importación, exportación y clasificación arancelaria. Escríbenos y recibe orientación personalizada.',
+    'cta_btn' => 'Solicitar asesoría gratuita',
+    'cta_whatsapp_msg' => 'Hola, me interesa recibir asesoría en comercio exterior.',
 ];

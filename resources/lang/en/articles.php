@@ -6,6 +6,7 @@ return [
     'about' => 'About',
     'services' => 'Services',
     'news' => 'Blog',
+    'news_description' => 'Stay updated with the latest articles on foreign trade and business solutions',
     'resources' => 'Resources',
     'contact' => 'Contact',
     'contact_us' => 'Contact Us',
@@ -50,4 +51,8 @@ return [
     'comment_note' => 'Note: Your comment will be reviewed by our team before being published.',
     'invalid_youtube' => 'Invalid YouTube URL or video not available',
     'url_saved' => 'Saved URL',
+    'cta_title' => 'Do you need foreign trade advisory?',
+    'cta_body' => 'Our team of specialists can help you optimize your import, export and tariff classification processes. Write to us and receive personalized guidance.',
+    'cta_btn' => 'Request free advisory',
+    'cta_whatsapp_msg' => 'Hello, I am interested in receiving foreign trade advisory.',
 ];

@@ -93,21 +93,19 @@
                     <a href="/#contacto" class="btn-primary">{{ __('service.request_advisory') }}</a>
                 </div>
 
+                @php
+                    $activeResources = $service->usefulResources->where('is_active', true);
+                @endphp
+                @if($activeResources->count())
                 <div class="sidebar-box">
                     <h3>{{ __('service.useful_info') }}</h3>
-                    @php
-                        $activeResources = $service->usefulResources->where('is_active', true);
-                    @endphp
-                    @if($activeResources->count())
-                        <ul class="info-list">
-                            @foreach($activeResources as $resource)
-                                <li><a href="{{ $resource->url }}" target="_blank">{{ $resource->title }}</a></li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p style="color: #666; font-size: 14px;">{{ __('service.no_resources') }}</p>
-                    @endif
+                    <ul class="info-list">
+                        @foreach($activeResources as $resource)
+                            <li><a href="{{ $resource->url }}" target="_blank">{{ $resource->title }}</a></li>
+                        @endforeach
+                    </ul>
                 </div>
+                @endif
             </aside>
         </div>
     </section>
@@ -169,7 +167,7 @@
                             <path d="M4 5H20C21.1 5 22 5.9 22 7V17C22 18.1 21.1 19 20 19H4C2.9 19 2 18.1 2 17V7C2 5.9 2.9 5 4 5Z" stroke="currentColor" stroke-width="1.5"/>
                         </svg>
                     </span>
-                    <a href="mailto:info@tarix.com.co">info@tarix.com.co</a>
+                    <a href="mailto:gerenciacomercial@tarix.com.co">gerenciacomercial@tarix.com.co</a>
                 </div>
                 <div class="footer-contact-item">
                     <span class="footer-icon icon-phone">
@@ -195,9 +193,13 @@
             </div>
         </div>
         <hr class="footer-divider">
+        <div class="footer-legal">
+            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Bogot&aacute; D.C., Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
+        </div>
         <div class="footer-bottom">
-            <span>© {{ date('Y') }} TARIX | {{ __('service.solutions') }}. {{ __('service.all_rights_reserved') }}</span>
-            <span>{{ __('service.made_in_colombia') }} 🇨🇴</span>
+            <span>&copy; {{ date('Y') }} TARIX | {{ __('service.solutions') }}. {{ __('service.all_rights_reserved') }}</span>
+            <span>{{ __('service.made_in_colombia') }}</span>
         </div>
     </footer>
 

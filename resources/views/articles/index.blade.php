@@ -18,11 +18,8 @@
     <!-- NAV -->
     <nav>
         <a href="/" class="nav-logo">
-            <div class="logo-icon">
-                <div class="logo-t">T</div>
-            </div>
             <div class="logo-text">
-                <span class="logo-name">TARIX</span>
+                <img src="{{ asset('img/logo.png') }}" alt="Comercio Internacional">
                 <span class="logo-sub">{{ __('articles.solutions') }}</span>
             </div>
         </a>
@@ -52,7 +49,7 @@
     <!-- NEWS HEADER -->
     <div class="news-header">
         <h1>{{ __('articles.news') }}</h1>
-        <p>{{ __('articles.news') == 'Blog' ? 'Mantente actualizado con los últimos artículos sobre comercio exterior y soluciones empresariales' : 'Stay updated with the latest articles on foreign trade and business solutions' }}</p>
+        <p>{{ __('articles.news_description') }}</p>
     </div>
 
     <!-- MAIN CONTENT -->
@@ -72,7 +69,7 @@
                             @if($article->images()->count() > 0 || $article->videos()->count() > 0)
                                 <div style="display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap;">
                                     @if($article->images()->count() > 0)
-                                        <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #e3f2fd; color: #1976d2; border-radius: 3px; font-size: 11px; font-weight: 600;">
+                                        <span style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: #eaf5f0; color: #1D9E75; border-radius: 3px; font-size: 11px; font-weight: 600;">
                                             <i class="fa fa-image"></i>
                                             {{ $article->images()->count() }} imagen(es)
                                         </span>
@@ -89,7 +86,7 @@
                             <div class="news-footer">
                                 <div>
                                     <span class="news-author">{{ __('articles.created_by') }} {{ $article->user->name ?? 'Admin' }}</span>
-                                    <div style="font-size: 12px; color: #aaa; margin-top: 3px;">
+                                    <div style="font-size: 12px; color: #4D4D4D; margin-top: 3px;">
                                         <i class="fa fa-eye" style="margin-right: 4px;"></i>{{ number_format($article->views) }} visualizaciones
                                     </div>
                                 </div>
@@ -122,14 +119,10 @@
         <div class="footer-top">
             <div class="footer-brand">
                 <div class="nav-logo" style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
-                    <div class="logo-icon">
-                        <div class="logo-t">T</div>
-                    </div>
-                    <div>
-                        <div style="font-family:'Montserrat',sans-serif;font-weight:800;font-size:18px;color:#fff;letter-spacing:3px;">
-                            TARIX</div>
-                        <div style="font-size:8px;color:#22c5bc;letter-spacing:1.5px;text-transform:uppercase;">
-                            {{ __('articles.solutions') }}</div>
+                    <div class="logo-text">
+                        <img src="{{ asset('img/logo.png') }}" alt="Comercio Internacional">
+                        <div style="font-size:8px;color:#1D9E75;letter-spacing:1.5px;text-transform:uppercase;">
+                            {{ __('app.soluciones') }}</div>
                     </div>
                 </div>
                 <p>{{ __('articles.footer_experts') }}</p>
@@ -195,9 +188,13 @@
             </div>
         </div>
         <hr class="footer-divider">
+        <div class="footer-legal">
+            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Bogot&aacute; D.C., Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
+        </div>
         <div class="footer-bottom">
-            <span>© {{ date('Y') }} TARIX | {{ __('articles.solutions') }}. {{ __('articles.all_rights_reserved') }}</span>
-            <span>{{ __('articles.made_in_colombia') }} 🇨🇴</span>
+            <span>&copy; {{ date('Y') }} TARIX | {{ __('articles.solutions') }}. {{ __('articles.all_rights_reserved') }}</span>
+            <span>{{ __('articles.made_in_colombia') }}</span>
         </div>
     </footer>
 

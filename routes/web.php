@@ -203,6 +203,11 @@ Route::middleware(['auth', 'user-verified'])->group(function () {
 // Ruta para cambiar idioma
 Route::get('/lang/{locale}', [LanguageController::class, 'setLanguage'])->name('lang.set');
 
+// Página legal
+Route::get('/privacidad', function () {
+    return view('privacidad');
+})->name('privacidad');
+
 // Rutas públicas de artículos (blog)
 Route::get('/blog', [ArticlePublicController::class, 'index'])->name('articles.index');
 Route::get('/blog/{slug}', [ArticlePublicController::class, 'show'])->name('articles.show');
