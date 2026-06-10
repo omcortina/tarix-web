@@ -55,4 +55,5 @@ return [
     'cta_body' => 'Nuestro equipo de especialistas puede ayudarte a optimizar tus procesos de importación, exportación y clasificación arancelaria. Escríbenos y recibe orientación personalizada.',
     'cta_btn' => 'Solicitar asesoría gratuita',
     'cta_whatsapp_msg' => 'Hola, me interesa recibir asesoría en comercio exterior.',
+    'meta_desc' => 'Artículos y guías sobre clasificación arancelaria, comercio exterior, importaciones y cumplimiento aduanero en Colombia. Mantente informado con TARIX.',
 ];

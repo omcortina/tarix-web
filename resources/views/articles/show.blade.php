@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $article->title }} | TARIX</title>
+    <meta name="description" content="{{ Str::limit(strip_tags($article->excerpt ?? $article->content ?? ''), 160) }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url('/blog/' . $article->slug) }}" />
+    <link rel="alternate" hreflang="es" href="{{ url('/blog/' . $article->slug) }}" />
+    <link rel="alternate" hreflang="en" href="{{ url('/blog/' . $article->slug) }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ url('/blog/' . $article->slug) }}" />
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap"
@@ -14,7 +20,7 @@
     <link rel="stylesheet" href="{{ asset('css/articles.css') }}">
     <style>
         .article-header {
-            background: #171714;
+            background: #001B30;
             color: #FFFFFF;
             padding: 100px 20px;
             text-align: center;
@@ -57,7 +63,7 @@
         }
         .article-content h2 {
             font-size: 24px;
-            color: #171714;
+            color: #001B30;
             margin-top: 35px;
             margin-bottom: 15px;
             font-family: 'Montserrat', sans-serif;
@@ -95,7 +101,7 @@
         .related-section { margin-top: 80px; }
         .related-title {
             font-size: 24px;
-            color: #171714;
+            color: #001B30;
             margin-bottom: 30px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;
@@ -122,7 +128,7 @@
         }
         .related-card h3 {
             font-size: 16px;
-            color: #171714;
+            color: #001B30;
             margin: 0 0 12px 0;
             font-family: 'Montserrat', sans-serif;
             font-weight: 700;

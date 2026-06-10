@@ -4,7 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog | TARIX</title>
+    <title>{{ __('articles.news') }} | TARIX</title>
+    <meta name="description" content="{{ __('articles.meta_desc') }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url('/blog') }}" />
+    <link rel="alternate" hreflang="es" href="{{ url('/blog') }}" />
+    <link rel="alternate" hreflang="en" href="{{ url('/blog') }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ url('/blog') }}" />
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link
         href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap"

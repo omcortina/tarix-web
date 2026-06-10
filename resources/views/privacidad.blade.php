@@ -5,13 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('privacidad.page_title') }}</title>
     <meta name="description" content="{{ __('privacidad.meta_desc') }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url('/privacidad') }}" />
+    <link rel="alternate" hreflang="es" href="{{ url('/privacidad') }}" />
+    <link rel="alternate" hreflang="en" href="{{ url('/privacidad') }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ url('/privacidad') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{{ asset('css/index.css') }}">
     <style>
         .privacy-hero {
-            background: #171714;
+            background: #001B30;
             padding: 100px 24px 60px;
             text-align: center;
         }
@@ -35,7 +40,7 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 20px;
             font-weight: 700;
-            color: #171714;
+            color: #001B30;
             margin: 40px 0 12px;
             border-left: 4px solid #1D9E75;
             padding-left: 14px;
@@ -95,12 +100,12 @@
         </button>
 
         <div class="nav-links" id="navMenu">
-            <a href="#inicio">{{ __('app.inicio') }}</a>
-            <a href="#nosotros">{{ __('app.nosotros') }}</a>
-            <a href="#servicios">{{ __('app.servicios') }}</a>
+            <a href="/#inicio">{{ __('app.inicio') }}</a>
+            <a href="/#nosotros">{{ __('app.nosotros') }}</a>
+            <a href="/#servicios">{{ __('app.servicios') }}</a>
             <a href="/blog">{{ __('app.blog') }}</a>
-            <a href="#recursos">{{ __('app.recursos') }}</a>
-            <a href="#contacto">{{ __('app.contacto') }}</a>
+            <a href="/#recursos">{{ __('app.recursos') }}</a>
+            <a href="/#contacto">{{ __('app.contacto') }}</a>
             <a href="{{ route('login') }}" class="nav-cta">{{ __('app.login') }}</a>
             <div class="language-selector">
                 <a href="{{ route('lang.set', 'es') }}" class="lang-btn {{ app()->getLocale() === 'es' ? 'active' : '' }}">ES</a>

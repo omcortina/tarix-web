@@ -1,10 +1,16 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ app()->getLocale() }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('app.title') }}</title>
+    <meta name="description" content="{{ __('app.meta_desc') }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url('/') }}" />
+    <link rel="alternate" hreflang="es" href="{{ url('/') }}" />
+    <link rel="alternate" hreflang="en" href="{{ url('/') }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ url('/') }}" />
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">

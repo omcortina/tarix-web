@@ -16,6 +16,7 @@ return [
     'descripcion_hero' => 'Te ayudamos a identificar la subpartida correcta, cumplir requisitos y evitar problemas con la DIAN en tus importaciones.',
     'conoce_servicios' => 'Registrate aquí',
     'title' => 'TARIX | Soluciones en Comercio Exterior',
+    'meta_desc' => 'Expertos en clasificación arancelaria y comercio exterior en Colombia. Identificamos la subpartida correcta, cumplimos requisitos y evitamos problemas con la DIAN en tus importaciones.',
     'por_que_elegirnos' => 'Por qué elegirnos',
     'nuestros_valores' => 'Nuestros Valores',
     'nuestros_valores_line1' => 'Los valores que nos guían,',

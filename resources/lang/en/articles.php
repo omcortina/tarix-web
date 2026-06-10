@@ -55,4 +55,5 @@ return [
     'cta_body' => 'Our team of specialists can help you optimize your import, export and tariff classification processes. Write to us and receive personalized guidance.',
     'cta_btn' => 'Request free advisory',
     'cta_whatsapp_msg' => 'Hello, I am interested in receiving foreign trade advisory.',
+    'meta_desc' => 'Articles and guides on tariff classification, foreign trade, imports and customs compliance in Colombia. Stay informed with TARIX.',
 ];

@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $service->title }} | TARIX</title>
+    <meta name="description" content="{{ $service->subtitle }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{ url('/' . $service->slug) }}" />
+    <link rel="alternate" hreflang="es" href="{{ url('/' . $service->slug) }}" />
+    <link rel="alternate" hreflang="en" href="{{ url('/' . $service->slug) }}" />
+    <link rel="alternate" hreflang="x-default" href="{{ url('/' . $service->slug) }}" />
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">

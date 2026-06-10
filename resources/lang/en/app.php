@@ -16,6 +16,7 @@ return [
     'descripcion_hero' => 'We help you identify the correct subheading, meet requirements and avoid problems with the DIAN in your imports.',
     'conoce_servicios' => 'Register here',
     'title' => 'TARIX | Foreign Trade Solutions',
+    'meta_desc' => 'Experts in tariff classification and foreign trade in Colombia. We identify the correct subheading, meet requirements and avoid problems with the DIAN in your imports.',
     'por_que_elegirnos' => 'Why choose us',
     'nuestros_valores' => 'Our Values',
     'nuestros_valores_line1' => 'The values that guide us,',

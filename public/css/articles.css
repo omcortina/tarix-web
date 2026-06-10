@@ -2,7 +2,7 @@ body {
     background: #f5f7fa;
 }
 .news-header {
-    background: #171714;
+    background: #001B30;
     color: #FFFFFF;
     padding: 100px 20px;
     text-align: center;
@@ -61,7 +61,7 @@ body {
 .news-card h3 {
     margin: 0;
     font-size: 18px;
-    color: #171714;
+    color: #001B30;
     font-family: "Montserrat", sans-serif;
     font-weight: 700;
     line-height: 1.4;
@@ -154,7 +154,7 @@ ul.pagination-custom li.page-item span.page-link {
     border: 1.5px solid #dce4ef;
     border-radius: 6px;
     background: white;
-    color: #171714;
+    color: #001B30;
     font-size: 14px;
     font-weight: 500;
     text-decoration: none;

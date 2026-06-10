@@ -215,5 +215,14 @@ Route::get('/blog/{slug}', [ArticlePublicController::class, 'show'])->name('arti
 // Ruta para comentarios en artículos
 Route::post('/articles/{article}/comments', [ArticleCommentController::class, 'store'])->name('articles.comments.store');
 
+// Sitemap dinámico
+Route::get('/sitemap.xml', function () {
+    $services = \App\Models\Service::where('published', true)->get();
+    $articles = \App\Models\Article::where('published', true)->get();
+    return response()
+        ->view('sitemap', compact('services', 'articles'))
+        ->header('Content-Type', 'application/xml');
+})->name('sitemap');
+
 // Rutas públicas de servicios (dinámicas por slug)
 Route::get('{service}', [ServiceController::class, 'show']);
