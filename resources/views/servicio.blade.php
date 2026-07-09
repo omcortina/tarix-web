@@ -182,7 +182,7 @@
                             <path d="M9.5 8H14.5M9.5 15H14.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
                         </svg>
                     </span>
-                    <span>+57 302 467 4923</span>
+                    <span>+57 300 321 6903</span>
                 </div>
                 <div class="footer-contact-item">
                     <span class="footer-icon icon-linkedin">

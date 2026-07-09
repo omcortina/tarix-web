@@ -149,7 +149,7 @@
                 <a href="{{ $loginUrl }}" class="cta-button">Iniciar Sesión</a>
             </p>
 
-            <p>Si tienes alguna pregunta o necesitas ayuda para comenzar, no dudes en contactarnos a través de info@tarix.com.co o por teléfono +57 302 467 4923.</p>
+            <p>Si tienes alguna pregunta o necesitas ayuda para comenzar, no dudes en contactarnos a través de info@tarix.com.co o por teléfono +57 300 321 6903.</p>
 
             <p>
                 Saludos cordiales,<br>
