@@ -200,7 +200,7 @@
         </div>
         <hr class="footer-divider">
         <div class="footer-legal">
-            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Bogot&aacute; D.C., Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <span>NIT: 902079556-5 &nbsp;&middot;&nbsp; Cartagena, Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
             <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
         </div>
         <div class="footer-bottom">
@@ -210,7 +210,7 @@
     </footer>
 
     <!-- WHATSAPP FLOATING BUTTON -->
-    <a href="https://wa.me/573024674923" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
+    <a href="https://wa.me/573003216903" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
         <i class="fa fa-whatsapp" style="font-size: 32px;"></i>
     </a>
 

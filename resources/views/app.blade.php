@@ -153,7 +153,7 @@
                 <h3>{{ __('app.value_commitment_name') }}</h3>
                 <p>{{ __('app.value_commitment_desc') }}</p>
             </div>
-            <a href="https://wa.me/573024674923" class="btn-commitment">{{ __('app.value_commitment_btn') }} →</a>
+            <a href="https://wa.me/573003216903" class="btn-commitment">{{ __('app.value_commitment_btn') }} →</a>
         </div>
     </section>
 
@@ -331,7 +331,7 @@
                         </div>
                         <div>
                             <div class="contact-info-label">WhatsApp</div>
-                            <a href="https://wa.me/573024674923" target="_blank" rel="noopener noreferrer" class="contact-info-value">+57 302 467 4923</a>
+                            <a href="https://wa.me/573003216903" target="_blank" rel="noopener noreferrer" class="contact-info-value">+57 302 467 4923</a>
                         </div>
                     </div>
                     <div class="contact-info-item">
@@ -474,7 +474,7 @@
         </div>
         <hr class="footer-divider">
         <div class="footer-legal">
-            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Cartagena, Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <span>NIT: 902079556-5 &nbsp;&middot;&nbsp; Cartagena, Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
             <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
         </div>
         <div class="footer-bottom">
@@ -484,7 +484,7 @@
     </footer>
 
     <!-- WHATSAPP FLOATING BUTTON -->
-    <a href="https://wa.me/573024674923" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
+    <a href="https://wa.me/573003216903" class="whatsapp-float" target="_blank" rel="noopener noreferrer" title="Contáctanos por WhatsApp">
         <i class="fa fa-whatsapp" style="font-size: 32px;"></i>
     </a>
 

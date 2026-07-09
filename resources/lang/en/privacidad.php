@@ -60,7 +60,7 @@ return [
     'footer_legal'      => 'Legal',
     'footer_privacy'    => 'Privacy Policy',
     'footer_contact'    => 'Contact',
-    'footer_legal_row'  => 'NIT: 900.XXX.XXX-X · Bogotá D.C., Colombia · Mon – Fri: 8:00 a.m. – 6:00 p.m.',
+    'footer_legal_row'  => 'NIT: 902079556-5 · Cartagena, Colombia · Mon - Fri: 8:00 a.m. - 6:00 p.m.',
     'footer_rights'     => 'All rights reserved.',
     'footer_colombia'   => 'Made in Colombia',
 ];

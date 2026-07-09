@@ -272,7 +272,7 @@
                 <h3>{{ __('articles.cta_title') }}</h3>
                 <p>{{ __('articles.cta_body') }}</p>
             </div>
-            <a href="https://wa.me/573024674923?text={{ urlencode(__('articles.cta_whatsapp_msg')) }}" class="article-cta-btn" target="_blank" rel="noopener noreferrer">{{ __('articles.cta_btn') }}</a>
+            <a href="https://wa.me/573003216903?text={{ urlencode(__('articles.cta_whatsapp_msg')) }}" class="article-cta-btn" target="_blank" rel="noopener noreferrer">{{ __('articles.cta_btn') }}</a>
         </div>
 
         <!-- Comments Section -->
@@ -371,7 +371,7 @@
         </div>
         <hr class="footer-divider">
         <div class="footer-legal">
-            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Bogot&aacute; D.C., Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <span>NIT: 902079556-5 &nbsp;&middot;&nbsp; Cartagena, Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
             <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
         </div>
         <div class="footer-bottom">

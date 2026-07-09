@@ -127,7 +127,7 @@
 
         <h2>{{ __('privacidad.s1_title') }}</h2>
         <p>
-            <strong>TARIX S.A.S.</strong> — NIT: 900.XXX.XXX-X<br>
+            <strong>TARIX S.A.S.</strong> — NIT: 902079556-5<br>
             Cartagena, Colombia<br>
             {{ __('privacidad.s1_body') }} <a href="mailto:gerenciacomercial@tarix.com.co">gerenciacomercial@tarix.com.co</a><br>
             {{ __('privacidad.s1_phone') }} +57 302 467 4923

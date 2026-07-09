@@ -60,7 +60,7 @@ return [
     'footer_legal'      => 'Legal',
     'footer_privacy'    => 'Política de Privacidad',
     'footer_contact'    => 'Contacto',
-    'footer_legal_row'  => 'NIT: 900.XXX.XXX-X · Bogotá D.C., Colombia · Lun – Vie: 8:00 a.m. – 6:00 p.m.',
+    'footer_legal_row'  => 'NIT: 902079556-5 · Cartagena, Colombia · Lun – Vie: 8:00 a.m. – 6:00 p.m.',
     'footer_rights'     => 'Todos los derechos reservados.',
     'footer_colombia'   => 'Hecho en Colombia',
 ];

@@ -195,7 +195,7 @@
         </div>
         <hr class="footer-divider">
         <div class="footer-legal">
-            <span>NIT: 900.XXX.XXX-X &nbsp;&middot;&nbsp; Bogot&aacute; D.C., Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
+            <span>NIT: 902079556-5 &nbsp;&middot;&nbsp; Cartagena, Colombia &nbsp;&middot;&nbsp; Lun &ndash; Vie: 8:00 a.m. &ndash; 6:00 p.m.</span>
             <a href="/privacidad">{{ __('privacidad.footer_privacy') }}</a>
         </div>
         <div class="footer-bottom">
